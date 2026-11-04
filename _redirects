@@ -1,0 +1,4 @@
+# Cloudflare Pages Redirects
+/admin        /admin/index.html   200
+/demos        /#ejemplos          301
+/plantillas   /#ejemplos          301

@@ -1,0 +1,51 @@
+/* ====================================================================
+   LUMIÈRE - CONTROL DE INSUMOS & SALÓN (STYLES)
+   ==================================================================== */
+:root {
+  --purple-main: #9333ea;
+  --purple-light: #a855f7;
+  --bg-dark: #030712;
+  --bg-card: #0f172a;
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-main); background: var(--bg-dark); color: #f8fafc; line-height: 1.5; }
+
+.container-beauty { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.beauty-top-bar { background: #1e1138; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+.header-flex { display: flex; justify-content: space-between; align-items: center; }
+
+.btn-beauty-action { background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); color: #fff; font-weight: 800; font-size: 0.82rem; padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; box-shadow: 0 4px 18px rgba(147, 51, 234, 0.35); }
+.btn-beauty-action:hover { background: #a855f7; }
+
+/* Stat Cards */
+.stat-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 18px; padding: 22px; }
+.stat-label { font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-value { font-size: 1.8rem; font-weight: 800; margin: 6px 0 2px; }
+.stat-sub { font-size: 0.72rem; color: #64748b; }
+
+/* Beauty Card & Table */
+.beauty-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 20px; padding: 26px; }
+.btn-sm-whatsapp { background: #25d366; color: #042f1a; font-weight: 800; font-size: 0.78rem; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; }
+
+.beauty-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.85rem; }
+.beauty-table th { text-align: left; padding: 12px 10px; color: #94a3b8; border-bottom: 1px solid var(--border-glass); font-weight: 700; }
+.beauty-table td { padding: 14px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: middle; }
+
+.badge-status-ok { background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 800; font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3); }
+.badge-status-low { background: rgba(239, 68, 68, 0.15); color: #f87171; font-weight: 800; font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.btn-consume-one { background: #1e293b; color: #cbd5e1; border: 1px solid var(--border-glass); font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.btn-consume-one:hover { background: #334155; color: #fff; }
+
+/* Modal */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 60; padding: 20px; }
+.modal-backdrop.hidden { display: none; }
+.consume-card { background: #0f172a; border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; max-width: 440px; width: 100%; padding: 24px; position: relative; }
+.modal-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+.beauty-input { width: 100%; background: #030712; border: 1px solid var(--border-glass); border-radius: 8px; padding: 9px 12px; color: #fff; font-size: 0.85rem; outline: none; }
+.beauty-input:focus { border-color: var(--purple-light); }
+.btn-purple-save { background: var(--purple-main); color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; }
+.btn-cancel { background: #334155; color: #fff; padding: 8px 14px; border-radius: 6px; border: none; cursor: pointer; }

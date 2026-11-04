@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CaribIA Labs | Consola Maestra de Administrador (Software Factory)</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="../Logo_Caribia_labs.png" />
+    <style>
+      :root {
+        --bg-dark: #070a12;
+        --border-glass: rgba(255, 255, 255, 0.08);
+        --cyan-glow: #06b6d4;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        background-color: var(--bg-dark);
+        color: #f8fafc;
+      }
+      .font-display {
+        font-family: 'Space Grotesk', system-ui, sans-serif;
+      }
+      .glass-card {
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid var(--border-glass);
+        backdrop-filter: blur(16px);
+      }
+      .glass-input {
+        background: rgba(2, 6, 23, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #fff;
+        outline: none;
+        transition: all 0.2s ease;
+      }
+      .glass-input:focus {
+        border-color: var(--cyan-glow);
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+      }
+      .btn-glow {
+        background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+        box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+        transition: all 0.25s ease;
+      }
+      .btn-glow:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 28px rgba(6, 182, 212, 0.6);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col antialiased">
+    <!-- Pantalla de Login / PIN de Seguridad -->
+    <div id="auth-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4">
+      <div class="glass-card max-w-md w-full p-8 rounded-3xl border border-cyan-500/30 text-center shadow-2xl">
+        <img src="../Logo_Caribia_labs.png" alt="CaribIA Labs" class="w-16 h-16 mx-auto mb-4 drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]" />
+        <h2 class="font-display text-2xl font-bold text-white mb-1">Consola Privada de Fábrica</h2>
+        <p class="text-xs text-slate-400 mb-6">Acceso exclusivo para el administrador de CaribIA Labs</p>
+
+        <form id="pin-form" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 text-left mb-1">PIN o Contraseña de Administrador:</label>
+            <input
+              type="password"
+              id="admin-pin-input"
+              required
+              placeholder="Ingresa PIN (default: admin2026)"
+              class="glass-input w-full px-4 py-3 rounded-xl text-center text-lg tracking-widest font-mono"
+            />
+          </div>
+          <button type="submit" class="btn-glow w-full py-3 rounded-xl font-bold text-white text-sm">
+            Ingresar al Panel de Control 🔓
+          </button>
+          <p id="pin-error" class="text-xs text-rose-400 font-bold hidden">PIN incorrecto. Reintenta.</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Panel de Control Principal (Visible tras autenticación) -->
+    <div id="admin-dashboard" class="hidden flex-1 flex flex-col">
+      <!-- Barra Superior -->
+      <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <img src="../Logo_Caribia_labs.png" alt="CaribIA Labs" class="h-9 w-auto" />
+            <div>
+              <span class="font-display font-bold text-white text-base leading-none block">CaribIA Labs Console</span>
+              <span class="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">Software Factory Admin v2.0</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Servidor Activo (Puerto 8000)
+            </span>
+            <a href="../index.html" target="_blank" class="text-xs text-slate-400 hover:text-white transition">
+              Ver Web Pública ↗
+            </a>
+            <button id="btn-logout" class="text-xs text-rose-400 hover:underline">
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
+        <!-- Tarjetas de Métricas de Fábrica -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass-card p-5 rounded-2xl">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Clientes Aprovisionados</span>
+            <div class="text-2xl font-extrabold text-white mt-2" id="metric-tenants-count">4 Activos</div>
+            <span class="text-xs text-cyan-400 mt-1 block">100% aislados e independientes</span>
+          </div>
+
+          <div class="glass-card p-5 rounded-2xl">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Plantillas Listas</span>
+            <div class="text-2xl font-extrabold text-white mt-2">4 Industriales</div>
+            <span class="text-xs text-slate-400 mt-1 block">Moda, Gastronomía, Salud, Salón</span>
+          </div>
+
+          <div class="glass-card p-5 rounded-2xl">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Cerebro Cognitivo</span>
+            <div class="text-2xl font-extrabold text-emerald-400 mt-2">Gemini 2.0 Flash</div>
+            <span class="text-xs text-slate-400 mt-1 block">Sin restricciones de Meta</span>
+          </div>
+
+          <div class="glass-card p-5 rounded-2xl">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Costo Fijo de Operación</span>
+            <div class="text-2xl font-extrabold text-cyan-400 mt-2">$0 USD / mes</div>
+            <span class="text-xs text-emerald-400 mt-1 block">Cloudflare Edge + Neon Postgres</span>
+          </div>
+        </div>
+
+        <!-- Sección Principal: Creador de Nuevo Cliente & Simulador de Bot -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Columna Izquierda: Formulario de Aprovisionamiento -->
+          <div class="lg:col-span-7 glass-card p-6 sm:p-8 rounded-3xl border border-cyan-500/20">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="font-display text-xl font-bold text-white">⚡ Aprovisionar Nuevo Cliente</h3>
+                <p class="text-xs text-slate-400">Genera una tienda o app independiente en 2 segundos</p>
+              </div>
+              <span class="text-xs font-bold px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/30">
+                100% Automatizado
+              </span>
+            </div>
+
+            <form id="provision-form" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">Nombre Comercial del Cliente *</label>
+                  <input
+                    type="text"
+                    id="client-name"
+                    required
+                    placeholder="Ej. Óptica Visión del Sol"
+                    class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">Slug / Subdominio Asignado *</label>
+                  <input
+                    type="text"
+                    id="client-slug"
+                    required
+                    placeholder="ej: optica-vision"
+                    class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm font-mono"
+                  />
+                  <span class="text-[11px] text-slate-500">Quedará: <span id="slug-preview" class="text-cyan-400">optica-vision.caribialabs.com</span></span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Plantilla Industrial Base *</label>
+                <select id="client-template" class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm cursor-pointer">
+                  <option value="retail-stock">👗 Tienda de Ropa & Moda (Shopify Style con Stock por Talle)</option>
+                  <option value="menu-gastronomia">🍔 Menú Digital & Delivery (0% Comisión, Comandas a WhatsApp)</option>
+                  <option value="citas-salud">🩺 Agenda Médica & Citas (Turnos sin Superposiciones)</option>
+                  <option value="insumos-belleza">✂️ Control de Insumos & Salón (1 Toque para Consumos)</option>
+                </select>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp Oficial para Pedidos *</label>
+                  <input
+                    type="text"
+                    id="client-phone"
+                    required
+                    value="5491154188294"
+                    placeholder="Ej. 5491154188294"
+                    class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm"
+                  />
+                  <span class="text-[10px] text-slate-500">Recibirá las órdenes de sus clientes</span>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">Alias Bancario para Cobros</label>
+                  <input
+                    type="text"
+                    id="client-alias"
+                    placeholder="Ej. optica.vision.mp"
+                    class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">% Descuento por Transferencia (Alias)</label>
+                  <input
+                    type="number"
+                    id="client-discount"
+                    value="15"
+                    min="0"
+                    max="50"
+                    class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">Moneda de Facturación</label>
+                  <select id="client-currency" class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm">
+                    <option value="ARS">ARS ($ Pesos Argentinos)</option>
+                    <option value="USD">USD ($ Dólares)</option>
+                    <option value="COP">COP ($ Pesos Colombianos)</option>
+                    <option value="CLP">CLP ($ Pesos Chilenos)</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-glow w-full py-3.5 rounded-xl font-bold text-white text-sm mt-4 flex items-center justify-center gap-2">
+                <span>🚀 Fabricar y Aprovisionar Nueva Web para Cliente</span>
+              </button>
+            </form>
+
+            <!-- Feedback de Creación -->
+            <div id="provision-success-box" class="hidden mt-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                <span>✓</span>
+                <span id="success-title">¡Cliente aprovisionado con éxito en 1.4 segundos!</span>
+              </div>
+              <p class="text-xs text-slate-300" id="success-desc">
+                La web ha sido generada de forma independiente y aislada. Ya puedes abrirla para revisar o enviar el enlace al cliente.
+              </p>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <a id="btn-open-generated" href="#" target="_blank" class="px-4 py-2 rounded-lg bg-emerald-500 text-black font-extrabold text-xs">
+                  Abrir Web del Cliente ↗
+                </a>
+                <button id="btn-copy-link" type="button" class="px-4 py-2 rounded-lg bg-slate-800 text-white font-bold text-xs hover:bg-slate-700">
+                  Copiar Enlace para WhatsApp 📋
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Simulador de Chatbot con IA -->
+          <div class="lg:col-span-5 glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-display text-lg font-bold text-white">🤖 Simulador de Bot con IA</h3>
+                <p class="text-xs text-slate-400">Prueba cómo responde Gemini a un comprador</p>
+              </div>
+              <span class="text-xs px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-full font-bold">
+                Motor Cognitivo
+              </span>
+            </div>
+
+            <!-- Ventana de Chat Simulado -->
+            <div id="chat-messages-box" class="flex-1 bg-slate-950/80 rounded-2xl border border-slate-800/80 p-4 space-y-3 overflow-y-auto max-h-80 mb-4 text-xs">
+              <div class="flex gap-2">
+                <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white">IA</div>
+                <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200">
+                  ¡Hola! Soy la vendedora virtual de CaribIA Labs. Escribe cualquier duda sobre productos, talles o envíos para probarme.
+                </div>
+              </div>
+            </div>
+
+            <!-- Input del Chat -->
+            <form id="chat-simulator-form" class="flex gap-2">
+              <input
+                type="text"
+                id="sim-user-message"
+                required
+                placeholder="Ej. ¿Qué precio tiene y qué talles quedan?"
+                class="glass-input flex-1 px-3 py-2 rounded-xl text-xs"
+              />
+              <button type="submit" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs">
+                Enviar
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Directorio de Clientes / Tenants Aprovisionados -->
+        <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800">
+          <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+            <div>
+              <h3 class="font-display text-xl font-bold text-white">Directorio de Clientes Activos</h3>
+              <p class="text-xs text-slate-400">Páginas y webapps generadas por la fábrica de software</p>
+            </div>
+            <span class="text-xs text-slate-500 font-mono">Total registrados: <strong id="tenants-badge" class="text-white">4</strong></span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-800">
+                  <th class="pb-3 font-bold">Cliente / Negocio</th>
+                  <th class="pb-3 font-bold">Plantilla</th>
+                  <th class="pb-3 font-bold">WhatsApp Receptor</th>
+                  <th class="pb-3 font-bold">Alias de Cobro</th>
+                  <th class="pb-3 font-bold">Subdominio</th>
+                  <th class="pb-3 font-bold text-right">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tenants-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                <!-- Inyectado dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <footer class="border-t border-slate-900 py-4 text-center text-xs text-slate-500">
+        CaribIA Labs Factory Console · Entorno Privado de Gestión · La entrega personalizada más rápida del mercado
+      </footer>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

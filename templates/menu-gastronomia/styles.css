@@ -1,0 +1,102 @@
+/* ====================================================================
+   FORNO & CO. - MENÚ GASTRONÓMICO & DELIVERY (STYLES)
+   ==================================================================== */
+:root {
+  --bg-dark: #080d1a;
+  --bg-card: #0f172a;
+  --accent-amber: #f59e0b;
+  --accent-green: #10b981;
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --text-main: #f8fafc;
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-brand: 'Space Grotesk', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-main); background: var(--bg-dark); color: var(--text-main); }
+
+.container-food { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+
+/* Admin Bar */
+.admin-bar { background: #020617; border-bottom: 1px solid var(--border-glass); padding: 8px 16px; font-size: 0.8rem; }
+.admin-bar-inner { max-width: 1140px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.admin-pill { background: #d97706; color: #fff; font-weight: 800; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; }
+.btn-admin { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-glass); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+.btn-admin.active { background: #10b981; color: #000; font-weight: 700; }
+
+.food-announcement { background: #111827; border-bottom: 1px solid var(--border-glass); }
+
+/* Header */
+.food-header { background: rgba(8, 13, 26, 0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border-glass); }
+.header-grid { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+.food-brand { font-family: var(--font-brand); font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
+.food-slogan { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; color: var(--accent-amber); }
+
+.food-cats-nav { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0; }
+.food-cat-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); color: #cbd5e1; font-size: 0.78rem; font-weight: 700; padding: 6px 14px; border-radius: 9999px; cursor: pointer; white-space: nowrap; }
+.food-cat-btn.active { background: rgba(245, 158, 11, 0.2); border-color: var(--accent-amber); color: #fbbf24; }
+
+.btn-food-cart { display: flex; align-items: center; gap: 8px; background: #1e293b; border: 1px solid var(--border-glass); padding: 8px 16px; border-radius: 9999px; color: #fff; cursor: pointer; }
+.cart-badge-food { background: var(--accent-amber); color: #451a03; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; }
+
+/* Hero */
+.food-hero { position: relative; min-height: 280px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 48px 20px; overflow: hidden; }
+.food-hero-img-wrap { position: absolute; inset: 0; z-index: 1; }
+.food-hero-img { width: 100%; height: 100%; object-fit: cover; }
+.food-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,13,26,0.6) 0%, rgba(8,13,26,0.92) 100%); }
+.food-hero-content { position: relative; z-index: 2; max-width: 680px; }
+.food-hero-badge { display: inline-block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; color: var(--accent-amber); background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 12px; border-radius: 9999px; margin-bottom: 12px; }
+.food-hero-title { font-size: clamp(1.8rem, 3.8vw, 2.6rem); font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 10px; }
+.food-hero-desc { font-size: 0.92rem; color: #cbd5e1; }
+
+/* Menu Section */
+.food-menu-section { padding: 48px 0 80px; }
+.dishes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+
+.dish-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, border-color 0.2s ease; position: relative; }
+.dish-card:hover { transform: translateY(-3px); border-color: rgba(245, 158, 11, 0.35); }
+.dish-img-wrap { height: 190px; position: relative; background: #000; }
+.dish-img { width: 100%; height: 100%; object-fit: cover; }
+.dish-badge { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px); color: var(--accent-amber); font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; }
+
+.dish-body { padding: 18px; display: flex; flex-direction: column; flex-grow: 1; }
+.dish-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.dish-desc { font-size: 0.82rem; color: #94a3b8; line-height: 1.45; margin-bottom: 14px; flex-grow: 1; }
+.dish-price-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.dish-price { font-size: 1.2rem; font-weight: 800; color: #fff; }
+.dish-alias-discount { font-size: 0.72rem; color: var(--accent-green); font-weight: 700; }
+
+.btn-add-dish { width: 100%; background: #d97706; color: #fff; font-weight: 800; font-size: 0.85rem; padding: 10px; border-radius: 10px; border: none; cursor: pointer; transition: background 0.2s ease; }
+.btn-add-dish:hover { background: #f59e0b; color: #000; }
+.btn-add-dish.out { background: #334155; color: #94a3b8; cursor: not-allowed; }
+
+.dish-edit-pill { position: absolute; top: 10px; right: 10px; background: #020617; color: #38bdf8; border: 1px solid rgba(255,255,255,0.2); font-size: 0.72rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; cursor: pointer; z-index: 2; }
+
+/* Cart Drawer */
+.cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 50; display: flex; justify-content: flex-end; }
+.cart-overlay.hidden { display: none; }
+.cart-modal-food { width: 100%; max-width: 440px; background: #0f172a; border-left: 1px solid var(--border-glass); height: 100%; display: flex; flex-direction: column; padding: 20px; }
+.cart-items-body { flex-grow: 1; overflow-y: auto; padding: 16px 0; display: flex; flex-direction: column; gap: 12px; }
+
+.cart-dish-row { display: flex; gap: 10px; background: #080d1a; padding: 10px; border-radius: 10px; border: 1px solid var(--border-glass); align-items: center; }
+.cart-dish-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+.cart-dish-info { flex-grow: 1; }
+.cart-dish-title { font-size: 0.85rem; font-weight: 700; color: #fff; }
+.cart-dish-price { font-size: 0.82rem; font-weight: 800; color: var(--accent-amber); }
+
+.food-input { width: 100%; background: #080d1a; border: 1px solid var(--border-glass); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.85rem; outline: none; }
+.food-input:focus { border-color: var(--accent-amber); }
+
+.deliv-choice-btn, .pay-choice-food { background: #1e293b; border: 1px solid var(--border-glass); border-radius: 8px; padding: 8px; text-align: left; color: #fff; cursor: pointer; }
+.deliv-choice-btn.active, .pay-choice-food.active { background: rgba(245, 158, 11, 0.15); border-color: var(--accent-amber); }
+
+.btn-send-kitchen { width: 100%; background: #25d366; color: #042f1a; font-weight: 800; font-size: 0.92rem; padding: 14px; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-send-kitchen:hover { background: #2ee672; }
+
+/* Modal Edición */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 60; padding: 20px; }
+.modal-backdrop.hidden { display: none; }
+.food-modal-card { background: #0f172a; border: 1px solid rgba(245,158,11,0.3); border-radius: 20px; max-width: 460px; width: 100%; padding: 24px; position: relative; }
+.modal-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+.btn-save { background: #d97706; color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; }
+.btn-cancel { background: #334155; color: #fff; padding: 8px 14px; border-radius: 6px; border: none; cursor: pointer; }

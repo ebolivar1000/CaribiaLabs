@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Administración | Garage Los Pimpollos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .admin-container { max-width: 860px; margin: 0 auto; padding: 24px 18px 80px; }
+      .admin-card { background: #0f172a; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; margin-bottom: 24px; }
+      .admin-input { width: 100%; background: #020617; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 14px; color: #fff; font-size: 0.9rem; margin-top: 6px; }
+      .admin-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.88rem; }
+      .admin-table th { text-align: left; padding: 10px; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .admin-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .stock-btn { background: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.1); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-100">
+    <div class="admin-container">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+        <div>
+          <h1 class="text-xl font-extrabold text-white">Panel de Control PyME</h1>
+          <p class="text-xs text-slate-400">Garage Los Pimpollos · Gestión de Stock & Precios</p>
+        </div>
+        <a href="index.html" class="category-pill active">← Ver Tienda Online</a>
+      </div>
+
+      <!-- Configuración Rápida de Cobro -->
+      <div class="admin-card">
+        <h2 class="text-base font-bold text-white mb-3">⚙️ Datos de Cobro de tu Tienda</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-slate-400">Alias Bancario para Transferencias:</label>
+            <input type="text" class="admin-input" id="cfg-alias" value="pimpollos.garage.mp" />
+          </div>
+          <div>
+            <label class="text-xs text-slate-400">WhatsApp de Notificaciones:</label>
+            <input type="text" class="admin-input" id="cfg-wsp" value="5491154188294" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Cargar Nuevo Producto -->
+      <div class="admin-card">
+        <h2 class="text-base font-bold text-white mb-3">➕ Publicar Nuevo Producto</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-slate-400">Nombre de la Prenda / Producto:</label>
+            <input type="text" class="admin-input" id="new-name" placeholder="Ej. Campera Jeans" />
+          </div>
+          <div>
+            <label class="text-xs text-slate-400">Categoría:</label>
+            <select class="admin-input" id="new-cat">
+              <option value="Indumentaria">Indumentaria</option>
+              <option value="Tecnología">Tecnología</option>
+              <option value="Accesorios">Accesorios</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-slate-400">Precio (ARS):</label>
+            <input type="number" class="admin-input" id="new-price" placeholder="Ej. 35000" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <div>
+            <label class="text-xs text-slate-400">Talle u Opción:</label>
+            <input type="text" class="admin-input" id="new-variant" placeholder="Ej. Talle L / Negro" />
+          </div>
+          <div>
+            <label class="text-xs text-slate-400">Cantidad en Stock:</label>
+            <input type="number" class="admin-input" id="new-stock" placeholder="Ej. 5" />
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary-glow w-full" id="btn-add-product" style="padding: 10px; font-size: 0.9rem;">
+          Publicar Producto en Catálogo
+        </button>
+      </div>
+
+      <!-- Lista y Control de Stock -->
+      <div class="admin-card">
+        <h2 class="text-base font-bold text-white mb-2">📦 Inventario y Stock en Tiempo Real</h2>
+        <p class="text-xs text-slate-400 mb-4">Puedes sumar o restar unidades con 1 toque desde tu celular.</p>
+
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Talle / Variante</th>
+              <th>Stock Actual</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-tbody">
+            <!-- Inyectado dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      // Sincronización con el catálogo de la tienda
+      const items = [
+        { name: "Auriculares Logitech H390 USB", price: 38000, variant: "Negro Mate", stock: 3 },
+        { name: "Combo Drone DJI Mini", price: 450000, variant: "Fly More", stock: 1 },
+        { name: "Remera Oversize Streetwear", price: 28500, variant: "Negro - Talle M", stock: 5 },
+        { name: "Remera Oversize Streetwear", price: 28500, variant: "Negro - Talle L", stock: 2 },
+        { name: "Top & Calza TotalHiit", price: 34000, variant: "Talle S", stock: 4 }
+      ];
+
+      function renderAdminTable() {
+        const tbody = document.getElementById("admin-products-tbody");
+        tbody.innerHTML = items.map((item, idx) => `
+          <tr>
+            <td style="font-weight: 700; color: #fff;">${item.name}</td>
+            <td>$${item.price.toLocaleString("es-AR")}</td>
+            <td style="color: #06b6d4;">${item.variant}</td>
+            <td>
+              <span style="font-weight: 800; color: ${item.stock > 0 ? '#34d399' : '#f87171'};">
+                ${item.stock > 0 ? `${item.stock} unidades` : 'Agotado'}
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="stock-btn" onclick="updateAdminStock(${idx}, -1)">-</button>
+                <button class="stock-btn" onclick="updateAdminStock(${idx}, 1)">+</button>
+              </div>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      window.updateAdminStock = function(idx, delta) {
+        items[idx].stock = Math.max(0, items[idx].stock + delta);
+        renderAdminTable();
+      };
+
+      document.getElementById("btn-add-product").addEventListener("click", () => {
+        const name = document.getElementById("new-name").value.trim();
+        const price = parseInt(document.getElementById("new-price").value, 10);
+        const variant = document.getElementById("new-variant").value.trim();
+        const stock = parseInt(document.getElementById("new-stock").value, 10);
+
+        if (!name || isNaN(price) || !variant || isNaN(stock)) {
+          alert("Por favor completa todos los campos del producto.");
+          return;
+        }
+
+        items.unshift({ name, price, variant, stock });
+        renderAdminTable();
+
+        document.getElementById("new-name").value = "";
+        document.getElementById("new-price").value = "";
+        document.getElementById("new-variant").value = "";
+        document.getElementById("new-stock").value = "";
+        alert("¡Producto publicado con éxito en tu catálogo!");
+      });
+
+      renderAdminTable();
+    </script>
+  </body>
+</html>

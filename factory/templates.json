@@ -1,0 +1,75 @@
+{
+  "templates": {
+    "retail-stock": {
+      "id": "retail-stock",
+      "name": "Tienda Online de Indumentaria & Moda (Shopify Style)",
+      "vertical": "retail",
+      "source_dir": "templates/retail-stock",
+      "features": [
+        "Control de stock por talle (XS a XL)",
+        "3 Cuotas con Mercado Pago",
+        "15% OFF con Transferencia Bancaria (Alias)",
+        "Modo Comerciante para editar precios y existencias en vivo",
+        "Carrito deslizable con meta de envío gratis",
+        "Envío de comanda estructurada a WhatsApp"
+      ],
+      "default_config": {
+        "currency": "ARS",
+        "free_shipping_threshold": 80000,
+        "bank_discount_percent": 15,
+        "default_phone": "5491154188294"
+      }
+    },
+    "menu-gastronomia": {
+      "id": "menu-gastronomia",
+      "name": "Menú Digital & Delivery Gastronómico (Sin Comisiones)",
+      "vertical": "gastronomia",
+      "source_dir": "templates/menu-gastronomia",
+      "features": [
+        "Cero comisiones a plataformas de terceros (0% vs 30%)",
+        "Envío a domicilio vs Retiro en local (Take away)",
+        "10% OFF con Transferencia Bancaria (Alias)",
+        "Modo Restaurante para pausar platos agotados en vivo",
+        "Comanda estructurada directa a cocina por WhatsApp"
+      ],
+      "default_config": {
+        "currency": "ARS",
+        "delivery_fee": 2500,
+        "bank_discount_percent": 10,
+        "default_phone": "5491154188294"
+      }
+    },
+    "citas-salud": {
+      "id": "citas-salud",
+      "name": "Agenda Inteligente & Reserva de Turnos Médicos",
+      "vertical": "salud",
+      "source_dir": "templates/citas-salud",
+      "features": [
+        "Selector de profesionales por especialidad y matrícula",
+        "Días y horarios dinámicos sin superposiciones",
+        "Reducción de ausentismo con confirmación por WhatsApp",
+        "Recordatorios automáticos 24h antes"
+      ],
+      "default_config": {
+        "default_phone": "5491154188294",
+        "consultation_time_minutes": 45
+      }
+    },
+    "insumos-belleza": {
+      "id": "insumos-belleza",
+      "name": "Control de Insumos & Inventario para Salones de Belleza",
+      "vertical": "belleza",
+      "source_dir": "templates/insumos-belleza",
+      "features": [
+        "Registro de consumos en 1 toque desde el celular del estilista",
+        "Semáforo y alerta visual de stock crítico",
+        "Generador automático de pedidos a proveedor por WhatsApp",
+        "Cálculo de comisiones del día"
+      ],
+      "default_config": {
+        "default_phone": "5491154188294",
+        "critical_stock_threshold": 2
+      }
+    }
+  }
+}

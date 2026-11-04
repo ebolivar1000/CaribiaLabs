@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LUMIÈRE | Control de Insumos & Inventario para Salones de Belleza</title>
+    <meta
+      name="description"
+      content="Aplicación de gestión de stock de insumos, tintes y cálculo de comisiones para peluquerías, salones y barberías."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-slate-950 text-slate-100">
+    <!-- Top Announcement -->
+    <div class="beauty-top-bar">
+      <div class="container-beauty flex justify-between items-center text-xs py-2">
+        <span class="flex items-center gap-1.5 text-purple-400 font-bold">
+          <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+          GESTIÓN OPERATIVA EN LA NUBE · CONTROL DE COMISIONES & MERMA CERO
+        </span>
+        <a href="../../index.html" class="text-purple-300 font-semibold hover:underline">← Volver a CaribIA Labs</a>
+      </div>
+    </div>
+
+    <!-- Header Salón -->
+    <header class="beauty-header sticky top-0 z-40 bg-slate-900 border-b border-slate-800">
+      <div class="container-beauty header-flex py-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-lg">
+            ✂️
+          </div>
+          <div>
+            <h1 class="text-lg font-extrabold text-white leading-none">LUMIÈRE Studio</h1>
+            <p class="text-xs text-purple-400 font-semibold">CONTROL DE INSUMOS & PELUQUERÍA</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button type="button" class="btn-beauty-action" id="btn-open-consume-modal">
+            ⚡ Registrar Consumo Rápido
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="py-10">
+      <div class="container-beauty">
+        <!-- Hero Salón -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div class="stat-card">
+            <span class="stat-label">Insumos Registrados</span>
+            <div class="stat-value text-white" id="stat-total-items">4 productos</div>
+            <span class="stat-sub">Control en tiempo real</span>
+          </div>
+
+          <div class="stat-card border-amber-500/30">
+            <span class="stat-label text-amber-400">⚠️ Alerta de Stock Crítico</span>
+            <div class="stat-value text-amber-400" id="stat-low-stock">1 insumo</div>
+            <span class="stat-sub">Menos de 2 unidades en boliche</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-label">Comisiones del Día</span>
+            <div class="stat-value text-emerald-400">$42.500 ARS</div>
+            <span class="stat-sub">3 estilistas activos</span>
+          </div>
+        </div>
+
+        <!-- Tabla de Insumos -->
+        <div class="beauty-card mb-10">
+          <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+            <div>
+              <h3 class="text-lg font-bold text-white">Inventario de Tintes & Químicos</h3>
+              <p class="text-xs text-slate-400">Control de mermas y existencias de salón</p>
+            </div>
+            <button type="button" class="btn-sm-whatsapp" id="btn-reorder-wsp">
+              📲 Pedir Reposición a Proveedor por WhatsApp
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="beauty-table">
+              <thead>
+                <tr>
+                  <th>Insumo / Químico</th>
+                  <th>Categoría</th>
+                  <th>Precio Costo</th>
+                  <th>Stock Actual</th>
+                  <th>Estado</th>
+                  <th>Acción Rápida</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-tbody">
+                <!-- Inyectado dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal de Consumo Rápido -->
+    <div class="modal-backdrop hidden" id="consume-modal">
+      <div class="consume-card">
+        <button type="button" class="modal-close" id="close-consume-modal">✕</button>
+        <span class="text-xs font-bold text-purple-400 uppercase">Registro en 1 Toque</span>
+        <h4 class="text-lg font-bold text-white mb-3">Imputar Consumo de Insumo</h4>
+
+        <form id="form-consume">
+          <div class="mb-3">
+            <label class="text-xs font-bold text-slate-300 block mb-1">Estilista que aplicó el servicio:</label>
+            <select id="consume-stylist" class="beauty-input">
+              <option value="Sofía (Colorista)">Sofía (Colorista Senior)</option>
+              <option value="Lucas (Barbero)">Lucas (Barbero)</option>
+              <option value="Martín (Estilista)">Martín (Estilista)</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="text-xs font-bold text-slate-300 block mb-1">Insumo Utilizado:</label>
+            <select id="consume-item-select" class="beauty-input">
+              <!-- Opciones dinámicas -->
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="text-xs font-bold text-slate-300 block mb-1">Cantidad Utilizada:</label>
+            <input type="number" id="consume-amount" value="1" min="1" max="10" class="beauty-input" />
+          </div>
+
+          <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
+            <button type="button" class="btn-cancel" id="btn-cancel-consume">Cancelar</button>
+            <button type="submit" class="btn-purple-save">Registrar Consumo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer Belleza -->
+    <footer class="bg-slate-900 text-slate-500 py-8 border-t border-slate-800 text-xs text-center">
+      <div class="container-beauty">
+        <p class="text-slate-400 font-bold mb-1">InventarioSalón · Sistema de Gestión de Belleza</p>
+        <p>Desarrollado y automatizado por <a href="../../index.html" class="text-purple-400 underline">CaribIA Labs</a></p>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

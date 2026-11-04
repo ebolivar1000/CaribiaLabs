@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="store-meta-title">AURA Studio | Tienda Online de Ropa & Indumentaria</title>
+    <meta
+      name="description"
+      content="Tienda online de indumentaria y moda con stock en tiempo real, 3 cuotas sin interés con Mercado Pago y 15% OFF por transferencia bancaria."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- ============================================================ -->
+    <!-- BARRA FLOTANTE DEL DUEÑO (MODO EDICIÓN RÁPIDA / CMS)         -->
+    <!-- Permite entender y probar cómo el comerciante cambia precios -->
+    <!-- ============================================================ -->
+    <aside class="owner-toolbar" id="owner-toolbar">
+      <div class="owner-toolbar-inner">
+        <div class="flex items-center gap-2">
+          <span class="owner-badge">⚡ MODO COMERCIANTE</span>
+          <span class="owner-tip hidden md:inline">Edita precios, stock y datos de cobro con 1 clic</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button type="button" class="btn-owner-action" id="btn-toggle-edit-mode">
+            <span id="edit-mode-label">✏️ Activar Edición en Vivo</span>
+          </button>
+          <button type="button" class="btn-owner-settings" id="btn-open-settings">
+            ⚙️ Ajustes de Cobro & WhatsApp
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Barra de Anuncios Estilo Shopify -->
+    <div class="top-announcement-bar">
+      <div class="container-announcement">
+        <div class="announcement-slider">
+          <span>✨ <strong>3 CUOTAS SIN INTERÉS</strong> CON MERCADO PAGO · <strong>15% OFF</strong> CON TRANSFERENCIA ALIAS</span>
+          <span class="hidden md:inline">· ENVÍOS GRATIS A PARTIR DE $50.000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header Principal Shopify Clean Minimalist -->
+    <header class="shopify-header sticky-header">
+      <div class="container-header">
+        <!-- Menú Hamburguesa Móvil -->
+        <button type="button" class="mobile-menu-trigger md:hidden" id="mobile-menu-btn" aria-label="Abrir menú">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
+        <!-- Navegación Izquierda Desktop -->
+        <nav class="desktop-navigation hidden md:flex">
+          <a href="#catalogo" class="nav-link active" data-filter="all">Todas las prendas</a>
+          <a href="#catalogo" class="nav-link" data-filter="Remeras">Remeras</a>
+          <a href="#catalogo" class="nav-link" data-filter="Buzos">Buzos & Hoodies</a>
+          <a href="#catalogo" class="nav-link" data-filter="Pantalones">Pantalones</a>
+          <a href="#catalogo" class="nav-link" data-filter="Abrigos">Abrigos</a>
+          <a href="#catalogo" class="nav-link text-sale font-bold" data-filter="Sale">SALE -15%</a>
+        </nav>
+
+        <!-- Brand / Logo Editorial Centrado -->
+        <div class="brand-wrapper">
+          <a href="#" class="brand-logo-text" id="store-brand-name">AURA STUDIO</a>
+          <span class="brand-subtext" id="store-brand-sub">BUENOS AIRES · INDUMENTARIA</span>
+        </div>
+
+        <!-- Acciones Derecha (Buscar y Carrito) -->
+        <div class="header-right-actions">
+          <div class="search-trigger-box">
+            <input
+              type="text"
+              id="header-search-input"
+              placeholder="Buscar remera, buzo, talle..."
+              class="header-search-field"
+            />
+          </div>
+
+          <button type="button" class="cart-trigger-shopify" id="open-cart-drawer" aria-label="Ver carrito">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            <span class="cart-count-bubble" id="cart-counter-bubble">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ============================================================ -->
+      <!-- HERO BANNER EDITORIAL DE MODA (SHOPIFY LOOK)                 -->
+      <!-- ============================================================ -->
+      <section class="shopify-hero">
+        <div class="hero-image-backdrop">
+          <img src="assets/hero_fashion.jpg" alt="Nueva Colección AURA Studio" class="hero-cover-img" />
+          <div class="hero-gradient-overlay"></div>
+        </div>
+        <div class="hero-content-box">
+          <span class="hero-collection-tag">NUEVA COLECCIÓN OTOÑO / INVIERNO</span>
+          <h2 class="hero-headline">Prendas con propósito, calce perfecto y stock real.</h2>
+          <p class="hero-subhead">
+            Diseños atemporales confeccionados con materiales nobles. Compra online en 3 cuotas o ahorra 15% pagando con transferencia inmediata.
+          </p>
+          <div class="flex items-center justify-center gap-3">
+            <a href="#catalogo" class="btn-hero-primary">Explorar Catálogo</a>
+            <a href="#beneficios" class="btn-hero-secondary">Medios de Pago & Envíos</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- BARRA DE BENEFICIOS (TRUST BADGES SHOPIFY)                   -->
+      <!-- ============================================================ -->
+      <section class="trust-bar" id="beneficios">
+        <div class="container-general grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+          <div class="trust-item">
+            <div class="trust-icon">💳</div>
+            <div>
+              <h4 class="trust-title">3 Cuotas sin Interés</h4>
+              <p class="trust-desc">Con todas las tarjetas a través de Mercado Pago.</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">💸</div>
+            <div>
+              <h4 class="trust-title">15% OFF por Transferencia</h4>
+              <p class="trust-desc">Descuento automático pagando por Alias bancario.</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">📦</div>
+            <div>
+              <h4 class="trust-title">Envíos a Todo el País</h4>
+              <p class="trust-desc">Despacho en 24hs o retiro sin cargo en el local.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- CATÁLOGO PRINCIPAL DE PRODUCTOS                              -->
+      <!-- ============================================================ -->
+      <section class="catalog-section" id="catalogo">
+        <div class="container-general">
+          <!-- Cabecera de Colección y Filtros -->
+          <div class="collection-header flex items-center justify-between flex-wrap gap-4 mb-8 pb-4 border-b border-slate-200">
+            <div>
+              <h2 class="collection-title" id="current-category-name">Todas las Prendas</h2>
+              <p class="collection-count text-xs text-slate-500 mt-1" id="products-counter-text">6 productos disponibles</p>
+            </div>
+
+            <!-- Botón para Agregar Prenda (visible en modo comerciante) -->
+            <button type="button" class="btn-add-new-product hidden" id="btn-quick-add-product">
+              ➕ Agregar Nueva Prenda al Catálogo
+            </button>
+          </div>
+
+          <!-- Grilla de Productos Shopify -->
+          <div class="shopify-products-grid" id="products-container">
+            <!-- Inyectado dinámicamente desde app.js -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- DRAWER DEL CARRITO (SLIDE-OVER SHOPIFY STYLE)                -->
+    <!-- ============================================================ -->
+    <div class="cart-backdrop hidden" id="cart-backdrop">
+      <div class="shopify-cart-drawer">
+        <!-- Header del Carrito -->
+        <div class="cart-drawer-top">
+          <div class="flex items-center gap-2">
+            <h3 class="cart-title">Tu Carrito</h3>
+            <span class="cart-items-qty" id="cart-drawer-qty">(0)</span>
+          </div>
+          <button type="button" class="cart-close-trigger" id="close-cart-drawer" aria-label="Cerrar carrito">✕</button>
+        </div>
+
+        <!-- Barra de Envío Gratis Dinámica -->
+        <div class="free-shipping-bar-box">
+          <p class="free-shipping-text" id="free-shipping-msg">
+            ¡Agrega <strong>$50.000</strong> para tener <strong>Envío Gratis</strong>!
+          </p>
+          <div class="free-shipping-progress">
+            <div class="free-shipping-fill" id="free-shipping-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Lista de Productos en el Carrito -->
+        <div class="cart-drawer-body" id="cart-items-list">
+          <!-- Renderizado dinámico -->
+        </div>
+
+        <!-- Footer con Resumen y Checkout -->
+        <div class="cart-drawer-bottom" id="cart-drawer-bottom-panel">
+          <!-- Opciones de Envío -->
+          <div class="cart-delivery-selector mb-3">
+            <label class="text-xs font-bold text-slate-700 block mb-1">Método de entrega:</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" class="delivery-option-btn active" id="btn-delivery-pickup">
+                <span class="text-xs font-bold block">Retiro en Local</span>
+                <span class="text-[10px] text-slate-500">Gratis · Palermo</span>
+              </button>
+              <button type="button" class="delivery-option-btn" id="btn-delivery-ship">
+                <span class="text-xs font-bold block">Envío a Domicilio</span>
+                <span class="text-[10px] text-slate-500" id="cart-shipping-price-label">+$3.500 ARS</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Selección de Método de Pago -->
+          <div class="cart-payment-selector mb-3">
+            <label class="text-xs font-bold text-slate-700 block mb-1">Forma de pago:</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" class="pay-option-btn active" id="btn-pay-alias-choice">
+                <span class="text-xs font-bold text-emerald-700 block">Transferencia</span>
+                <span class="text-[10px] text-emerald-600 font-bold">15% OFF (Alias)</span>
+              </button>
+              <button type="button" class="pay-option-btn" id="btn-pay-mp-choice">
+                <span class="text-xs font-bold text-cyan-800 block">Mercado Pago</span>
+                <span class="text-[10px] text-slate-500">3 cuotas s/interés</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Desglose de Totales -->
+          <div class="cart-totals-summary mb-4">
+            <div class="flex justify-between text-xs text-slate-600 mb-1">
+              <span>Subtotal:</span>
+              <span id="cart-subtotal-val">$0 ARS</span>
+            </div>
+            <div class="flex justify-between text-xs text-emerald-700 mb-1 font-semibold" id="cart-discount-row">
+              <span>Descuento Transferencia (15% OFF):</span>
+              <span id="cart-discount-val">-$0 ARS</span>
+            </div>
+            <div class="flex justify-between text-xs text-slate-600 mb-1">
+              <span>Costo de Envío:</span>
+              <span id="cart-shipping-val">Gratis</span>
+            </div>
+            <div class="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-200">
+              <span>Total a Pagar:</span>
+              <span class="text-slate-900" id="cart-final-total">$0 ARS</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1" id="cart-installments-text">
+              o en 3 cuotas sin interés con Mercado Pago
+            </p>
+          </div>
+
+          <!-- Botón de Compra Directa por WhatsApp -->
+          <button type="button" class="btn-shopify-checkout" id="btn-checkout-whatsapp">
+            <span>Iniciar Compra vía WhatsApp</span>
+            <svg class="w-5 h-5 fill-current ml-2" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL DE DETALLE DE PRENDA (PRODUCT DETAIL MODAL)             -->
+    <!-- ============================================================ -->
+    <div class="modal-backdrop hidden" id="product-detail-modal">
+      <div class="shopify-modal-card">
+        <button type="button" class="modal-close-trigger" id="close-detail-modal">✕</button>
+        <div class="modal-content-grid">
+          <div class="modal-gallery">
+            <img id="detail-modal-img" src="" alt="Prenda" class="modal-primary-img" />
+          </div>
+          <div class="modal-product-info">
+            <span class="product-vendor-tag">AURA STUDIO</span>
+            <h2 class="modal-product-title" id="detail-modal-title">Remera Oversize Heavyweight</h2>
+
+            <div class="modal-price-box mb-4">
+              <span class="price-regular-modal" id="detail-modal-price">$38.000 ARS</span>
+              <span class="price-transfer-discount" id="detail-modal-transfer-price">
+                $32.300 ARS pagando con Transferencia (15% OFF)
+              </span>
+              <div class="installments-badge-modal">
+                💳 <strong>3 cuotas fijas</strong> de <span id="detail-modal-cuotas">$12.666</span> sin interés
+              </div>
+            </div>
+
+            <!-- Selector de Color -->
+            <div class="variant-group mb-4">
+              <label class="variant-label">
+                Color: <strong id="selected-color-label">Negro</strong>
+              </label>
+              <div class="color-swatches-grid" id="modal-color-swatches">
+                <!-- Inyectado dinámicamente -->
+              </div>
+            </div>
+
+            <!-- Selector de Talles -->
+            <div class="variant-group mb-5">
+              <div class="flex items-center justify-between mb-2">
+                <label class="variant-label">Talle:</label>
+                <button type="button" class="size-guide-link" id="btn-open-size-guide">📐 Guía de talles</button>
+              </div>
+              <div class="sizes-buttons-grid" id="modal-sizes-buttons">
+                <!-- Inyectado dinámicamente -->
+              </div>
+              <span class="stock-status-notice mt-2 block" id="modal-stock-status-text">
+                ✓ En stock disponible para entrega inmediata
+              </span>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="modal-actions-box">
+              <button type="button" class="btn-shopify-add-cart" id="btn-add-to-cart-action">
+                Agregar al Carrito
+              </button>
+              <button type="button" class="btn-shopify-buy-now" id="btn-buy-now-action">
+                Comprar Ahora
+              </button>
+            </div>
+
+            <!-- Acordeones de Información Estilo Shopify -->
+            <div class="shopify-accordions mt-6">
+              <details class="accordion-item" open>
+                <summary class="accordion-title">Detalles & Calce</summary>
+                <div class="accordion-content" id="detail-modal-desc">
+                  Confeccionada en algodón 100% peinado de alto gramaje (24/1). Corte holgado con hombros caídos y cuello cerrado en ribb.
+                </div>
+              </details>
+              <details class="accordion-item">
+                <summary class="accordion-title">Envíos & Medios de Pago</summary>
+                <div class="accordion-content">
+                  • Envíos a todo el país por Correo Argentino / Andreani.<br />
+                  • Retiro gratuito en nuestro showroom en Palermo.<br />
+                  • Mercado Pago (tarjetas y cuotas) o Transferencia Bancaria (Alias directo con 15% OFF).
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL DE GUÍA DE TALLES                                      -->
+    <!-- ============================================================ -->
+    <div class="modal-backdrop hidden" id="size-guide-modal">
+      <div class="size-guide-card">
+        <button type="button" class="modal-close-trigger" id="close-size-guide">✕</button>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">Guía de Talles (Medidas en cm)</h3>
+        <p class="text-xs text-slate-500 mb-4">Medidas tomadas en plano sobre la prenda sin estirar.</p>
+        <div class="overflow-x-auto">
+          <table class="size-table">
+            <thead>
+              <tr>
+                <th>Talle</th>
+                <th>Pecho (Sisa a Sisa)</th>
+                <th>Largo Total</th>
+                <th>Largo de Manga</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>S</td><td>56 cm</td><td>72 cm</td><td>22 cm</td></tr>
+              <tr><td>M</td><td>59 cm</td><td>75 cm</td><td>23 cm</td></tr>
+              <tr><td>L</td><td>62 cm</td><td>78 cm</td><td>24 cm</td></tr>
+              <tr><td>XL</td><td>65 cm</td><td>81 cm</td><td>25 cm</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL DE EDICIÓN DE PRODUCTO (PARA EL DUEÑO)                -->
+    <!-- ============================================================ -->
+    <div class="modal-backdrop hidden" id="edit-product-modal">
+      <div class="edit-product-card">
+        <button type="button" class="modal-close-trigger" id="close-edit-modal">✕</button>
+        <span class="text-xs font-bold text-cyan-600 uppercase tracking-wider">Panel Rápido del Comerciante</span>
+        <h3 class="text-lg font-bold text-slate-900 mb-3" id="edit-modal-title">Editar Prenda</h3>
+
+        <form id="form-edit-product">
+          <input type="hidden" id="edit-prod-id" />
+          <div class="mb-3">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre de la Prenda:</label>
+            <input type="text" id="edit-prod-name" class="shopify-input" required />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Precio de Lista (ARS):</label>
+              <input type="number" id="edit-prod-price" class="shopify-input" required />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Categoría:</label>
+              <select id="edit-prod-category" class="shopify-input">
+                <option value="Remeras">Remeras</option>
+                <option value="Buzos">Buzos & Hoodies</option>
+                <option value="Pantalones">Pantalones</option>
+                <option value="Abrigos">Abrigos</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Stock por Talle -->
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-slate-700 mb-2">Unidades en Stock por Talle:</label>
+            <div class="grid grid-cols-4 gap-2" id="edit-variants-stock-grid">
+              <!-- Inyectado dinámicamente -->
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-3 border-t border-slate-200">
+            <button type="button" class="btn-cancel" id="btn-cancel-edit">Cancelar</button>
+            <button type="submit" class="btn-save-changes">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL DE AJUSTES GENERALES (ALIAS, WHATSAPP, MARCA)          -->
+    <!-- ============================================================ -->
+    <div class="modal-backdrop hidden" id="settings-modal">
+      <div class="edit-product-card">
+        <button type="button" class="modal-close-trigger" id="close-settings-modal">✕</button>
+        <span class="text-xs font-bold text-cyan-600 uppercase tracking-wider">Ajustes de Tu Tienda</span>
+        <h3 class="text-lg font-bold text-slate-900 mb-3">Configuración de Cobro & Pedidos</h3>
+
+        <form id="form-settings">
+          <div class="mb-3">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre de la Tienda:</label>
+            <input type="text" id="setting-store-name" class="shopify-input" required />
+          </div>
+          <div class="mb-3">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Número de WhatsApp (con código de país):</label>
+            <input type="text" id="setting-whatsapp" class="shopify-input" required />
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Alias Bancario para Transferencias:</label>
+              <input type="text" id="setting-alias" class="shopify-input" required />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">% Descuento por Transferencia:</label>
+              <input type="number" id="setting-discount" class="shopify-input" min="0" max="50" required />
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-3 border-t border-slate-200">
+            <button type="button" class="btn-cancel" id="btn-cancel-settings">Cerrar</button>
+            <button type="submit" class="btn-save-changes">Guardar Configuración</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer Shopify Clean -->
+    <footer class="shopify-footer">
+      <div class="container-general py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="md:col-span-2">
+            <h3 class="footer-brand-title" id="footer-store-name">AURA STUDIO</h3>
+            <p class="footer-desc">
+              Tienda online de indumentaria y diseño contemporáneo. Desarrollada sobre el motor de software factory de CaribIA Labs con costo operativo inicial cero ($0).
+            </p>
+          </div>
+          <div>
+            <h4 class="footer-sub-title">Navegación</h4>
+            <ul class="footer-nav-list">
+              <li><a href="#catalogo">Todas las Prendas</a></li>
+              <li><a href="#beneficios">Envíos & Entregas</a></li>
+              <li><a href="#beneficios">Formas de Pago</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="footer-sub-title">Atención al Cliente</h4>
+            <ul class="footer-nav-list">
+              <li><a href="https://wa.me/5491154188294" target="_blank" rel="noopener">WhatsApp Oficial</a></li>
+              <li><a href="../../index.html">Volver a CaribIA Labs Hub</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-copyright mt-10 pt-6 border-t border-slate-200 text-center text-xs text-slate-400">
+          © 2026 AURA Studio. Todos los derechos reservados · Desarrollado por CaribIA Labs.
+        </div>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

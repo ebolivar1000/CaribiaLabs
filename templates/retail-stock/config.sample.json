@@ -1,0 +1,29 @@
+{
+  "tenant_id": "garage-pimpollos",
+  "business_name": "Garage Los Pimpollos",
+  "tagline": "Ropa, Calzado & Tecnología de Ocasión",
+  "whatsapp_phone": "5491154188294",
+  "currency": "ARS",
+  "currency_symbol": "$",
+  "branding": {
+    "primary_color": "#06b6d4",
+    "accent_color": "#10b981",
+    "background_theme": "dark",
+    "logo_url": "Logo_Caribia_labs.png"
+  },
+  "payments": {
+    "mercadopago_enabled": true,
+    "mercadopago_public_key": "TEST-XXXX-XXXX-XXXX",
+    "bank_transfer_enabled": true,
+    "bank_alias": "pimpollos.garage.mp",
+    "bank_cbu_cvu": "0000003100010000000000",
+    "bank_holder_name": "Everth Bolívar",
+    "bank_discount_percent": 10
+  },
+  "shipping": {
+    "pickup_in_store": true,
+    "pickup_address": "Palermo / Recoleta, CABA",
+    "home_delivery": true,
+    "default_shipping_cost": 3500
+  }
+}

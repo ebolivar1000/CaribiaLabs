@@ -1,0 +1,16 @@
+name = "caribia-labs-api"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+DEFAULT_WHATSAPP_PHONE = "5491154188294"
+GEMINI_MODEL = "gemini-2.0-flash"
+
+# Variables de entorno secretas (Se configuran con: wrangler secret put <KEY>):
+# - DATABASE_URL: Postgres Connection String de Neon (ej: postgresql://user:pass@ep-cool-db.us-east-2.aws.neon.tech/neondb?sslmode=require)
+# - GEMINI_API_KEY: Llave de Google AI Studio para el motor cognitivo
+# - WHATSAPP_VERIFY_TOKEN: Token de verificación de Meta Webhooks (ej: "caribia_labs_secret_verify_2026")
+# - WHATSAPP_ACCESS_TOKEN: Token permanente del Cloud API de Meta
+# - MERCADOPAGO_ACCESS_TOKEN: Access token de producción de Mercado Pago Argentina
