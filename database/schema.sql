@@ -125,3 +125,55 @@ ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE product_variants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+
+-- ====================================================================
+-- 10. MÓDULO CRM & FACTURACIÓN DE CLIENTES (ADMIN CARIBIA LABS)
+-- Administración de Clientes, Abonos Recurrentes y Facturación PyME
+-- ====================================================================
+
+CREATE TABLE IF NOT EXISTS admin_users (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    email VARCHAR(128) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    full_name VARCHAR(128) DEFAULT 'Everth Bolivar',
+    role VARCHAR(32) DEFAULT 'superadmin',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS crm_clients (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tenant_id UUID REFERENCES tenants(id) ON DELETE SET NULL,
+    business_name VARCHAR(128) NOT NULL,
+    contact_name VARCHAR(128),
+    whatsapp_phone VARCHAR(32) NOT NULL,
+    email VARCHAR(128),
+    plan_name VARCHAR(64) NOT NULL,            -- 'Web Básica', 'Tienda Online', 'Web + Bot IA 24/7', 'A Medida'
+    monthly_fee NUMERIC(12,2) NOT NULL,        -- Monto mensual en ARS o USD
+    currency VARCHAR(8) DEFAULT 'ARS',
+    billing_day INT DEFAULT 10,                 -- Día del mes que vence
+    payment_method VARCHAR(32) DEFAULT 'alias', -- 'alias', 'mercadopago', 'transferencia', 'efectivo'
+    status VARCHAR(32) DEFAULT 'al_dia',       -- 'al_dia', 'pendiente', 'vencido'
+    next_due_date DATE,
+    last_payment_date DATE,
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS crm_invoices (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    client_id UUID NOT NULL REFERENCES crm_clients(id) ON DELETE CASCADE,
+    invoice_number VARCHAR(32) NOT NULL,
+    amount NUMERIC(12,2) NOT NULL,
+    period_month VARCHAR(16) NOT NULL,         -- ej: '2026-11'
+    status VARCHAR(32) DEFAULT 'pendiente',    -- 'cobrado', 'pendiente', 'vencido'
+    due_date DATE NOT NULL,
+    paid_at TIMESTAMP WITH TIME ZONE,
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_crm_clients_status ON crm_clients(status);
+CREATE INDEX IF NOT EXISTS idx_crm_invoices_client ON crm_invoices(client_id);
+

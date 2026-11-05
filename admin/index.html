@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CaribIA Labs | Consola Maestra de Administrador (Software Factory)</title>
+    <title>CaribIA Labs | Consola Maestra & CRM de Clientes</title>
     <meta name="robots" content="noindex, nofollow" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/png" href="../Logo_Caribia_labs.png" />
+    <link rel="icon" type="image/png" href="../assets/banner_caribialabs.jpg" />
     <style>
       :root {
         --bg-dark: #070a12;
@@ -28,12 +28,12 @@
         font-family: 'Space Grotesk', system-ui, sans-serif;
       }
       .glass-card {
-        background: rgba(15, 23, 42, 0.7);
+        background: rgba(15, 23, 42, 0.75);
         border: 1px solid var(--border-glass);
-        backdrop-filter: blur(16px);
+        backdrop-filter: blur(20px);
       }
       .glass-input {
-        background: rgba(2, 6, 23, 0.8);
+        background: rgba(2, 6, 23, 0.85);
         border: 1px solid rgba(255, 255, 255, 0.12);
         color: #fff;
         outline: none;
@@ -41,7 +41,7 @@
       }
       .glass-input:focus {
         border-color: var(--cyan-glow);
-        box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+        box-shadow: 0 0 16px rgba(6, 182, 212, 0.3);
       }
       .btn-glow {
         background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
@@ -49,34 +49,81 @@
         transition: all 0.25s ease;
       }
       .btn-glow:hover {
-        transform: translateY(-2px);
+        transform: translateY(-1px);
         box-shadow: 0 6px 28px rgba(6, 182, 212, 0.6);
+      }
+      .tab-btn.active {
+        background: rgba(6, 182, 212, 0.15);
+        border-color: rgba(6, 182, 212, 0.35);
+        color: #22d3ee;
+      }
+      .badge-status {
+        padding: 3px 10px;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .badge-al-dia {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+      .badge-pendiente {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+      }
+      .badge-vencido {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
       }
     </style>
   </head>
   <body class="min-h-screen flex flex-col antialiased">
-    <!-- Pantalla de Login / PIN de Seguridad -->
-    <div id="auth-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4">
-      <div class="glass-card max-w-md w-full p-8 rounded-3xl border border-cyan-500/30 text-center shadow-2xl">
-        <img src="../Logo_Caribia_labs.png" alt="CaribIA Labs" class="w-16 h-16 mx-auto mb-4 drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]" />
-        <h2 class="font-display text-2xl font-bold text-white mb-1">Consola Privada de Fábrica</h2>
+    <!-- Pantalla de Login / Autenticación de Seguridad -->
+    <div id="auth-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-black/92 backdrop-blur-2xl p-4">
+      <div class="glass-card max-w-md w-full p-8 rounded-3xl border border-cyan-500/30 text-center shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+        <img src="../assets/banner_caribialabs.jpg" alt="CaribIA Labs" class="h-10 mx-auto mb-4 rounded-lg object-contain drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]" />
+        <h2 class="font-display text-2xl font-bold text-white mb-1">Consola Privada & CRM</h2>
         <p class="text-xs text-slate-400 mb-6">Acceso exclusivo para el administrador de CaribIA Labs</p>
 
-        <form id="pin-form" class="space-y-4">
+        <form id="login-form" class="space-y-4 text-left">
           <div>
-            <label class="block text-xs font-bold text-slate-300 text-left mb-1">PIN o Contraseña de Administrador:</label>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Usuario / Email de Administrador:</label>
             <input
-              type="password"
-              id="admin-pin-input"
+              type="email"
+              id="admin-email-input"
               required
-              placeholder="Ingresa PIN (default: admin2026)"
-              class="glass-input w-full px-4 py-3 rounded-xl text-center text-lg tracking-widest font-mono"
+              autocomplete="username"
+              placeholder="correo@ejemplo.com"
+              class="glass-input w-full px-4 py-3 rounded-xl text-sm"
             />
           </div>
-          <button type="submit" class="btn-glow w-full py-3 rounded-xl font-bold text-white text-sm">
-            Ingresar al Panel de Control 🔓
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Contraseña de Acceso:</label>
+            <input
+              type="password"
+              id="admin-pass-input"
+              required
+              autocomplete="current-password"
+              placeholder="••••••••••••"
+              class="glass-input w-full px-4 py-3 rounded-xl text-sm"
+            />
+          </div>
+          <button type="submit" class="btn-glow w-full py-3.5 rounded-xl font-bold text-white text-sm mt-2 flex items-center justify-center gap-2">
+            <span>Iniciar Sesión Segura</span>
+            <span class="text-xs">🔒</span>
           </button>
-          <p id="pin-error" class="text-xs text-rose-400 font-bold hidden">PIN incorrecto. Reintenta.</p>
+          <p id="login-error" class="text-xs text-rose-400 font-bold text-center hidden">
+            Credenciales incorrectas. Verifica tu email y contraseña.
+          </p>
         </form>
       </div>
     </div>
@@ -84,63 +131,138 @@
     <!-- Panel de Control Principal (Visible tras autenticación) -->
     <div id="admin-dashboard" class="hidden flex-1 flex flex-col">
       <!-- Barra Superior -->
-      <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-40 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <header class="border-b border-slate-800 bg-slate-950/85 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <img src="../Logo_Caribia_labs.png" alt="CaribIA Labs" class="h-9 w-auto" />
-            <div>
-              <span class="font-display font-bold text-white text-base leading-none block">CaribIA Labs Console</span>
-              <span class="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">Software Factory Admin v2.0</span>
+            <img src="../assets/banner_caribialabs.jpg" alt="CaribIA Labs" class="h-8 w-auto rounded object-contain" />
+            <div class="hidden sm:block">
+              <span class="font-display font-bold text-white text-sm leading-none block">CaribIA Labs Console</span>
+              <span class="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">CRM & Factory Suite v2.0</span>
             </div>
           </div>
 
-          <div class="flex items-center gap-4">
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Servidor Activo (Puerto 8000)
-            </span>
-            <a href="../index.html" target="_blank" class="text-xs text-slate-400 hover:text-white transition">
-              Ver Web Pública ↗
+          <!-- Pestañas de Navegación del Panel -->
+          <nav class="flex items-center gap-1 sm:gap-2">
+            <button type="button" class="tab-btn active px-3 py-1.5 rounded-lg text-xs font-bold transition border border-transparent" data-tab="tab-crm">
+              👥 CRM & Facturación
+            </button>
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent" data-tab="tab-provision">
+              ⚡ Aprovisionar
+            </button>
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent" data-tab="tab-simulator">
+              🤖 Simulador IA
+            </button>
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent" data-tab="tab-sites">
+              🌐 Sitios Activos
+            </button>
+          </nav>
+
+          <div class="flex items-center gap-2 sm:gap-4">
+            <button id="btn-open-security" type="button" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 text-xs font-bold transition flex items-center gap-1.5" title="Configurar cuenta y contraseña">
+              <span>⚙️</span>
+              <span class="hidden md:inline">Seguridad</span>
+            </button>
+            <a href="../index.html" target="_blank" class="text-xs text-slate-400 hover:text-white transition hidden md:inline">
+              Web Pública ↗
             </a>
             <button id="btn-logout" class="text-xs text-rose-400 hover:underline">
-              Cerrar Sesión
+              Salir
             </button>
           </div>
         </div>
       </header>
 
-      <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
-        <!-- Tarjetas de Métricas de Fábrica -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="glass-card p-5 rounded-2xl">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Clientes Aprovisionados</span>
-            <div class="text-2xl font-extrabold text-white mt-2" id="metric-tenants-count">4 Activos</div>
-            <span class="text-xs text-cyan-400 mt-1 block">100% aislados e independientes</span>
+      <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+
+        <!-- ============================================================ -->
+        <!-- PESTAÑA 1: CRM & FACTURACIÓN DE CLIENTES (ESTILO ODOO/LINEAR) -->
+        <!-- ============================================================ -->
+        <section id="panel-crm" class="space-y-6">
+          <!-- KPIs Financieros -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-cyan-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">MRR (Ingreso Recurrente)</span>
+              <div class="text-2xl font-extrabold text-white mt-1.5" id="kpi-mrr">$240.000 ARS</div>
+              <span class="text-[11px] text-cyan-400 mt-1 block">Abonos mensuales acumulados</span>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-emerald-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Cobrado (Mes en Curso)</span>
+              <div class="text-2xl font-extrabold text-emerald-400 mt-1.5" id="kpi-cobrado">$195.000 ARS</div>
+              <span class="text-[11px] text-emerald-400 mt-1 block" id="kpi-al-dia-ratio">4 clientes al día</span>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-amber-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pendiente / Por Cobrar</span>
+              <div class="text-2xl font-extrabold text-amber-400 mt-1.5" id="kpi-pendiente">$45.000 ARS</div>
+              <span class="text-[11px] text-amber-300 mt-1 block" id="kpi-pendientes-count">1 cliente con cobro a vencer</span>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-purple-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Clientes en Cartera</span>
+              <div class="text-2xl font-extrabold text-white mt-1.5" id="kpi-total-clientes">5 Activos</div>
+              <span class="text-[11px] text-slate-400 mt-1 block">Base de clientes CaribIA Labs</span>
+            </div>
           </div>
 
-          <div class="glass-card p-5 rounded-2xl">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Plantillas Listas</span>
-            <div class="text-2xl font-extrabold text-white mt-2">4 Industriales</div>
-            <span class="text-xs text-slate-400 mt-1 block">Moda, Gastronomía, Salud, Salón</span>
+          <!-- Barra de Control del CRM: Filtros, Búsqueda y Botón Nuevo Cliente -->
+          <div class="glass-card p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-bold text-slate-400 mr-1">Filtrar:</span>
+              <button type="button" class="crm-filter-btn active px-3 py-1 rounded-lg text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40" data-filter="todos">
+                Todos (<span id="count-filter-todos">5</span>)
+              </button>
+              <button type="button" class="crm-filter-btn px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800" data-filter="al_dia">
+                🟢 Al Día (<span id="count-filter-aldia">4</span>)
+              </button>
+              <button type="button" class="crm-filter-btn px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800" data-filter="pendiente">
+                🟡 Pendientes (<span id="count-filter-pendientes">1</span>)
+              </button>
+              <button type="button" class="crm-filter-btn px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800" data-filter="vencido">
+                🔴 Vencidos (<span id="count-filter-vencidos">0</span>)
+              </button>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <input
+                type="text"
+                id="crm-search-input"
+                placeholder="Buscar cliente por nombre..."
+                class="glass-input px-3 py-1.5 rounded-lg text-xs w-full sm:w-56"
+              />
+              <button id="btn-open-new-client-modal" type="button" class="btn-glow px-4 py-2 rounded-xl text-xs font-bold text-white whitespace-nowrap flex items-center gap-1.5">
+                <span>+ Nuevo Cliente</span>
+              </button>
+            </div>
           </div>
 
-          <div class="glass-card p-5 rounded-2xl">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Cerebro Cognitivo</span>
-            <div class="text-2xl font-extrabold text-emerald-400 mt-2">Gemini 2.0 Flash</div>
-            <span class="text-xs text-slate-400 mt-1 block">Sin restricciones de Meta</span>
+          <!-- Tabla de Clientes & Facturación del CRM -->
+          <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-slate-400 bg-slate-900/60 border-b border-slate-800">
+                    <th class="p-4 font-bold">Cliente / Negocio</th>
+                    <th class="p-4 font-bold">Servicio / Plan</th>
+                    <th class="p-4 font-bold">Abono Mensual</th>
+                    <th class="p-4 font-bold">Próximo Vencimiento</th>
+                    <th class="p-4 font-bold">Estado</th>
+                    <th class="p-4 font-bold text-right">Acciones Rápidas</th>
+                  </tr>
+                </thead>
+                <tbody id="crm-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                  <!-- Inyectado por admin.js -->
+                </tbody>
+              </table>
+            </div>
           </div>
+        </section>
 
-          <div class="glass-card p-5 rounded-2xl">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Costo Fijo de Operación</span>
-            <div class="text-2xl font-extrabold text-cyan-400 mt-2">$0 USD / mes</div>
-            <span class="text-xs text-emerald-400 mt-1 block">Cloudflare Edge + Neon Postgres</span>
-          </div>
-        </div>
-
-        <!-- Sección Principal: Creador de Nuevo Cliente & Simulador de Bot -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <!-- Columna Izquierda: Formulario de Aprovisionamiento -->
-          <div class="lg:col-span-7 glass-card p-6 sm:p-8 rounded-3xl border border-cyan-500/20">
+        <!-- ============================================================ -->
+        <!-- PESTAÑA 2: APROVISIONAMIENTO DE CLIENTES (FÁBRICA)            -->
+        <!-- ============================================================ -->
+        <section id="panel-provision" class="hidden space-y-6">
+          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-cyan-500/20">
             <div class="flex items-center justify-between mb-6">
               <div>
                 <h3 class="font-display text-xl font-bold text-white">⚡ Aprovisionar Nuevo Cliente</h3>
@@ -180,10 +302,10 @@
               <div>
                 <label class="block text-xs font-bold text-slate-300 mb-1">Plantilla Industrial Base *</label>
                 <select id="client-template" class="glass-input w-full px-3.5 py-2.5 rounded-xl text-sm cursor-pointer">
-                  <option value="retail-stock">👗 Tienda de Ropa & Moda (Shopify Style con Stock por Talle)</option>
+                  <option value="retail-stock">👗 Tienda de Ropa (Catálogo con Stock por Talle)</option>
                   <option value="menu-gastronomia">🍔 Menú Digital & Delivery (0% Comisión, Comandas a WhatsApp)</option>
                   <option value="citas-salud">🩺 Agenda Médica & Citas (Turnos sin Superposiciones)</option>
-                  <option value="insumos-belleza">✂️ Control de Insumos & Salón (1 Toque para Consumos)</option>
+                  <option value="insumos-belleza">📦 Control de Inventarios & Stock (1 Toque para Salidas)</option>
                 </select>
               </div>
 
@@ -260,25 +382,29 @@
               </div>
             </div>
           </div>
+        </section>
 
-          <!-- Columna Derecha: Simulador de Chatbot con IA -->
-          <div class="lg:col-span-5 glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 flex flex-col">
+        <!-- ============================================================ -->
+        <!-- PESTAÑA 3: SIMULADOR DE CHATBOT CON IA                       -->
+        <!-- ============================================================ -->
+        <section id="panel-simulator" class="hidden space-y-6">
+          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 max-w-2xl mx-auto flex flex-col">
             <div class="flex items-center justify-between mb-4">
               <div>
                 <h3 class="font-display text-lg font-bold text-white">🤖 Simulador de Bot con IA</h3>
-                <p class="text-xs text-slate-400">Prueba cómo responde Gemini a un comprador</p>
+                <p class="text-xs text-slate-400">Prueba cómo responde Gemini a un comprador en WhatsApp</p>
               </div>
               <span class="text-xs px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-full font-bold">
-                Motor Cognitivo
+                Motor Cognitivo Live
               </span>
             </div>
 
             <!-- Ventana de Chat Simulado -->
-            <div id="chat-messages-box" class="flex-1 bg-slate-950/80 rounded-2xl border border-slate-800/80 p-4 space-y-3 overflow-y-auto max-h-80 mb-4 text-xs">
+            <div id="chat-messages-box" class="bg-slate-950/80 rounded-2xl border border-slate-800/80 p-4 space-y-3 overflow-y-auto h-80 mb-4 text-xs">
               <div class="flex gap-2">
                 <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white">IA</div>
                 <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200">
-                  ¡Hola! Soy la vendedora virtual de CaribIA Labs. Escribe cualquier duda sobre productos, talles o envíos para probarme.
+                  ¡Hola! Soy la asistente virtual de CaribIA Labs. Escribe cualquier duda sobre productos, precios, talles o envíos para probar cómo atiendo a tus clientes.
                 </div>
               </div>
             </div>
@@ -290,48 +416,186 @@
                 id="sim-user-message"
                 required
                 placeholder="Ej. ¿Qué precio tiene y qué talles quedan?"
-                class="glass-input flex-1 px-3 py-2 rounded-xl text-xs"
+                class="glass-input flex-1 px-3 py-2.5 rounded-xl text-xs"
               />
-              <button type="submit" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs">
+              <button type="submit" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs">
                 Enviar
               </button>
             </form>
           </div>
-        </div>
+        </section>
 
-        <!-- Directorio de Clientes / Tenants Aprovisionados -->
-        <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800">
-          <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
-            <div>
-              <h3 class="font-display text-xl font-bold text-white">Directorio de Clientes Activos</h3>
-              <p class="text-xs text-slate-400">Páginas y webapps generadas por la fábrica de software</p>
+        <!-- ============================================================ -->
+        <!-- PESTAÑA 4: DIRECTORIO DE SITIOS ACTIVOS                      -->
+        <!-- ============================================================ -->
+        <section id="panel-sites" class="hidden space-y-6">
+          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800">
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+              <div>
+                <h3 class="font-display text-xl font-bold text-white">Directorio de Sitios Activos</h3>
+                <p class="text-xs text-slate-400">Páginas y webapps generadas por la fábrica de software</p>
+              </div>
+              <span class="text-xs text-slate-500 font-mono">Total registrados: <strong id="tenants-badge" class="text-white">5</strong></span>
             </div>
-            <span class="text-xs text-slate-500 font-mono">Total registrados: <strong id="tenants-badge" class="text-white">4</strong></span>
-          </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead>
-                <tr class="text-slate-400 border-b border-slate-800">
-                  <th class="pb-3 font-bold">Cliente / Negocio</th>
-                  <th class="pb-3 font-bold">Plantilla</th>
-                  <th class="pb-3 font-bold">WhatsApp Receptor</th>
-                  <th class="pb-3 font-bold">Alias de Cobro</th>
-                  <th class="pb-3 font-bold">Subdominio</th>
-                  <th class="pb-3 font-bold text-right">Acción</th>
-                </tr>
-              </thead>
-              <tbody id="tenants-table-body" class="divide-y divide-slate-800/60 text-slate-300">
-                <!-- Inyectado dinámicamente -->
-              </tbody>
-            </table>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-slate-400 border-b border-slate-800">
+                    <th class="pb-3 font-bold">Cliente / Negocio</th>
+                    <th class="pb-3 font-bold">Plantilla</th>
+                    <th class="pb-3 font-bold">WhatsApp Receptor</th>
+                    <th class="pb-3 font-bold">Alias de Cobro</th>
+                    <th class="pb-3 font-bold">Subdominio</th>
+                    <th class="pb-3 font-bold text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tenants-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                  <!-- Inyectado por admin.js -->
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </section>
+
       </main>
 
       <footer class="border-t border-slate-900 py-4 text-center text-xs text-slate-500">
         CaribIA Labs Factory Console · Entorno Privado de Gestión · La entrega personalizada más rápida del mercado
       </footer>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL: NUEVO CLIENTE & CONTRATO CRM                          -->
+    <!-- ============================================================ -->
+    <div id="modal-new-client" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 hidden">
+      <div class="glass-card max-w-lg w-full p-6 sm:p-8 rounded-3xl border border-cyan-500/30 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-display text-lg font-bold text-white">Alta de Cliente & Suscripción CRM</h3>
+          <button id="btn-close-new-client-modal" class="text-slate-400 hover:text-white text-lg">✕</button>
+        </div>
+
+        <form id="form-new-client" class="space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Nombre Comercial del Negocio *</label>
+            <input type="text" id="new-crm-business" required placeholder="Ej. Óptica Visión del Sol" class="glass-input w-full p-2.5 rounded-xl" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Contacto / Dueño</label>
+              <input type="text" id="new-crm-contact" placeholder="Ej. Martín Gómez" class="glass-input w-full p-2.5 rounded-xl" />
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">WhatsApp de Cobro *</label>
+              <input type="text" id="new-crm-phone" required placeholder="5491154188294" class="glass-input w-full p-2.5 rounded-xl font-mono" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Email del Cliente</label>
+              <input type="email" id="new-crm-email" placeholder="cliente@correo.com" class="glass-input w-full p-2.5 rounded-xl" />
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Servicio / Plan Contratado *</label>
+              <select id="new-crm-plan" class="glass-input w-full p-2.5 rounded-xl cursor-pointer">
+                <option value="Página Web + Hosting">Página Web + Hosting ($25.000 ARS/mes)</option>
+                <option value="Tienda Online + Carrito" selected>Tienda Online + Carrito ($45.000 ARS/mes)</option>
+                <option value="Menú & Delivery Gastronómico">Menú & Delivery Gastronómico ($55.000 ARS/mes)</option>
+                <option value="Agenda Médica + Citas">Agenda Médica + Citas ($60.000 ARS/mes)</option>
+                <option value="Control de Inventarios & Stock">Control de Inventarios & Stock ($35.000 ARS/mes)</option>
+                <option value="Web + Bot IA 24/7">Web + Bot IA 24/7 ($75.000 ARS/mes)</option>
+                <option value="Desarrollo a Medida">Desarrollo a Medida (Personalizado)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Abono Mensual ($) *</label>
+              <input type="number" id="new-crm-fee" required value="45000" min="0" step="1000" class="glass-input w-full p-2.5 rounded-xl" />
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Día de Cobro (1-31)</label>
+              <input type="number" id="new-crm-day" value="10" min="1" max="31" class="glass-input w-full p-2.5 rounded-xl" />
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Estado de Pago</label>
+              <select id="new-crm-status" class="glass-input w-full p-2.5 rounded-xl">
+                <option value="al_dia">🟢 Al Día</option>
+                <option value="pendiente">🟡 Pendiente</option>
+                <option value="vencido">🔴 Vencido</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Método de Cobro Habitual</label>
+            <select id="new-crm-method" class="glass-input w-full p-2.5 rounded-xl">
+              <option value="Transferencia Alias">Transferencia Alias / CBU</option>
+              <option value="Mercado Pago">Mercado Pago</option>
+              <option value="Efectivo">Efectivo</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Notas / Observaciones del Cliente</label>
+            <textarea id="new-crm-notes" rows="2" placeholder="Detalles de facturación, pedidos especiales, etc." class="glass-input w-full p-2.5 rounded-xl"></textarea>
+          </div>
+
+          <button type="submit" class="btn-glow w-full py-3 rounded-xl font-bold text-white text-xs mt-2">
+            Guardar Cliente en el CRM 💾
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL: SEGURIDAD & CAMBIO DE CREDENCIALES                   -->
+    <!-- ============================================================ -->
+    <div id="modal-security" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 hidden">
+      <div class="glass-card max-w-md w-full p-6 sm:p-8 rounded-3xl border border-cyan-500/30">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">🔐</span>
+            <h3 class="font-display text-lg font-bold text-white">Seguridad & Cuenta</h3>
+          </div>
+          <button id="btn-close-security-modal" class="text-slate-400 hover:text-white text-lg">✕</button>
+        </div>
+
+        <p class="text-xs text-slate-400 mb-4">
+          Modifica el email de acceso y la contraseña maestra de la Consola CaribIA Labs.
+        </p>
+
+        <form id="form-security" class="space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Email del Administrador</label>
+            <input type="email" id="sec-email-input" required class="glass-input w-full p-2.5 rounded-xl text-sm" />
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Contraseña Actual *</label>
+            <input type="password" id="sec-current-pass" required placeholder="••••••••••••" class="glass-input w-full p-2.5 rounded-xl text-sm" />
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Nueva Contraseña *</label>
+            <input type="password" id="sec-new-pass" required minlength="6" placeholder="Mínimo 6 caracteres" class="glass-input w-full p-2.5 rounded-xl text-sm" />
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Confirmar Nueva Contraseña *</label>
+            <input type="password" id="sec-confirm-pass" required minlength="6" placeholder="Repite la nueva contraseña" class="glass-input w-full p-2.5 rounded-xl text-sm" />
+          </div>
+
+          <p id="sec-feedback" class="text-xs font-bold hidden"></p>
+
+          <button type="submit" class="btn-glow w-full py-3 rounded-xl font-bold text-white text-xs mt-2">
+            Actualizar Credenciales 🔒
+          </button>
+        </form>
+      </div>
     </div>
 
     <script src="admin.js"></script>

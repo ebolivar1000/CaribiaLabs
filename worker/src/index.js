@@ -11,6 +11,7 @@ import { tenantsRouter } from './routes/tenants.js';
 import { catalogRouter } from './routes/catalog.js';
 import { checkoutRouter } from './routes/checkout.js';
 import { whatsappRouter } from './routes/whatsapp.js';
+import { adminCrmRouter } from './routes/adminCrm.js';
 
 const app = new Hono();
 
@@ -37,7 +38,9 @@ app.get('/', (c) => {
       stock_update: 'PATCH /api/catalog/:slug/stock',
       checkout_order: 'POST /api/checkout/:slug/create-order',
       whatsapp_webhook: 'GET & POST /api/whatsapp/webhook',
-      whatsapp_simulator: 'POST /api/whatsapp/test-chat'
+      whatsapp_simulator: 'POST /api/whatsapp/test-chat',
+      crm_clients: 'GET, POST /api/admin/crm/clients',
+      crm_client_action: 'PATCH, DELETE /api/admin/crm/clients/:id'
     }
   });
 });
@@ -47,6 +50,7 @@ app.route('/api/tenants', tenantsRouter);
 app.route('/api/catalog', catalogRouter);
 app.route('/api/checkout', checkoutRouter);
 app.route('/api/whatsapp', whatsappRouter);
+app.route('/api/admin/crm', adminCrmRouter);
 
 // Manejo de 404
 app.notFound((c) => {

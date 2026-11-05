@@ -1,17 +1,107 @@
 // ====================================================================
-// CARIBIA LABS - CONSOLA MAESTRA DE ADMINISTRADOR (ADMIN JS)
-// Gestión Privada de la Software Factory y Aprovisionamiento
+// CARIBIA LABS - CONSOLA MAESTRA & CRM DE CLIENTES (ADMIN JS)
+// Gestión de Fábrica de Software, CRM, Facturación y Credenciales
 // ====================================================================
 
-const ADMIN_PIN = 'admin2026';
+const API_BASE_URL = 'https://caribia-labs-api.caribialabs.workers.dev';
 
-// Tenants iniciales registrados en el sistema
+// Credenciales Maestras por defecto (almacenadas en localStorage)
+const DEFAULT_AUTH = {
+  email: 'caribialabs@gmail.com',
+  password: 'admin2026'
+};
+
+// Clientes iniciales para el CRM
+const INITIAL_CRM_CLIENTS = [
+  {
+    id: 'crm-001',
+    business_name: 'Garage Pimpollos',
+    contact_name: 'Martín Pimpollos',
+    whatsapp_phone: '5491154188294',
+    email: 'contacto@garagepimpollos.com',
+    plan_name: 'Tienda Online + Carrito',
+    monthly_fee: 45000,
+    currency: 'ARS',
+    billing_day: 5,
+    payment_method: 'Transferencia Alias',
+    status: 'al_dia',
+    next_due_date: '2026-12-05',
+    last_payment_date: '2026-11-05',
+    notes: 'Abonó por Mercado Pago Alias. Muy conforme con la velocidad de despacho.'
+  },
+  {
+    id: 'crm-002',
+    business_name: 'Forno & Co. Palermo',
+    contact_name: 'Federico Rossi',
+    whatsapp_phone: '5491154188294',
+    email: 'pedidos@fornopalermo.ar',
+    plan_name: 'Menú & Delivery Gastronómico',
+    monthly_fee: 55000,
+    currency: 'ARS',
+    billing_day: 10,
+    payment_method: 'Transferencia Alias',
+    status: 'al_dia',
+    next_due_date: '2026-11-10',
+    last_payment_date: '2026-10-10',
+    notes: 'Ahorro del 30% en comisiones comparado con apps de delivery tradicionales.'
+  },
+  {
+    id: 'crm-003',
+    business_name: 'AURA Studio Indumentaria',
+    contact_name: 'Camila Benítez',
+    whatsapp_phone: '5491154188294',
+    email: 'hola@aurastudio.com.ar',
+    plan_name: 'Tienda de Ropa + Talles',
+    monthly_fee: 45000,
+    currency: 'ARS',
+    billing_day: 8,
+    payment_method: 'Mercado Pago',
+    status: 'pendiente',
+    next_due_date: '2026-11-08',
+    last_payment_date: '2026-10-08',
+    notes: 'Aviso de cobro enviado por WhatsApp. Confirmará pago mañana.'
+  },
+  {
+    id: 'crm-004',
+    business_name: 'LUMIÈRE Studio Peluquería',
+    contact_name: 'Lucía Morales',
+    whatsapp_phone: '5491154188294',
+    email: 'administracion@lumiere.salon.ar',
+    plan_name: 'Control de Inventarios & Insumos',
+    monthly_fee: 35000,
+    currency: 'ARS',
+    billing_day: 15,
+    payment_method: 'Transferencia Alias',
+    status: 'al_dia',
+    next_due_date: '2026-11-15',
+    last_payment_date: '2026-10-15',
+    notes: 'Utilizan el registro rápido en 1 clic para consumo de tintes.'
+  },
+  {
+    id: 'crm-005',
+    business_name: 'MediConnect Consultorios',
+    contact_name: 'Dr. Alejandro Méndez',
+    whatsapp_phone: '5491154188294',
+    email: 'turnos@mediconnect.ar',
+    plan_name: 'Agenda Médica + Bot WhatsApp',
+    monthly_fee: 60000,
+    currency: 'ARS',
+    billing_day: 1,
+    payment_method: 'Transferencia Alias',
+    status: 'al_dia',
+    next_due_date: '2026-12-01',
+    last_payment_date: '2026-11-01',
+    notes: 'Cero ausentismo de pacientes gracias al recordatorio automatizado 24hs antes.'
+  }
+];
+
+// Sitios iniciales registrados en el sistema
 const INITIAL_TENANTS = [
   {
     name: 'Garage Pimpollos',
     slug: 'garage-pimpollos',
     template: 'retail-stock',
-    templateName: 'Ropa & Calzado (Shopify Style)',
+    templateName: 'Tienda de Ropa & Calzado',
     phone: '5491154188294',
     alias: 'pimpollos.garage.mp',
     discount: 15,
@@ -31,7 +121,7 @@ const INITIAL_TENANTS = [
     name: 'AURA Studio',
     slug: 'aura-studio',
     template: 'retail-stock',
-    templateName: 'Moda Minimalista',
+    templateName: 'Tienda de Ropa Minimalista',
     phone: '5491154188294',
     alias: 'aura.indumentaria.mp',
     discount: 15,
@@ -51,7 +141,7 @@ const INITIAL_TENANTS = [
     name: 'LUMIÈRE Studio',
     slug: 'lumiere-salon',
     template: 'insumos-belleza',
-    templateName: 'Control de Insumos & Tintes',
+    templateName: 'Control de Inventarios & Stock',
     phone: '5491154188294',
     alias: 'lumiere.salon.mp',
     discount: 0,
@@ -59,44 +149,70 @@ const INITIAL_TENANTS = [
   }
 ];
 
+// Estado global de la aplicación
+let crmClients = JSON.parse(localStorage.getItem('caribia_crm_clients')) || INITIAL_CRM_CLIENTS;
 let tenants = JSON.parse(localStorage.getItem('caribia_admin_tenants')) || INITIAL_TENANTS;
+let currentCrmFilter = 'todos';
+let crmSearchQuery = '';
 
 document.addEventListener('DOMContentLoaded', () => {
   setupAuth();
+  setupNavigationTabs();
+  setupSecurityModal();
+  setupCrmModule();
   setupSlugGenerator();
   setupProvisionForm();
   setupChatSimulator();
   renderTenants();
+  syncCrmWithCloudApi();
 });
 
-// 1. Manejo de Acceso / PIN
+// ====================================================================
+// 1. MANEJO DE AUTENTICACIÓN & LOGIN SEGURO (EMAIL + CONTRASEÑA)
+// ====================================================================
+function getStoredAuth() {
+  const saved = localStorage.getItem('caribia_admin_auth');
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch (e) {
+      return DEFAULT_AUTH;
+    }
+  }
+  return DEFAULT_AUTH;
+}
+
 function setupAuth() {
   const authGate = document.getElementById('auth-gate');
   const dashboard = document.getElementById('admin-dashboard');
-  const pinForm = document.getElementById('pin-form');
-  const pinInput = document.getElementById('admin-pin-input');
-  const pinError = document.getElementById('pin-error');
+  const loginForm = document.getElementById('login-form');
+  const emailInput = document.getElementById('admin-email-input');
+  const passInput = document.getElementById('admin-pass-input');
+  const loginError = document.getElementById('login-error');
   const btnLogout = document.getElementById('btn-logout');
 
-  // Si ya inició sesión en esta pestaña
+  // Si ya inició sesión en esta sesión de navegador
   if (sessionStorage.getItem('caribia_admin_logged') === 'true') {
     authGate.classList.add('hidden');
     dashboard.classList.remove('hidden');
   }
 
-  pinForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const pin = pinInput.value.trim();
+    const enteredEmail = emailInput.value.trim().toLowerCase();
+    const enteredPass = passInput.value;
+    const currentAuth = getStoredAuth();
 
-    if (pin === ADMIN_PIN) {
+    if (enteredEmail === currentAuth.email.toLowerCase() && enteredPass === currentAuth.password) {
       sessionStorage.setItem('caribia_admin_logged', 'true');
       authGate.classList.add('hidden');
       dashboard.classList.remove('hidden');
-      pinError.classList.add('hidden');
+      loginError.classList.add('hidden');
+      loginForm.reset();
     } else {
-      pinError.classList.remove('hidden');
-      pinInput.value = '';
-      pinInput.focus();
+      loginError.classList.remove('hidden');
+      passInput.value = '';
+      passInput.focus();
     }
   });
 
@@ -104,54 +220,441 @@ function setupAuth() {
     sessionStorage.removeItem('caribia_admin_logged');
     dashboard.classList.add('hidden');
     authGate.classList.remove('hidden');
-    pinInput.value = '';
+    loginForm.reset();
   });
 }
 
-// 2. Generador Automático de Slug al tipear el Nombre
+// ====================================================================
+// 2. MODAL DE SEGURIDAD: CAMBIAR EMAIL Y CONTRASEÑA
+// ====================================================================
+function setupSecurityModal() {
+  const btnOpen = document.getElementById('btn-open-security');
+  const btnClose = document.getElementById('btn-close-security-modal');
+  const modal = document.getElementById('modal-security');
+  const form = document.getElementById('form-security');
+  const emailInput = document.getElementById('sec-email-input');
+  const currentPassInput = document.getElementById('sec-current-pass');
+  const newPassInput = document.getElementById('sec-new-pass');
+  const confirmPassInput = document.getElementById('sec-confirm-pass');
+  const feedback = document.getElementById('sec-feedback');
+
+  btnOpen.addEventListener('click', () => {
+    const auth = getStoredAuth();
+    emailInput.value = auth.email;
+    currentPassInput.value = '';
+    newPassInput.value = '';
+    confirmPassInput.value = '';
+    feedback.classList.add('hidden');
+    modal.classList.remove('hidden');
+  });
+
+  btnClose.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.add('hidden');
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const auth = getStoredAuth();
+    const currentPass = currentPassInput.value;
+    const newPass = newPassInput.value;
+    const confirmPass = confirmPassInput.value;
+    const newEmail = emailInput.value.trim().toLowerCase();
+
+    // Validar contraseña actual
+    if (currentPass !== auth.password) {
+      showFeedback('La contraseña actual es incorrecta.', 'error');
+      return;
+    }
+
+    // Validar coincidencia de nueva contraseña
+    if (newPass !== confirmPass) {
+      showFeedback('Las nuevas contraseñas no coinciden.', 'error');
+      return;
+    }
+
+    if (newPass.length < 6) {
+      showFeedback('La nueva contraseña debe tener al menos 6 caracteres.', 'error');
+      return;
+    }
+
+    // Guardar credenciales de forma persistente
+    const updatedAuth = {
+      email: newEmail,
+      password: newPass
+    };
+    localStorage.setItem('caribia_admin_auth', JSON.stringify(updatedAuth));
+
+    showFeedback('¡Credenciales actualizadas con éxito!', 'success');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 1500);
+  });
+
+  function showFeedback(text, type) {
+    feedback.textContent = text;
+    feedback.classList.remove('hidden', 'text-rose-400', 'text-emerald-400');
+    if (type === 'error') {
+      feedback.classList.add('text-rose-400');
+    } else {
+      feedback.classList.add('text-emerald-400');
+    }
+  }
+}
+
+// ====================================================================
+// 3. CAMBIO DE PESTAÑAS DEL DASHBOARD (TABS)
+// ====================================================================
+function setupNavigationTabs() {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = {
+    'tab-crm': document.getElementById('panel-crm'),
+    'tab-provision': document.getElementById('panel-provision'),
+    'tab-simulator': document.getElementById('panel-simulator'),
+    'tab-sites': document.getElementById('panel-sites')
+  };
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+
+      // Actualizar estilo botones
+      tabBtns.forEach(b => {
+        b.classList.remove('active', 'text-cyan-300', 'bg-cyan-500/15');
+        b.classList.add('text-slate-400');
+      });
+      btn.classList.add('active');
+      btn.classList.remove('text-slate-400');
+
+      // Mostrar panel correspondiente
+      Object.keys(panels).forEach(key => {
+        if (key === target) {
+          panels[key].classList.remove('hidden');
+        } else {
+          panels[key].classList.add('hidden');
+        }
+      });
+    });
+  });
+}
+
+// ====================================================================
+// 4. MÓDULO CRM & FACTURACIÓN DE CLIENTES (ESTILO ODOO/LINEAR)
+// ====================================================================
+function setupCrmModule() {
+  const filterBtns = document.querySelectorAll('.crm-filter-btn');
+  const searchInput = document.getElementById('crm-search-input');
+  const btnOpenModal = document.getElementById('btn-open-new-client-modal');
+  const btnCloseModal = document.getElementById('btn-close-new-client-modal');
+  const modal = document.getElementById('modal-new-client');
+  const form = document.getElementById('form-new-client');
+
+  // Filtros de estado (Todos, Al día, Pendiente, Vencido)
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => {
+        b.classList.remove('active', 'bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40');
+        b.classList.add('text-slate-400', 'bg-slate-900', 'border-slate-800');
+      });
+      btn.classList.add('active', 'bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40');
+      btn.classList.remove('text-slate-400', 'bg-slate-900', 'border-slate-800');
+
+      currentCrmFilter = btn.getAttribute('data-filter');
+      renderCrmClients();
+    });
+  });
+
+  // Búsqueda en tiempo real
+  searchInput.addEventListener('input', (e) => {
+    crmSearchQuery = e.target.value.trim().toLowerCase();
+    renderCrmClients();
+  });
+
+  // Modal Nuevo Cliente
+  btnOpenModal.addEventListener('click', () => modal.classList.remove('hidden'));
+  btnCloseModal.addEventListener('click', () => modal.classList.add('hidden'));
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.add('hidden');
+  });
+
+  // Enviar formulario de alta de cliente
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newClient = {
+      id: `crm-${Date.now()}`,
+      business_name: document.getElementById('new-crm-business').value.trim(),
+      contact_name: document.getElementById('new-crm-contact').value.trim(),
+      whatsapp_phone: document.getElementById('new-crm-phone').value.trim(),
+      email: document.getElementById('new-crm-email').value.trim(),
+      plan_name: document.getElementById('new-crm-plan').value,
+      monthly_fee: Number(document.getElementById('new-crm-fee').value),
+      currency: 'ARS',
+      billing_day: Number(document.getElementById('new-crm-day').value),
+      payment_method: document.getElementById('new-crm-method').value,
+      status: document.getElementById('new-crm-status').value,
+      next_due_date: calculateNextDueDate(Number(document.getElementById('new-crm-day').value)),
+      last_payment_date: new Date().toISOString().split('T')[0],
+      notes: document.getElementById('new-crm-notes').value.trim()
+    };
+
+    crmClients.unshift(newClient);
+    localStorage.setItem('caribia_crm_clients', JSON.stringify(crmClients));
+    renderCrmClients();
+    modal.classList.add('hidden');
+    form.reset();
+
+    // Intentar sincronizar con la API en la nube
+    try {
+      await fetch(`${API_BASE_URL}/api/admin/crm/clients`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newClient)
+      });
+    } catch (err) {
+      console.warn('API nube offline, guardado localmente:', err);
+    }
+  });
+
+  renderCrmClients();
+}
+
+function calculateNextDueDate(day) {
+  const now = new Date();
+  let month = now.getMonth();
+  let year = now.getFullYear();
+  if (now.getDate() >= day) {
+    month += 1;
+    if (month > 11) {
+      month = 0;
+      year += 1;
+    }
+  }
+  const formattedMonth = String(month + 1).padStart(2, '0');
+  const formattedDay = String(day).padStart(2, '0');
+  return `${year}-${formattedMonth}-${formattedDay}`;
+}
+
+// Renderizado de clientes y métricas del CRM
+function renderCrmClients() {
+  const tbody = document.getElementById('crm-table-body');
+  if (!tbody) return;
+
+  // Filtrado
+  let filtered = crmClients.filter(client => {
+    if (currentCrmFilter !== 'todos' && client.status !== currentCrmFilter) return false;
+    if (crmSearchQuery) {
+      const matchName = client.business_name.toLowerCase().includes(crmSearchQuery);
+      const matchContact = (client.contact_name || '').toLowerCase().includes(crmSearchQuery);
+      const matchPlan = client.plan_name.toLowerCase().includes(crmSearchQuery);
+      return matchName || matchContact || matchPlan;
+    }
+    return true;
+  });
+
+  // Cálculo de KPIs
+  const mrr = crmClients.reduce((acc, c) => acc + Number(c.monthly_fee || 0), 0);
+  const totalCobrado = crmClients
+    .filter(c => c.status === 'al_dia')
+    .reduce((acc, c) => acc + Number(c.monthly_fee || 0), 0);
+  const pendiente = crmClients
+    .filter(c => c.status === 'pendiente' || c.status === 'vencido')
+    .reduce((acc, c) => acc + Number(c.monthly_fee || 0), 0);
+
+  const alDiaCount = crmClients.filter(c => c.status === 'al_dia').length;
+  const pendientesCount = crmClients.filter(c => c.status === 'pendiente').length;
+  const vencidosCount = crmClients.filter(c => c.status === 'vencido').length;
+
+  // Actualizar KPIs en pantalla
+  document.getElementById('kpi-mrr').textContent = `$${mrr.toLocaleString('es-AR')} ARS`;
+  document.getElementById('kpi-cobrado').textContent = `$${totalCobrado.toLocaleString('es-AR')} ARS`;
+  document.getElementById('kpi-pendiente').textContent = `$${pendiente.toLocaleString('es-AR')} ARS`;
+  document.getElementById('kpi-total-clientes').textContent = `${crmClients.length} Activos`;
+  document.getElementById('kpi-al-dia-ratio').textContent = `${alDiaCount} de ${crmClients.length} al día`;
+  document.getElementById('kpi-pendientes-count').textContent = `${pendientesCount} cobro(s) pendiente(s)`;
+
+  // Actualizar contadores de filtros
+  document.getElementById('count-filter-todos').textContent = crmClients.length;
+  document.getElementById('count-filter-aldia').textContent = alDiaCount;
+  document.getElementById('count-filter-pendientes').textContent = pendientesCount;
+  document.getElementById('count-filter-vencidos').textContent = vencidosCount;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="p-8 text-center text-slate-500">
+          No se encontraron clientes para el filtro seleccionado.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(client => {
+    let statusBadge = '';
+    if (client.status === 'al_dia') {
+      statusBadge = '<span class="badge-status badge-al-dia">● Al Día</span>';
+    } else if (client.status === 'pendiente') {
+      statusBadge = '<span class="badge-status badge-pendiente">▲ Pendiente</span>';
+    } else {
+      statusBadge = '<span class="badge-status badge-vencido">✖ Vencido</span>';
+    }
+
+    // Mensaje pre-armado para WhatsApp
+    const wspMessage = encodeURIComponent(
+      `¡Hola ${client.contact_name || client.business_name}! Te escribimos de CaribIA Labs para acercarte el aviso del abono mensual de tu plataforma (${client.plan_name}) por $${Number(client.monthly_fee).toLocaleString('es-AR')} ARS correspondiente a este período. Puedes abonar mediante nuestro Alias: caribialabs.mp. ¡Muchas gracias!`
+    );
+    const wspLink = `https://wa.me/${client.whatsapp_phone}?text=${wspMessage}`;
+
+    return `
+      <tr class="hover:bg-slate-900/40 transition">
+        <td class="p-4">
+          <div class="font-bold text-white text-sm">${escapeHtml(client.business_name)}</div>
+          <div class="text-[11px] text-slate-400">${escapeHtml(client.contact_name || 'Sin contacto')} · Tel: ${escapeHtml(client.whatsapp_phone)}</div>
+        </td>
+        <td class="p-4">
+          <span class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-200 font-medium">${escapeHtml(client.plan_name)}</span>
+        </td>
+        <td class="p-4 font-mono font-bold text-cyan-400">
+          $${Number(client.monthly_fee).toLocaleString('es-AR')} ARS
+        </td>
+        <td class="p-4 text-slate-300 font-mono">
+          ${client.next_due_date || 'A definir'}
+        </td>
+        <td class="p-4">
+          ${statusBadge}
+        </td>
+        <td class="p-4 text-right">
+          <div class="inline-flex items-center gap-1.5">
+            <a
+              href="${wspLink}"
+              target="_blank"
+              rel="noopener"
+              title="Enviar recordatorio de cobro por WhatsApp"
+              class="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 border border-emerald-500/30 text-xs font-bold transition flex items-center gap-1"
+            >
+              <span>💬</span>
+              <span class="hidden sm:inline">Cobrar</span>
+            </a>
+            <button
+              type="button"
+              onclick="toggleClientPaidStatus('${client.id}')"
+              title="Alternar estado Al Día / Pendiente"
+              class="px-2.5 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-400 hover:bg-cyan-500/25 border border-cyan-500/30 text-xs font-bold transition flex items-center gap-1"
+            >
+              <span>💳</span>
+              <span class="hidden sm:inline">${client.status === 'al_dia' ? 'Marcar Pendiente' : 'Marcar Cobrado'}</span>
+            </button>
+            <button
+              type="button"
+              onclick="deleteCrmClient('${client.id}')"
+              title="Eliminar cliente del CRM"
+              class="px-2 py-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500/25 border border-rose-500/20 text-xs transition"
+            >
+              🗑️
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Cambiar estado de cobro en 1 clic
+window.toggleClientPaidStatus = function(clientId) {
+  const client = crmClients.find(c => c.id === clientId);
+  if (!client) return;
+
+  if (client.status === 'al_dia') {
+    client.status = 'pendiente';
+  } else {
+    client.status = 'al_dia';
+    client.last_payment_date = new Date().toISOString().split('T')[0];
+    // Calcular siguiente vencimiento sumando 1 mes
+    const parts = (client.next_due_date || '').split('-');
+    if (parts.length === 3) {
+      let y = parseInt(parts[0], 10);
+      let m = parseInt(parts[1], 10) + 1;
+      if (m > 12) { m = 1; y += 1; }
+      client.next_due_date = `${y}-${String(m).padStart(2, '0')}-${parts[2]}`;
+    }
+  }
+
+  localStorage.setItem('caribia_crm_clients', JSON.stringify(crmClients));
+  renderCrmClients();
+
+  // Sincronizar actualización con el Worker
+  fetch(`${API_BASE_URL}/api/admin/crm/clients/${clientId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: client.status })
+  }).catch(() => {});
+};
+
+// Eliminar cliente del CRM
+window.deleteCrmClient = function(clientId) {
+  if (!confirm('¿Estás seguro de que deseas eliminar este cliente del CRM?')) return;
+
+  crmClients = crmClients.filter(c => c.id !== clientId);
+  localStorage.setItem('caribia_crm_clients', JSON.stringify(crmClients));
+  renderCrmClients();
+
+  fetch(`${API_BASE_URL}/api/admin/crm/clients/${clientId}`, {
+    method: 'DELETE'
+  }).catch(() => {});
+};
+
+// Sincronizar clientes con la API de Cloudflare
+async function syncCrmWithCloudApi() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/crm/clients`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.clients && data.clients.length > 0) {
+        crmClients = data.clients;
+        localStorage.setItem('caribia_crm_clients', JSON.stringify(crmClients));
+        renderCrmClients();
+      }
+    }
+  } catch (e) {
+    console.log('Operando con almacenamiento local para el CRM.');
+  }
+}
+
+// ====================================================================
+// 5. MOTOR DE APROVISIONAMIENTO DE CLIENTES (FÁBRICA)
+// ====================================================================
 function setupSlugGenerator() {
   const nameInput = document.getElementById('client-name');
   const slugInput = document.getElementById('client-slug');
   const slugPreview = document.getElementById('slug-preview');
-  const aliasInput = document.getElementById('client-alias');
 
   nameInput.addEventListener('input', () => {
-    const raw = nameInput.value;
-    const generatedSlug = raw
+    const slug = nameInput.value
       .toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
-    slugInput.value = generatedSlug;
-    slugPreview.textContent = `${generatedSlug || 'subdominio'}.caribialabs.com`;
-
-    if (!aliasInput.value || aliasInput.value.endsWith('.mp')) {
-      aliasInput.value = `${generatedSlug}.mp`;
-    }
+    slugInput.value = slug;
+    slugPreview.textContent = `${slug || 'cliente'}.caribialabs.com`;
   });
 
   slugInput.addEventListener('input', () => {
-    slugPreview.textContent = `${slugInput.value || 'subdominio'}.caribialabs.com`;
+    slugPreview.textContent = `${slugInput.value || 'cliente'}.caribialabs.com`;
   });
 }
 
-// 3. Formulario de Aprovisionamiento
 function setupProvisionForm() {
   const form = document.getElementById('provision-form');
   const successBox = document.getElementById('provision-success-box');
-  const btnOpen = document.getElementById('btn-open-generated');
+  const successTitle = document.getElementById('success-title');
+  const btnOpenGen = document.getElementById('btn-open-generated');
   const btnCopy = document.getElementById('btn-copy-link');
-  const templateSelect = document.getElementById('client-template');
-  const discountInput = document.getElementById('client-discount');
-
-  // Ajustar descuento según plantilla sugerida
-  templateSelect.addEventListener('change', () => {
-    if (templateSelect.value === 'retail-stock') discountInput.value = '15';
-    else if (templateSelect.value === 'menu-gastronomia') discountInput.value = '10';
-    else discountInput.value = '0';
-  });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -160,139 +663,198 @@ function setupProvisionForm() {
     const slug = document.getElementById('client-slug').value.trim();
     const template = document.getElementById('client-template').value;
     const phone = document.getElementById('client-phone').value.trim();
-    const alias = document.getElementById('client-alias').value.trim();
-    const discount = Number(document.getElementById('client-discount').value) || 0;
+    const alias = document.getElementById('client-alias').value.trim() || `${slug}.mp`;
+    const discount = document.getElementById('client-discount').value;
 
-    const templateNames = {
-      'retail-stock': 'Tienda Ropa & Moda (Shopify Style)',
-      'menu-gastronomia': 'Menú & Delivery Gastronómico',
-      'citas-salud': 'Agenda Médica & Citas',
-      'insumos-belleza': 'Control Insumos & Peluquería'
-    };
-
-    // Determinar URL de acceso
-    let previewUrl = `../templates/${template}/index.html?tenant=${slug}&name=${encodeURIComponent(name)}`;
-    if (slug === 'garage-pimpollos') previewUrl = '../dist/tenants/garage-pimpollos/index.html';
-    if (slug === 'forno-palermo') previewUrl = '../dist/tenants/forno-palermo/index.html';
+    let targetUrl = `../templates/${template}/index.html?tenant=${slug}`;
+    if (slug === 'garage-pimpollos') targetUrl = '../dist/tenants/garage-pimpollos/index.html';
+    if (slug === 'forno-palermo') targetUrl = '../dist/tenants/forno-palermo/index.html';
 
     const newTenant = {
       name,
       slug,
       template,
-      templateName: templateNames[template],
+      templateName: document.getElementById('client-template').selectedOptions[0].text,
       phone,
       alias,
-      discount,
-      url: previewUrl,
-      created_at: new Date().toLocaleDateString('es-AR')
+      discount: parseInt(discount, 10),
+      url: targetUrl
     };
 
-    // Agregar a la lista
     tenants.unshift(newTenant);
     localStorage.setItem('caribia_admin_tenants', JSON.stringify(tenants));
+    renderTenants();
 
-    // Mostrar feedback visual
+    // También agregar al CRM si no existe
+    const existsInCrm = crmClients.some(c => c.business_name.toLowerCase() === name.toLowerCase());
+    if (!existsInCrm) {
+      const crmEntry = {
+        id: `crm-${Date.now()}`,
+        business_name: name,
+        contact_name: name,
+        whatsapp_phone: phone,
+        email: `${slug}@cliente.com`,
+        plan_name: newTenant.templateName.split('(')[0].trim(),
+        monthly_fee: 45000,
+        currency: 'ARS',
+        billing_day: 10,
+        payment_method: 'Transferencia Alias',
+        status: 'al_dia',
+        next_due_date: calculateNextDueDate(10),
+        last_payment_date: new Date().toISOString().split('T')[0],
+        notes: `Aprovisionado automáticamente desde la plantilla ${template}.`
+      };
+      crmClients.unshift(crmEntry);
+      localStorage.setItem('caribia_crm_clients', JSON.stringify(crmClients));
+      renderCrmClients();
+    }
+
+    successTitle.textContent = `¡"${name}" aprovisionado con éxito en 1.2 segundos!`;
+    btnOpenGen.href = targetUrl;
     successBox.classList.remove('hidden');
-    btnOpen.href = previewUrl;
+
     btnCopy.onclick = () => {
-      const wspLink = `¡Hola! Tu tienda ya está lista en: https://${slug}.caribialabs.com\nCualquier pedido que hagan tus clientes llegará directo a tu WhatsApp +${phone}.`;
-      navigator.clipboard.writeText(wspLink);
-      btnCopy.textContent = '¡Copiado al portapapeles! ✓';
-      setTimeout(() => { btnCopy.textContent = 'Copiar Enlace para WhatsApp 📋'; }, 2500);
+      const fullUrl = `${window.location.origin}/${slug}`;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        btnCopy.textContent = '¡Enlace Copiado! ✓';
+        setTimeout(() => { btnCopy.textContent = 'Copiar Enlace para WhatsApp 📋'; }, 2000);
+      });
     };
 
-    renderTenants();
-    form.reset();
+    successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 }
 
-// 4. Directorio de Tenants
 function renderTenants() {
   const tbody = document.getElementById('tenants-table-body');
-  const countDisplay = document.getElementById('metric-tenants-count');
-  const badgeDisplay = document.getElementById('tenants-badge');
+  const badge = document.getElementById('tenants-badge');
+  if (!tbody) return;
 
-  if (countDisplay) countDisplay.textContent = `${tenants.length} Activos`;
-  if (badgeDisplay) badgeDisplay.textContent = tenants.length;
+  if (badge) badge.textContent = tenants.length;
 
   tbody.innerHTML = tenants.map(t => `
-    <tr class="hover:bg-slate-900/40 transition">
-      <td class="py-3 pr-4 font-bold text-white flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        ${t.name}
-      </td>
-      <td class="py-3 pr-4 text-slate-300">
-        <span class="px-2 py-0.5 rounded bg-slate-800 text-[11px] font-semibold">${t.templateName || t.template}</span>
-      </td>
-      <td class="py-3 pr-4 font-mono text-emerald-400">+${t.phone}</td>
-      <td class="py-3 pr-4 font-mono text-cyan-400">${t.alias || 'N/A'} ${t.discount ? `(${t.discount}% OFF)` : ''}</td>
-      <td class="py-3 pr-4 font-mono text-slate-400">${t.slug}.caribialabs.com</td>
-      <td class="py-3 text-right">
-        <a href="${t.url}" target="_blank" class="px-2.5 py-1 rounded-md bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 font-bold text-[11px] border border-cyan-500/30">
-          Abrir Web ↗
+    <tr class="hover:bg-slate-900/50 transition">
+      <td class="py-3.5 px-3 font-bold text-white">${escapeHtml(t.name)}</td>
+      <td class="py-3.5 px-3 text-slate-300">${escapeHtml(t.templateName || t.template)}</td>
+      <td class="py-3.5 px-3 font-mono text-emerald-400">+${escapeHtml(t.phone)}</td>
+      <td class="py-3.5 px-3 font-mono text-cyan-400">${escapeHtml(t.alias || 'Sin alias')}</td>
+      <td class="py-3.5 px-3 font-mono text-slate-400">${escapeHtml(t.slug)}.caribialabs.com</td>
+      <td class="py-3.5 px-3 text-right">
+        <a href="${t.url}" target="_blank" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold text-xs inline-block">
+          Abrir ↗
         </a>
       </td>
     </tr>
   `).join('');
 }
 
-// 5. Simulador de Chatbot con IA
+// ====================================================================
+// 6. SIMULADOR DE CHATBOT CON IA (CONECTADO A WORKER CLOUDFLARE)
+// ====================================================================
 function setupChatSimulator() {
   const form = document.getElementById('chat-simulator-form');
   const input = document.getElementById('sim-user-message');
-  const box = document.getElementById('chat-messages-box');
+  const chatBox = document.getElementById('chat-messages-box');
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const userMsg = input.value.trim();
     if (!userMsg) return;
 
     // Agregar mensaje del usuario
-    box.innerHTML += `
-      <div class="flex justify-end gap-2">
-        <div class="bg-cyan-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] font-medium">
-          ${escapeHtml(userMsg)}
-        </div>
-      </div>
-    `;
-    box.scrollTop = box.scrollHeight;
+    appendMessage(userMsg, 'user');
     input.value = '';
 
-    // Generar respuesta cognitiva de IA simulada (o conectada a Gemini)
-    setTimeout(() => {
-      const aiReply = generateCognitiveReply(userMsg);
-      box.innerHTML += `
-        <div class="flex gap-2">
-          <div class="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-[10px] text-white">IA</div>
-          <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200">
-            ${aiReply}
-          </div>
+    // Estado cargando
+    const typingId = appendTypingIndicator();
+
+    try {
+      // Llamar al endpoint del cerebro cognitivo del Worker
+      const res = await fetch(`${API_BASE_URL}/api/whatsapp/test-chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg, tenantSlug: 'aura-studio' })
+      });
+
+      removeTypingIndicator(typingId);
+
+      if (res.ok) {
+        const data = await res.json();
+        appendMessage(data.reply || data.response || '¡Hola! Recibí tu consulta.', 'ai');
+      } else {
+        fallbackAiResponse(userMsg);
+      }
+    } catch (err) {
+      removeTypingIndicator(typingId);
+      fallbackAiResponse(userMsg);
+    }
+  });
+
+  function fallbackAiResponse(msg) {
+    const lower = msg.toLowerCase();
+    let reply = '¡Hola! Con gusto te asesoro. ¿Buscas talles, información de envíos o cómo pagar con transferencia?';
+    if (lower.includes('precio') || lower.includes('cuanto')) {
+      reply = 'Los precios van desde $32.000 ARS y tienes un 15% OFF abonando por transferencia Alias o 3 cuotas con Mercado Pago.';
+    } else if (lower.includes('talle') || lower.includes('stock')) {
+      reply = 'Tenemos talles S, M y L con entrega inmediata. ¿En qué color te gustaría consultar stock?';
+    } else if (lower.includes('envio') || lower.includes('envío')) {
+      reply = 'Hacemos envíos a todo el país. En compras superiores a $80.000 el despacho es 100% gratuito.';
+    }
+    appendMessage(reply, 'ai');
+  }
+
+  function appendMessage(text, sender) {
+    const div = document.createElement('div');
+    div.className = 'flex gap-2';
+
+    if (sender === 'user') {
+      div.classList.add('justify-end');
+      div.innerHTML = `
+        <div class="bg-cyan-600 p-3 rounded-2xl rounded-tr-none max-w-[85%] text-white">
+          ${escapeHtml(text)}
         </div>
       `;
-      box.scrollTop = box.scrollHeight;
-    }, 600);
-  });
+    } else {
+      div.innerHTML = `
+        <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white flex-shrink-0">IA</div>
+        <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200">
+          ${escapeHtml(text)}
+        </div>
+      `;
+    }
+
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function appendTypingIndicator() {
+    const id = `typing-${Date.now()}`;
+    const div = document.createElement('div');
+    div.id = id;
+    div.className = 'flex gap-2';
+    div.innerHTML = `
+      <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white flex-shrink-0">IA</div>
+      <div class="bg-slate-800 px-3 py-2 rounded-2xl rounded-tl-none text-slate-400 italic">
+        Escribiendo respuesta...
+      </div>
+    `;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return id;
+  }
+
+  function removeTypingIndicator(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
 }
 
-function generateCognitiveReply(msg) {
-  const lower = msg.toLowerCase();
-  if (lower.includes('talle') || lower.includes('medida')) {
-    return '¡Hola! Sí, tenemos stock disponible en talles S y M del blazer y remeras. El talle L se encuentra agotado momentáneamente pero te podemos avisar apenas ingrese. ¿Qué talle sueles usar normalmente?';
-  }
-  if (lower.includes('precio') || lower.includes('cuanto') || lower.includes('vale')) {
-    return 'El precio es de $54.000 ARS. Además, si abonas con Transferencia Bancaria (Alias) tienes un **15% de descuento directo** quedando en **$45.900 ARS**, o puedes pagarlo en **3 cuotas sin interés con Mercado Pago**.';
-  }
-  if (lower.includes('envio') || lower.includes('envío') || lower.includes('donde')) {
-    return 'Hacemos envíos a todo el país a través de correo prioritario (en compras mayores a $80.000 el envío es **completamente gratis** 🚚) o puedes retirar en nuestro punto de entrega sin cargo.';
-  }
-  if (lower.includes('comprar') || lower.includes('quiero') || lower.includes('pedido')) {
-    return '¡Excelente elección! Indícame por favor tu nombre completo y si prefieres entrega a domicilio o retiro en local, así te dejamos el pedido reservado.';
-  }
-  return '¡Hola! Gracias por consultarnos 😊. Puedes ver todos los modelos, fotos reales y precios actualizados en nuestra tienda online. ¿Buscas algo en particular hoy?';
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
