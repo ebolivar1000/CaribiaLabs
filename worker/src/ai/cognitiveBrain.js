@@ -9,9 +9,10 @@ export async function processCustomerMessageWithAI({
   senderPhone,
   tenant,
   catalog = [],
-  env
+  env,
+  customApiKey
 }) {
-  const geminiApiKey = env?.GEMINI_API_KEY;
+  const geminiApiKey = customApiKey || env?.GEMINI_API_KEY;
   const geminiModel = env?.GEMINI_MODEL || 'gemini-2.0-flash';
 
   // 1. Catálogo formateado para el contexto del LLM
@@ -89,6 +90,32 @@ REGLAS DE CONDUCTA:
     }
   }
 
+  let aiError = null;
+
+  // 3.5. Llamada a Cloudflare Workers AI nativo (Llama 3.2 3B Instruct en el Edge - 100% Gratuito y Nativo)
+  if (env && env.AI) {
+    try {
+      const cfResponse = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage }
+        ],
+        max_tokens: 350,
+        temperature: 0.5
+      });
+
+      if (cfResponse && cfResponse.response) {
+        return {
+          replyText: cfResponse.response.trim(),
+          provider: 'cloudflare-workers-ai (llama-3.2-3b)'
+        };
+      }
+    } catch (e) {
+      console.error('Error llamando a Cloudflare Workers AI:', e);
+      aiError = e.message;
+    }
+  }
+
   // 4. Fallback determinístico inteligente si no hay API key o hay timeout
   const lower = userMessage.toLowerCase();
   let fallbackReply = `¡Hola! Gracias por comunicarte con ${tenant.name} 😊. `;
@@ -105,6 +132,6 @@ REGLAS DE CONDUCTA:
 
   return {
     replyText: fallbackReply,
-    provider: 'deterministic-rules-engine'
+    provider: aiError ? `deterministic-rules-engine (error: ${aiError})` : 'deterministic-rules-engine'
   };
 }

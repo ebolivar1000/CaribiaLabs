@@ -8,6 +8,9 @@ ENVIRONMENT = "production"
 DEFAULT_WHATSAPP_PHONE = "5491154188294"
 GEMINI_MODEL = "gemini-2.0-flash"
 
+[ai]
+binding = "AI"
+
 # Variables de entorno secretas (Se configuran con: wrangler secret put <KEY>):
 # - DATABASE_URL: Postgres Connection String de Neon (ej: postgresql://user:pass@ep-cool-db.us-east-2.aws.neon.tech/neondb?sslmode=require)
 # - GEMINI_API_KEY: Llave de Google AI Studio para el motor cognitivo

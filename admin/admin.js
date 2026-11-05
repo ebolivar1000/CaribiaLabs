@@ -749,13 +749,89 @@ function renderTenants() {
 }
 
 // ====================================================================
-// 6. SIMULADOR DE CHATBOT CON IA (CONECTADO A WORKER CLOUDFLARE)
+// 6. SIMULADOR DE CHATBOT CON IA REAL (CLOUDFLARE WORKERS AI + GEMINI)
 // ====================================================================
 function setupChatSimulator() {
   const form = document.getElementById('chat-simulator-form');
   const input = document.getElementById('sim-user-message');
   const chatBox = document.getElementById('chat-messages-box');
+  const tenantSelect = document.getElementById('sim-tenant-select');
+  const engineBadgeLabel = document.getElementById('active-engine-label');
+  const engineBadge = document.getElementById('active-engine-badge');
 
+  // Configuración de Gemini API Key
+  const toggleBtn = document.getElementById('gemini-toggle-btn');
+  const toggleCard = document.getElementById('toggle-gemini-card');
+  const drawer = document.getElementById('gemini-config-drawer');
+  const geminiInput = document.getElementById('gemini-api-key-input');
+  const saveKeyBtn = document.getElementById('btn-save-gemini-key');
+  const clearKeyBtn = document.getElementById('btn-clear-gemini-key');
+
+  function updateEngineStatus() {
+    const savedKey = localStorage.getItem('caribia_gemini_api_key');
+    if (savedKey) {
+      if (engineBadgeLabel) engineBadgeLabel.textContent = 'Google Gemini 2.0 Flash (Activo)';
+      if (engineBadge) {
+        engineBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5';
+      }
+      if (geminiInput) geminiInput.value = savedKey;
+    } else {
+      if (engineBadgeLabel) engineBadgeLabel.textContent = 'Cloudflare Workers AI (Llama 3.2 3B)';
+      if (engineBadge) {
+        engineBadge.className = 'text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5';
+      }
+      if (geminiInput) geminiInput.value = '';
+    }
+  }
+
+  updateEngineStatus();
+
+  // Toggle drawer
+  function toggleDrawer() {
+    if (drawer) drawer.classList.toggle('hidden');
+  }
+  if (toggleBtn) toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleDrawer(); });
+  if (toggleCard) toggleCard.addEventListener('click', toggleDrawer);
+
+  // Guardar clave
+  if (saveKeyBtn) {
+    saveKeyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const key = geminiInput.value.trim();
+      if (!key) {
+        alert('Por favor ingresa una API Key válida de Google Gemini');
+        return;
+      }
+      localStorage.setItem('caribia_gemini_api_key', key);
+      updateEngineStatus();
+      alert('✅ API Key de Google Gemini guardada. El bot ahora responderá con Gemini 2.0 Flash.');
+      if (drawer) drawer.classList.add('hidden');
+    });
+  }
+
+  // Borrar clave
+  if (clearKeyBtn) {
+    clearKeyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      localStorage.removeItem('caribia_gemini_api_key');
+      updateEngineStatus();
+      alert('ℹ️ API Key eliminada. El bot usará Cloudflare Workers AI (Llama 3.2 3B) gratis.');
+    });
+  }
+
+  // Chips de preguntas frecuentes
+  const chips = document.querySelectorAll('#quick-prompt-chips .chip-btn');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const prompt = chip.getAttribute('data-prompt');
+      if (prompt && input) {
+        input.value = prompt;
+        form.dispatchEvent(new Event('submit'));
+      }
+    });
+  });
+
+  // Envío del mensaje
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const userMsg = input.value.trim();
@@ -769,56 +845,88 @@ function setupChatSimulator() {
     const typingId = appendTypingIndicator();
 
     try {
-      // Llamar al endpoint del cerebro cognitivo del Worker
+      const selectedSlug = tenantSelect ? tenantSelect.value : 'aura-studio';
+      const customKey = localStorage.getItem('caribia_gemini_api_key') || '';
+
       const res = await fetch(`${API_BASE_URL}/api/whatsapp/test-chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg, tenantSlug: 'aura-studio' })
+        headers: {
+          'Content-Type': 'application/json',
+          ...(customKey ? { 'x-gemini-key': customKey } : {})
+        },
+        body: JSON.stringify({
+          message: userMsg,
+          slug: selectedSlug,
+          tenantSlug: selectedSlug,
+          apiKey: customKey
+        })
       });
 
       removeTypingIndicator(typingId);
 
       if (res.ok) {
         const data = await res.json();
-        appendMessage(data.reply || data.response || '¡Hola! Recibí tu consulta.', 'ai');
+        const replyText = data.reply || data.aiResponse || '¡Hola! Recibí tu consulta.';
+        const provider = data.provider || 'AI Engine';
+        appendMessage(replyText, 'ai', provider);
       } else {
-        fallbackAiResponse(userMsg);
+        const errData = await res.text().catch(() => '');
+        appendMessage(`⚠️ El servidor respondió con un error (${res.status}). Detalle: ${errData || 'Sin detalles'}`, 'ai', 'Error');
       }
     } catch (err) {
       removeTypingIndicator(typingId);
-      fallbackAiResponse(userMsg);
+      appendMessage(`⚠️ No se pudo conectar con el servidor de IA (${err.message}). Verifica tu conexión o el estado del Worker en Cloudflare.`, 'ai', 'Error');
     }
   });
 
-  function fallbackAiResponse(msg) {
-    const lower = msg.toLowerCase();
-    let reply = '¡Hola! Con gusto te asesoro. ¿Buscas talles, información de envíos o cómo pagar con transferencia?';
-    if (lower.includes('precio') || lower.includes('cuanto')) {
-      reply = 'Los precios van desde $32.000 ARS y tienes un 15% OFF abonando por transferencia Alias o 3 cuotas con Mercado Pago.';
-    } else if (lower.includes('talle') || lower.includes('stock')) {
-      reply = 'Tenemos talles S, M y L con entrega inmediata. ¿En qué color te gustaría consultar stock?';
-    } else if (lower.includes('envio') || lower.includes('envío')) {
-      reply = 'Hacemos envíos a todo el país. En compras superiores a $80.000 el despacho es 100% gratuito.';
-    }
-    appendMessage(reply, 'ai');
+  function formatAiText(text) {
+    let clean = escapeHtml(text);
+    // Negritas **texto**
+    clean = clean.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+    // Saltos de línea
+    clean = clean.replace(/\n/g, '<br/>');
+    return clean;
   }
 
-  function appendMessage(text, sender) {
+  function appendMessage(text, sender, provider) {
     const div = document.createElement('div');
     div.className = 'flex gap-2';
 
     if (sender === 'user') {
       div.classList.add('justify-end');
       div.innerHTML = `
-        <div class="bg-cyan-600 p-3 rounded-2xl rounded-tr-none max-w-[85%] text-white">
+        <div class="bg-cyan-600 p-3 rounded-2xl rounded-tr-none max-w-[85%] text-white text-xs leading-relaxed shadow-lg">
           ${escapeHtml(text)}
         </div>
       `;
     } else {
+      let badgeLabel = 'IA Real';
+      let badgeClass = 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10';
+
+      if (provider) {
+        if (provider.includes('llama')) {
+          badgeLabel = '⚡ Cloudflare Workers AI (Llama 3.2 3B)';
+          badgeClass = 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
+        } else if (provider.includes('gemini')) {
+          badgeLabel = '✨ Google Gemini 2.0 Flash';
+          badgeClass = 'text-purple-400 border-purple-500/30 bg-purple-500/10';
+        } else if (provider.includes('Error')) {
+          badgeLabel = '⚠️ Alerta';
+          badgeClass = 'text-rose-400 border-rose-500/30 bg-rose-500/10';
+        } else {
+          badgeLabel = provider;
+        }
+      }
+
       div.innerHTML = `
-        <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white flex-shrink-0">IA</div>
-        <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200">
-          ${escapeHtml(text)}
+        <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white flex-shrink-0 mt-1">IA</div>
+        <div class="bg-slate-800/90 border border-slate-700/60 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200 text-xs leading-relaxed space-y-1.5 shadow-lg">
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${badgeClass}">
+              ${badgeLabel}
+            </span>
+          </div>
+          <div>${formatAiText(text)}</div>
         </div>
       `;
     }
@@ -834,8 +942,13 @@ function setupChatSimulator() {
     div.className = 'flex gap-2';
     div.innerHTML = `
       <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white flex-shrink-0">IA</div>
-      <div class="bg-slate-800 px-3 py-2 rounded-2xl rounded-tl-none text-slate-400 italic">
-        Escribiendo respuesta...
+      <div class="bg-slate-800 px-3.5 py-2.5 rounded-2xl rounded-tl-none text-slate-400 italic text-xs flex items-center gap-2">
+        <span class="inline-flex gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]"></span>
+        </span>
+        <span>Generando respuesta inteligente con el LLM...</span>
       </div>
     `;
     chatBox.appendChild(div);

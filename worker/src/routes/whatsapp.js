@@ -116,7 +116,9 @@ whatsappRouter.post('/webhook', async (c) => {
 // Endpoint de prueba interactiva para simular mensajes de clientes sin necesidad de Meta Cloud API
 whatsappRouter.post('/test-chat', async (c) => {
   const body = await c.req.json();
-  const { message, slug = 'aura-studio', senderPhone = '5491154188294' } = body;
+  const { message, slug = 'aura-studio', senderPhone = '5491154188294', apiKey } = body;
+  const headerKey = c.req.header('x-gemini-key');
+  const customKey = apiKey || headerKey || c.env?.GEMINI_API_KEY;
 
   let tenant = MOCK_TENANTS[slug] || MOCK_TENANTS['aura-studio'];
   const sql = getDb(c.env);
@@ -142,13 +144,15 @@ whatsappRouter.post('/test-chat', async (c) => {
     senderPhone,
     tenant,
     catalog,
-    env: c.env
+    env: c.env,
+    customApiKey: customKey
   });
 
   return c.json({
     success: true,
     tenant: tenant.name,
     customerMessage: message,
+    reply: aiResult.replyText,
     aiResponse: aiResult.replyText,
     provider: aiResult.provider
   });

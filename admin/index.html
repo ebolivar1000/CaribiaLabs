@@ -385,26 +385,103 @@
         </section>
 
         <!-- ============================================================ -->
-        <!-- PESTAÑA 3: SIMULADOR DE CHATBOT CON IA                       -->
+        <!-- PESTAÑA 3: SIMULADOR DE CHATBOT CON IA REAL                  -->
         <!-- ============================================================ -->
         <section id="panel-simulator" class="hidden space-y-6">
-          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 max-w-2xl mx-auto flex flex-col">
-            <div class="flex items-center justify-between mb-4">
+          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-800 max-w-3xl mx-auto flex flex-col">
+            <!-- Encabezado & Estado de Motores de IA -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-4 border-b border-slate-800">
               <div>
-                <h3 class="font-display text-lg font-bold text-white">🤖 Simulador de Bot con IA</h3>
-                <p class="text-xs text-slate-400">Prueba cómo responde Gemini a un comprador en WhatsApp</p>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="font-display text-lg font-bold text-white">🤖 Simulador de Bot con IA Real</h3>
+                  <span id="active-engine-badge" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="active-engine-label">Cloudflare Workers AI (Llama 3.2 3B)</span>
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">Respuestas contextuales, catálogo, precios, talles y cobros generados en tiempo real por un LLM real.</p>
               </div>
-              <span class="text-xs px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-full font-bold">
-                Motor Cognitivo Live
-              </span>
+
+              <!-- Selector de Negocio PyME -->
+              <div class="flex items-center gap-2">
+                <label for="sim-tenant-select" class="text-[11px] font-bold text-slate-400 whitespace-nowrap">Negocio:</label>
+                <select id="sim-tenant-select" class="glass-input text-xs py-1.5 px-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-200 cursor-pointer">
+                  <option value="aura-studio">AURA Studio (Moda & Ropa)</option>
+                  <option value="forno-palermo">Forno Palermo (Pizzería)</option>
+                  <option value="garage-pimpollos">Garage Pimpollos (Infantil)</option>
+                  <option value="inventariosalon">InventarioSalón (Belleza)</option>
+                  <option value="mediconnect">MediConnect (Citas Médicas)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Panel Desplegable: Configuración de Gemini API Key -->
+            <div class="bg-slate-900/60 rounded-2xl border border-slate-800/80 p-3.5 mb-4 text-xs">
+              <div class="flex items-center justify-between cursor-pointer" id="toggle-gemini-card">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">✨</span>
+                  <div>
+                    <span class="font-bold text-slate-200">¿Deseas conectar Google Gemini 2.0 Flash?</span>
+                    <span class="text-[11px] text-slate-400 block sm:inline sm:ml-2">Opcional. Por defecto ya opera con Cloudflare Workers AI gratis.</span>
+                  </div>
+                </div>
+                <button type="button" class="text-cyan-400 hover:text-cyan-300 font-bold text-xs" id="gemini-toggle-btn">
+                  Configurar ⚙️
+                </button>
+              </div>
+
+              <div id="gemini-config-drawer" class="hidden mt-3 pt-3 border-t border-slate-800/80 space-y-2">
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                  Ingresa tu API Key de Google Gemini para activar el modelo <strong>Gemini 2.0 Flash</strong> con razonamiento ultra rápido y comprensión profunda de catálogos:
+                </p>
+                <div class="flex gap-2">
+                  <input
+                    type="password"
+                    id="gemini-api-key-input"
+                    placeholder="AIzaSy..."
+                    class="glass-input flex-1 px-3 py-2 rounded-xl text-xs font-mono"
+                  />
+                  <button type="button" id="btn-save-gemini-key" class="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition">
+                    Guardar
+                  </button>
+                  <button type="button" id="btn-clear-gemini-key" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition">
+                    Borrar
+                  </button>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                  <span>Se guarda localmente en tu navegador.</span>
+                  <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="text-cyan-400 hover:underline">
+                    Obtener API Key gratis en Google AI Studio &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chips de Preguntas de Prueba Rápida -->
+            <div class="mb-3">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Preguntas frecuentes de prueba:</span>
+              <div class="flex flex-wrap gap-1.5" id="quick-prompt-chips">
+                <button type="button" class="chip-btn text-[11px] px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/50 transition" data-prompt="¿Qué medios de pago aceptan y si hay descuento por transferencia?">
+                  💳 Medios de pago & Descuentos
+                </button>
+                <button type="button" class="chip-btn text-[11px] px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/50 transition" data-prompt="¿Tienen stock en talle M y cuánto demora el envío?">
+                  📦 Stock, talles y envíos
+                </button>
+                <button type="button" class="chip-btn text-[11px] px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/50 transition" data-prompt="Quiero hacer un pedido y retirarlo personalmente hoy mismo">
+                  🛍️ Retiro en local & Pedidos
+                </button>
+                <button type="button" class="chip-btn text-[11px] px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/50 transition" data-prompt="¿Cuáles son los precios de los productos y promociones vigentes?">
+                  🏷️ Precios del catálogo
+                </button>
+              </div>
             </div>
 
             <!-- Ventana de Chat Simulado -->
-            <div id="chat-messages-box" class="bg-slate-950/80 rounded-2xl border border-slate-800/80 p-4 space-y-3 overflow-y-auto h-80 mb-4 text-xs">
+            <div id="chat-messages-box" class="bg-slate-950/90 rounded-2xl border border-slate-800/80 p-4 space-y-3 overflow-y-auto h-80 mb-4 text-xs">
               <div class="flex gap-2">
-                <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white">IA</div>
+                <div class="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-[10px] text-white flex-shrink-0">IA</div>
                 <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200">
-                  ¡Hola! Soy la asistente virtual de CaribIA Labs. Escribe cualquier duda sobre productos, precios, talles o envíos para probar cómo atiendo a tus clientes.
+                  ¡Hola! Soy la asistente virtual conectada al Cerebro de IA Real de CaribIA Labs. Puedes preguntarme precios, stock, envíos o medios de pago para evaluar cómo respondo a tus clientes.
                 </div>
               </div>
             </div>
@@ -415,11 +492,12 @@
                 type="text"
                 id="sim-user-message"
                 required
-                placeholder="Ej. ¿Qué precio tiene y qué talles quedan?"
-                class="glass-input flex-1 px-3 py-2.5 rounded-xl text-xs"
+                placeholder="Escribe tu consulta de prueba aquí..."
+                class="glass-input flex-1 px-3.5 py-2.5 rounded-xl text-xs"
               />
-              <button type="submit" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs">
-                Enviar
+              <button type="submit" id="sim-send-btn" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition flex items-center gap-1.5">
+                <span>Enviar</span>
+                <span>➤</span>
               </button>
             </form>
           </div>
