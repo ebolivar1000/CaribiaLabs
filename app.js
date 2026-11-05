@@ -4,6 +4,7 @@
 // ====================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+  initMobileMenu();
   initTemplateTabs();
   initShowroom();
   initCalculator();
@@ -265,5 +266,40 @@ function initTemplateTabs() {
         }
       });
     });
+  });
+}
+
+// ====================================================================
+// 6. MENÚ DE NAVEGACIÓN MÓVIL (ESTILO APPLE HIG GLASS)
+// ====================================================================
+function initMobileMenu() {
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  if (!menuBtn || !drawer) return;
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = drawer.classList.toggle('open');
+    menuBtn.classList.toggle('active', isOpen);
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  // Cerrar al hacer clic en cualquier enlace
+  const navLinks = drawer.querySelectorAll('.mobile-nav-link, .mobile-drawer-wsp');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      menuBtn.classList.remove('active');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Cerrar al hacer clic fuera del menú
+  document.addEventListener('click', (e) => {
+    if (!drawer.contains(e.target) && !menuBtn.contains(e.target) && drawer.classList.contains('open')) {
+      drawer.classList.remove('open');
+      menuBtn.classList.remove('active');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }
   });
 }
