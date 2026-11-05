@@ -243,6 +243,21 @@ a:hover {
   filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.35));
 }
 
+.brand-banner-img {
+  height: 40px;
+  width: auto;
+  max-width: 145px;
+  object-fit: contain;
+  border-radius: 6px;
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.4));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.brand-link:hover .brand-banner-img {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 14px rgba(6, 182, 212, 0.6));
+}
+
 .brand-title {
   display: block;
   font-family: var(--font-display);
@@ -1669,6 +1684,10 @@ a:hover {
   }
   .brand-logo {
     height: 30px;
+  }
+  .brand-banner-img {
+    height: 32px;
+    max-width: 115px;
   }
   .brand-title {
     font-size: 1rem;
