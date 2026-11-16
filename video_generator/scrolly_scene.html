@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cinematic Editorial Brutalism Stage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Plus+Jakarta+Sans:wght@500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: #04060a;
+      font-family: 'Archivo', sans-serif;
+      color: #f8fafc;
+      position: relative;
+    }
+
+    /* Fondo Brutalista con Grilla & Halos */
+    .stage-bg {
+      position: absolute;
+      inset: 0;
+      background-color: #04060a;
+      background-image: 
+        radial-gradient(circle at 15% 25%, rgba(6, 182, 212, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(139, 92, 246, 0.16) 0%, transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      z-index: 0;
+    }
+
+    /* Scanlines sutiles estilo cine / CRT */
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.6;
+    }
+
+    /* Viñeta Cinematográfica */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.85);
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    /* Marcas de Telemetría Brutalista en las esquinas */
+    .hud-element {
+      position: absolute;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 1px;
+      z-index: 20;
+      text-transform: uppercase;
+    }
+    .hud-tl { top: 28px; left: 36px; display: flex; align-items: center; gap: 8px; }
+    .hud-tr { top: 28px; right: 36px; color: #00f0ff; }
+    .hud-bl { bottom: 28px; left: 36px; }
+    .hud-br { bottom: 28px; right: 36px; color: #a855f7; }
+
+    .hud-dot {
+      width: 8px;
+      height: 8px;
+      background: #ff0055;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff0055;
+    }
+
+    /* Contenedor Principal de Actos con Apertura Circular */
+    .acts-container {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 80px;
+      clip-path: circle(100% at 50% 50%);
+    }
+
+    .act-scene {
+      position: absolute;
+      width: 1120px;
+      height: 580px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transform: scale(0.97) translateY(15px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    .act-scene.active {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Encabezado del Acto (Editorial) */
+    .act-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 12px;
+    }
+
+    .act-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      color: #00f0ff;
+      letter-spacing: 2px;
+    }
+
+    .act-headline {
+      font-size: 42px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      color: #ffffff;
+    }
+
+    .act-headline span.highlight {
+      color: #00f0ff;
+      text-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+    }
+
+    .act-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: #94a3b8;
+    }
+
+    /* Grilla de Contraste Split-Screen (Antes vs CaribIA) */
+    .contrast-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      height: 380px;
+      margin-top: 15px;
+    }
+
+    /* Tarjeta "El Pasado Analógico" */
+    .card-before {
+      background: rgba(20, 15, 20, 0.7);
+      border: 1.5px solid rgba(239, 68, 68, 0.35);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-before::before {
+      content: 'EL PASADO ANALÓGICO';
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Tarjeta "CaribIA Labs" */
+    .card-after {
+      background: rgba(10, 20, 35, 0.85);
+      border: 1.5px solid rgba(6, 182, 212, 0.5);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 240, 255, 0.15);
+    }
+
+    .card-after::before {
+      content: 'CON CARIBIA LABS';
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .card-icon {
+      font-size: 38px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .card-before .card-title { color: #fca5a5; }
+    .card-after .card-title { color: #38bdf8; }
+
+    .card-desc {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    /* Elementos Visuales Específicos */
+    .visual-metric-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 12px;
+    }
+
+    .metric-value-huge {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .val-danger { color: #ef4444; }
+    .val-success { color: #10b981; }
+
+    .metric-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    /* Barra de Progreso Inferior del Acto */
+    .act-progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+
+    .act-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00f0ff, #a855f7);
+      transition: width 0.1s linear;
+    }
+
+    /* Iris Circular Aperture Transition */
+    .iris-aperture-overlay {
+      position: absolute;
+      inset: 0;
+      background: #04060a;
+      z-index: 100;
+      pointer-events: none;
+      clip-path: circle(100% at 50% 50%);
+      transition: clip-path 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+    }
+  </style>
+</head>
+<body>
+  <div class="stage-bg"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <!-- HUD Telemetry Markers -->
+  <div class="hud-element hud-tl">
+    <div class="hud-dot"></div>
+    <span>CARIBIA LABS // TRANSFORMATION ENGINE</span>
+  </div>
+  <div class="hud-element hud-tr" id="hud-timer">00:00:00</div>
+  <div class="hud-element hud-bl">LATAM BUSINESS PLATFORM // V2.6</div>
+  <div class="hud-element hud-br" id="hud-act-name">ACT 01: ADMINISTRACIÓN</div>
+
+  <!-- Contenedor de Actos -->
+  <div class="acts-container">
+
+    <!-- ============================================================ -->
+    <!-- ACTO 1: CUADERNO & FACTURAS ➔ CRM EN TIEMPO REAL             -->
+    <!-- ============================================================ -->
+    <div id="act-1" class="act-scene active">
+      <div class="act-header">
+        <div>
+          <span class="act-number">01 / GESTIÓN OPERATIVA</span>
+          <h2 class="act-headline">DE LA LIBRETA AL <span class="highlight">CRM INTELIGENTE</span></h2>
+        </div>
+        <span class="act-tag">FINANZAS & CONTROL</span>
+      </div>
+
+      <div class="contrast-grid">
+        <!-- Antes -->
+        <div class="card-before">
+          <div>
+            <div class="card-icon">📒</div>
+            <h3 class="card-title">Cuaderno & Facturas a Mano</h3>
+            <p class="card-desc">
+              Anotaciones perdidas en papel, sumas manuales con errores, recibos extraviados y 4 horas al día intentando saber quién pagó y quién debe.
+            </p>
+          </div>
+          <div class="visual-metric-box">
+            <div class="metric-value-huge val-danger">-4.5 Horas / Día</div>
+            <div class="metric-sub">TIEMPO PERDIDO EN TAREAS MANUALES</div>
+          </div>
+        </div>
+
+        <!-- Después -->
+        <div class="card-after">
+          <div>
+            <div class="card-icon">⚡</div>
+            <h3 class="card-title">CRM & Facturación en Tiempo Real</h3>
+            <p class="card-desc">
+              Control de ingresos en tu celular, facturación electrónica en 1 clic y conciliación automática con Mercado Pago y Alias bancario.
+            </p>
+          </div>
+          <div class="visual-metric-box">
+            <div class="metric-value-huge val-success">$4.850.000 ARS</div>
+            <div class="metric-sub">FACTURACIÓN Y COBROS 100% AL DÍA EN EL CRM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="act-progress-track">
+        <div id="p-bar-1" class="act-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ACTO 2: TELÉFONO COLAPSADO ➔ CHATBOT DE WHATSAPP CON IA     -->
+    <!-- ============================================================ -->
+    <div id="act-2" class="act-scene">
+      <div class="act-header">
+        <div>
+          <span class="act-number">02 / ATENCIÓN & VENTAS 24/7</span>
+          <h2 class="act-headline">DEL TELÉFONO AL <span class="highlight">BOT COGNITIVO</span></h2>
+        </div>
+        <span class="act-tag">WHATSAPP CLOUD API</span>
+      </div>
+
+      <div class="contrast-grid">
+        <!-- Antes -->
+        <div class="card-before">
+          <div>
+            <div class="card-icon">📞</div>
+            <h3 class="card-title">Recepcionista Colapsada</h3>
+            <p class="card-desc">
+              Llamadas sin contestar, clientes enojados esperando precios por privado y ventas que se van a la competencia después de las 20:00 hs.
+            </p>
+          </div>
+          <div class="visual-metric-box">
+            <div class="metric-value-huge val-danger">62% Fugas</div>
+            <div class="metric-sub">CLIENTES QUE NO ESPERAN MÁS DE 5 MINUTOS</div>
+          </div>
+        </div>
+
+        <!-- Después -->
+        <div class="card-after">
+          <div>
+            <div class="card-icon">🤖</div>
+            <h3 class="card-title">Chatbot con IA 24 Horas</h3>
+            <p class="card-desc">
+              Responde precios, talles, stock y turnos en 1 segundo. Toma pedidos, cobra con Mercado Pago y atiende mientras tú descansas.
+            </p>
+          </div>
+          <div class="visual-metric-box">
+            <div class="metric-value-huge val-success">1.4 Segundos</div>
+            <div class="metric-sub">TIEMPO DE RESPUESTA Y CIERRE DE VENTA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="act-progress-track">
+        <div id="p-bar-2" class="act-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ACTO 3: FOLLETOS DE CALLE ➔ EMBUDO DE ADQUISICIÓN DIGITAL    -->
+    <!-- ============================================================ -->
+    <div id="act-3" class="act-scene">
+      <div class="act-header">
+        <div>
+          <span class="act-number">03 / CRECIMIENTO & ESCALA</span>
+          <h2 class="act-headline">DEL FOLLETO AL <span class="highlight">EMBUDO DIGITAL</span></h2>
+        </div>
+        <span class="act-tag">INSTAGRAM & GOOGLE ADS</span>
+      </div>
+
+      <div class="contrast-grid">
+        <!-- Antes -->
+        <div class="card-before">
+          <div>
+            <div class="card-icon">🗑️</div>
+            <h3 class="card-title">Folletos de Papel en la Calle</h3>
+            <p class="card-desc">
+              Cientos de volantes que terminan en el suelo, costo de impresión altísimo y cero capacidad de saber cuántos clientes reales te generó.
+            </p>
+          </div>
+          <div class="visual-metric-box">
+            <div class="metric-value-huge val-danger">0% Medición</div>
+            <div class="metric-sub">DINERO TIRADO A LA BASURA SIN RETORNO</div>
+          </div>
+        </div>
+
+        <!-- Después -->
+        <div class="card-after">
+          <div>
+            <div class="card-icon">🚀</div>
+            <h3 class="card-title">Anuncios & Tráfico Segmentado</h3>
+            <p class="card-desc">
+              Campañas en Meta Ads (Instagram) y Google Ads dirigidas a tu público exacto, llevando compradores directos a tu web y WhatsApp.
+            </p>
+          </div>
+          <div class="visual-metric-box">
+            <div class="metric-value-huge val-success">ROAS 4.8x</div>
+            <div class="metric-sub">+380 COMPRADORES CALIFICADOS AL MES</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="act-progress-track">
+        <div id="p-bar-3" class="act-progress-fill"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Aperture Reveal Iris Mask Overlay (Controlado en .acts-container) -->
+
+  <script>
+    // Deterministic Seek Function para el motor de captura de video
+    window.seekToTime = function(t) {
+      const act1 = document.getElementById('act-1');
+      const act2 = document.getElementById('act-2');
+      const act3 = document.getElementById('act-3');
+      const p1 = document.getElementById('p-bar-1');
+      const p2 = document.getElementById('p-bar-2');
+      const p3 = document.getElementById('p-bar-3');
+      const actsContainer = document.querySelector('.acts-container');
+      const hudTimer = document.getElementById('hud-timer');
+      const hudAct = document.getElementById('hud-act-name');
+
+      // Formatear timer HUD
+      const mins = String(Math.floor(t / 60)).padStart(2, '0');
+      const secs = String(Math.floor(t % 60)).padStart(2, '0');
+      const ms = String(Math.floor((t % 1) * 100)).padStart(2, '0');
+      hudTimer.textContent = `${mins}:${secs}:${ms}`;
+
+      // Duración de cada acto: 7 segundos (Total: 21s + 1s loop = 22s)
+      if (t < 7.0) {
+        // ACTO 1: CUADERNO VS CRM
+        act1.className = 'act-scene active';
+        act2.className = 'act-scene';
+        act3.className = 'act-scene';
+        p1.style.width = ((t / 7.0) * 100) + '%';
+        p2.style.width = '0%';
+        p3.style.width = '0%';
+        hudAct.textContent = 'ACT 01/03: GESTIÓN OPERATIVA';
+      } else if (t >= 7.0 && t < 14.0) {
+        // ACTO 2: TELÉFONO VS CHATBOT IA
+        act1.className = 'act-scene';
+        act2.className = 'act-scene active';
+        act3.className = 'act-scene';
+        p1.style.width = '100%';
+        p2.style.width = (((t - 7.0) / 7.0) * 100) + '%';
+        p3.style.width = '0%';
+        hudAct.textContent = 'ACT 02/03: ATENCIÓN & VENTAS 24/7';
+      } else if (t >= 14.0 && t < 21.0) {
+        // ACTO 3: FOLLETOS VS EMBUDO DIGITAL
+        act1.className = 'act-scene';
+        act2.className = 'act-scene';
+        act3.className = 'act-scene active';
+        p1.style.width = '100%';
+        p2.style.width = '100%';
+        p3.style.width = (((t - 14.0) / 7.0) * 100) + '%';
+        hudAct.textContent = 'ACT 03/03: CRECIMIENTO & ESCALA';
+      }
+
+      // Transición Circular Iris Aperture Reveal en el contenedor
+      if (t < 0.6) {
+        const r = (t / 0.6) * 100;
+        actsContainer.style.clipPath = `circle(${r}% at 50% 50%)`;
+      } else if (t >= 21.0 && t <= 22.0) {
+        const r = (1 - ((t - 21.0) / 1.0)) * 100;
+        actsContainer.style.clipPath = `circle(${Math.max(0, r)}% at 50% 50%)`;
+      } else {
+        actsContainer.style.clipPath = 'circle(100% at 50% 50%)';
+      }
+    };
+  </script>
+</body>
+</html>

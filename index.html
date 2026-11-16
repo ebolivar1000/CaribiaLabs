@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -228,72 +228,128 @@
       <!-- ============================================================ -->
       <!-- SECCIÓN 1: ¿QUÉ HACEMOS POR TU NEGOCIO? (LOS 3 PILARES)       -->
       <!-- ============================================================ -->
-      <section class="section-padding" id="servicios">
-        <div class="container-custom">
-          <div class="section-title-wrapper text-center">
-            <span class="section-eyebrow">Soluciones Concretas</span>
-            <h2 class="section-title">¿Qué desarrollamos para tu negocio?</h2>
-            <p class="section-subtitle">
-              Sin tecnicismos complicados. Desarrollamos herramientas que resuelven tus problemas del día a día y te generan más dinero.
-            </p>
+      <!-- ============================================================ -->
+      <!-- SECCIÓN CINEMATIC SCROLLYTELLING: ¿QUÉ HACEMOS?              -->
+      <!-- Estilo: Cinematic Editorial Brutalism & Sticky Video Stage   -->
+      <!-- ============================================================ -->
+      <section class="editorial-scrolly-section" id="servicios">
+        <!-- Circular Iris Transition (Aperture Reveal) -->
+        <div class="iris-aperture-gate" id="iris-gate"></div>
+
+        <!-- Sticky Stage Wrapper (Pins at 100vh) -->
+        <div class="sticky-video-stage">
+          <!-- Background Video Loop -->
+          <video
+            id="scrolly-video-bg"
+            class="stage-background-video"
+            autoplay
+            loop
+            muted
+            playsinline
+            poster="assets/cinematic_transformation_poster.jpg"
+            preload="auto"
+          >
+            <source src="assets/cinematic_transformation_bg.mp4" type="video/mp4" />
+          </video>
+
+          <!-- Dark & Grain Overlays -->
+          <div class="stage-dark-overlay"></div>
+          <div class="stage-film-grain"></div>
+
+          <!-- Brutalist Stage Telemetry & Badges -->
+          <div class="stage-hud-bar top">
+            <div class="flex items-center gap-2">
+              <span class="hud-live-indicator"></span>
+              <span class="hud-mono-text">CARIBIA LABS // CINEMATIC SCROLLYTELLING</span>
+            </div>
+            <span class="hud-mono-text text-cyan-400">LATAM PYME AUTOMATION</span>
           </div>
 
-          <div class="services-grid">
-            <!-- Servicio 1: Páginas Web y Tiendas Online -->
-            <div class="service-card group">
-              <div class="service-icon-box bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-                </svg>
-              </div>
-              <h3 class="service-name">Páginas Web y Tiendas Online que Venden Solas</h3>
-              <p class="service-desc">
-                Tu vitrina digital disponible día y noche. Catálogos ultra-rápidos estilo Shopify, donde tus clientes eligen prendas, ven talles con stock real y pagan al instante.
-              </p>
-              <ul class="service-bullets">
-                <li><span>✓</span> Integración con <strong>Mercado Pago</strong> (tarjetas y 3 cuotas sin interés).</li>
-                <li><span>✓</span> Botón directo para pagar por <strong>Transferencia (Alias/CBU)</strong> con descuento.</li>
-                <li><span>✓</span> Conexión automática para recibir el pedido formateado en WhatsApp.</li>
-              </ul>
-              <div class="card-footer-pill">Ideal para: Tiendas de ropa, calzado, moda, indumentaria y comercios.</div>
+          <!-- Kinetic Typography Scrubbing Display (Active in Viewport) -->
+          <div class="kinetic-text-stage" id="kinetic-stage">
+            <div class="kinetic-headline-wrap" id="kinetic-headline">
+              <span class="kinetic-word" data-speed-x="-140" data-speed-y="-70" data-rot="-15">DEJA</span>
+              <span class="kinetic-word" data-speed-x="90" data-speed-y="-100" data-rot="12">EL</span>
+              <span class="kinetic-word highlight-cyan" data-speed-x="-180" data-speed-y="60" data-rot="-10">PASADO.</span>
+              <span class="kinetic-word" data-speed-x="160" data-speed-y="90" data-rot="18">ESCALA</span>
+              <span class="kinetic-word" data-speed-x="-70" data-speed-y="120" data-rot="-14">EN</span>
+              <span class="kinetic-word highlight-purple" data-speed-x="190" data-speed-y="-50" data-rot="16">AUTOMÁTICO.</span>
             </div>
+          </div>
 
-            <!-- Servicio 2: Aplicaciones Web y Móviles a Medida -->
-            <div class="service-card group">
-              <div class="service-icon-box bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                </svg>
-              </div>
-              <h3 class="service-name">Aplicaciones a Medida (Control de Stock y Turnos)</h3>
-              <p class="service-desc">
-                Despídete de las libretas de papel y los Excels enredados. Te creamos un sistema a tu medida que usas directo desde tu celular para saber exactamente qué tienes, qué falta y qué vendiste.
-              </p>
-              <ul class="service-bullets">
-                <li><span>✓</span> Control de stock en tiempo real con alerta de productos por agotarse.</li>
-                <li><span>✓</span> Agendamiento dinámico de turnos para clientes o pacientes.</li>
-                <li><span>✓</span> Funciona como aplicación instalable en el celular (PWA o APK Android).</li>
-              </ul>
-              <div class="card-footer-pill">Ideal para: Consultorios médicos, peluquerías, salones, gimnasios, bodegas.</div>
+          <!-- Stage Bottom Indicators -->
+          <div class="stage-hud-bar bottom">
+            <span class="hud-mono-text">DESLIZA PARA VER LAS 3 TRANSFORMACIONES ↓</span>
+            <div class="flex items-center gap-2 sm:gap-3">
+              <span class="step-pill active" id="step-pill-1">01 / CRM</span>
+              <span class="step-pill" id="step-pill-2">02 / CHATBOT</span>
+              <span class="step-pill" id="step-pill-3">03 / TRÁFICO</span>
             </div>
+          </div>
+        </div>
 
-            <!-- Servicio 3: Chatbots de WhatsApp con IA -->
-            <div class="service-card group">
-              <div class="service-icon-box bg-purple-500/10 text-purple-400 border-purple-500/20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                </svg>
-              </div>
-              <h3 class="service-name">Chatbots de WhatsApp con Inteligencia Artificial</h3>
-              <p class="service-desc">
-                Un empleado virtual que nunca duerme. Responde las preguntas frecuentes de tus clientes en WhatsApp, informa precios, disponibilidad de talles y toma pedidos completos mientras tú descansas.
+        <!-- Scrollytelling Scroll Steps (Tracks that drive the scroll scrubbing) -->
+        <div class="scrolly-scroll-track" id="scrolly-track">
+          <!-- Step 1: Gestión & Facturación -->
+          <div class="scrolly-step-card" data-step="1">
+            <div class="editorial-card-inner">
+              <div class="card-num-tag">TRANSFORMACIÓN 01 / 03 · GESTIÓN</div>
+              <h3 class="editorial-card-title">DEL CUADERNO AL CRM INTELIGENTE</h3>
+              <p class="editorial-card-desc">
+                Eliminamos las libretas de papel y los números manuales. Te entregamos un CRM moderno en la nube donde ves tus cobros en tiempo real, emites facturas electrónicas en 1 clic y concilias automáticamente con Mercado Pago y Alias bancario.
               </p>
-              <ul class="service-bullets">
-                <li><span>✓</span> Habla de forma natural en español latinoamericano (comprende modismos).</li>
-                <li><span>✓</span> Envía recordatorios automáticos 24h antes para evitar citas canceladas.</li>
-                <li><span>✓</span> Deriva a tu WhatsApp personal únicamente cuando el cliente está listo para comprar.</li>
-              </ul>
-              <div class="card-footer-pill">Ideal para: Todo negocio que reciba más de 15 mensajes diarios en WhatsApp.</div>
+              <div class="editorial-stat-row">
+                <div class="stat-block">
+                  <span class="stat-number text-rose-400">-4.5 hs</span>
+                  <span class="stat-label">Menos tiempo perdido al día</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-number text-emerald-400">100%</span>
+                  <span class="stat-label">Cobros y facturación al día</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Atención & Chatbot IA -->
+          <div class="scrolly-step-card" data-step="2">
+            <div class="editorial-card-inner">
+              <div class="card-num-tag">TRANSFORMACIÓN 02 / 03 · VENTAS 24/7</div>
+              <h3 class="editorial-card-title">DEL TELÉFONO COLAPSADO AL CHATBOT IA 24/7</h3>
+              <p class="editorial-card-desc">
+                Tu negocio nunca más pierde un comprador por responder tarde. El chatbot de WhatsApp impulsado por Inteligencia Artificial responde preguntas frecuentes, informa precios, disponibilidad de talles, agenda turnos y cobra a cualquier hora de la noche.
+              </p>
+              <div class="editorial-stat-row">
+                <div class="stat-block">
+                  <span class="stat-number text-cyan-400">1.4 seg</span>
+                  <span class="stat-label">Velocidad promedio de respuesta</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-number text-purple-400">24 / 7</span>
+                  <span class="stat-label">Atención y ventas sin descanso</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Publicidad & Crecimiento Digital -->
+          <div class="scrolly-step-card" data-step="3">
+            <div class="editorial-card-inner">
+              <div class="card-num-tag">TRANSFORMACIÓN 03 / 03 · ADQUISICIÓN</div>
+              <h3 class="editorial-card-title">DEL FOLLETO EN LA CALLE AL EMBUDO DIGITAL</h3>
+              <p class="editorial-card-desc">
+                Basta de repartir volantes de papel que terminan en la vereda sin saber si funcionaron. Diseñamos páginas de aterrizaje de ultra-conversión y campañas en Instagram y Google Ads que canalizan clientes calificados directo a tu WhatsApp.
+              </p>
+              <div class="editorial-stat-row">
+                <div class="stat-block">
+                  <span class="stat-number text-amber-400">ROAS 4.8x</span>
+                  <span class="stat-label">Retorno medible de inversión</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-number text-cyan-400">+380</span>
+                  <span class="stat-label">Compradores nuevos al mes</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -2144,3 +2144,272 @@ a:hover {
 .tab-pane.hidden {
   display: none !important;
 }
+
+/* ====================================================================
+   CINEMATIC EDITORIAL BRUTALISM: ¿QUÉ HACEMOS? (SCROLLYTELLING STAGE)
+   Inspiración: laconnectorhouse.com
+   ==================================================================== */
+.editorial-scrolly-section {
+  position: relative;
+  background: #04060a;
+  overflow: visible;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Transición Circular Iris Aperture Reveal */
+.iris-aperture-gate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: #000000;
+  z-index: 25;
+  clip-path: circle(100% at 50% 0%);
+  pointer-events: none;
+  transition: clip-path 0.3s ease;
+}
+
+/* Sticky Stage que se ancla a pantalla completa (100vh) */
+.sticky-video-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 40px;
+}
+
+.stage-background-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.42) contrast(1.15);
+  transform: scale(1.02);
+}
+
+.stage-dark-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(4, 6, 10, 0.45) 0%, rgba(4, 6, 10, 0.92) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.stage-film-grain {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.6;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.stage-hud-bar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.08em;
+}
+
+.hud-live-indicator {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #10b981;
+  display: inline-block;
+}
+
+.hud-mono-text {
+  text-transform: uppercase;
+}
+
+.step-pill {
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  font-size: 0.68rem;
+  font-family: 'Space Mono', monospace;
+  transition: all 0.3s ease;
+}
+
+.step-pill.active {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #00f0ff;
+  color: #00f0ff;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+/* Kinetic Typography Scrubbing Stage */
+.kinetic-text-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.kinetic-headline-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 28px;
+  max-width: 1080px;
+  text-align: center;
+  font-family: 'Archivo', sans-serif;
+  font-size: clamp(2.8rem, 6.2vw, 6.2rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: #ffffff;
+}
+
+.kinetic-word {
+  display: inline-block;
+  will-change: transform, opacity;
+  transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+.kinetic-word.highlight-cyan {
+  color: #00f0ff;
+  text-shadow: 0 0 35px rgba(0, 240, 255, 0.55);
+}
+
+.kinetic-word.highlight-purple {
+  color: #c084fc;
+  text-shadow: 0 0 35px rgba(192, 132, 252, 0.55);
+}
+
+/* Pista de Scroll con Tarjetas Flotantes */
+.scrolly-scroll-track {
+  position: relative;
+  z-index: 15;
+  margin-top: -100vh;
+  padding-top: 100vh;
+}
+
+.scrolly-step-card {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 6vw;
+}
+
+.editorial-card-inner {
+  max-width: 520px;
+  background: rgba(11, 17, 30, 0.88);
+  backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 36px 38px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(6, 182, 212, 0.12);
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.scrolly-step-card:hover .editorial-card-inner {
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(6, 182, 212, 0.25);
+}
+
+.card-num-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #00f0ff;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.editorial-card-title {
+  font-family: 'Archivo', sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.editorial-card-desc {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.editorial-stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+}
+
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-number {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Responsividad en Celulares */
+@media (max-width: 768px) {
+  .sticky-video-stage {
+    padding: 20px 16px;
+  }
+  .scrolly-step-card {
+    justify-content: center;
+    padding: 0 16px;
+  }
+  .editorial-card-inner {
+    padding: 24px 20px;
+  }
+  .stage-hud-bar {
+    font-size: 0.62rem;
+  }
+  .step-pill {
+    padding: 2px 8px;
+    font-size: 0.6rem;
+  }
+  .kinetic-headline-wrap {
+    gap: 10px 14px;
+    font-size: clamp(2rem, 9vw, 3.5rem);
+  }
+}

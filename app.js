@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCalculator();
   initHeroChatLoop();
   initLeadForm();
+  initEditorialScrollytelling();
 });
 
 // ====================================================================
@@ -313,4 +314,106 @@ function initMobileMenu() {
       menuBtn.setAttribute('aria-expanded', 'false');
     }
   });
+}
+
+// ====================================================================
+// 7. CINEMATIC EDITORIAL SCROLLYTELLING & KINETIC TYPOGRAPHY
+// Inspiración: laconnectorhouse.com
+// ====================================================================
+function initEditorialScrollytelling() {
+  const section = document.querySelector('.editorial-scrolly-section');
+  if (!section) return;
+
+  const irisGate = document.getElementById('iris-gate');
+  const videoBg = document.getElementById('scrolly-video-bg');
+  const kineticWords = document.querySelectorAll('.kinetic-word');
+  const kineticStage = document.getElementById('kinetic-stage');
+  const cards = document.querySelectorAll('.scrolly-step-card');
+  const pill1 = document.getElementById('step-pill-1');
+  const pill2 = document.getElementById('step-pill-2');
+  const pill3 = document.getElementById('step-pill-3');
+
+  // Asegurar reproducción de fondo
+  if (videoBg) {
+    videoBg.muted = true;
+    videoBg.playsInline = true;
+    videoBg.play().catch(() => {});
+  }
+
+  let isTicking = false;
+
+  function updateScrolly() {
+    const rect = section.getBoundingClientRect();
+    const windowH = window.innerHeight;
+    const totalDist = section.offsetHeight - windowH;
+
+    if (rect.bottom < 0 || rect.top > windowH) {
+      isTicking = false;
+      return;
+    }
+
+    const scrolled = -rect.top;
+    const progress = Math.max(0, Math.min(1, scrolled / totalDist));
+
+    // 1. Apertura Circular Iris Aperture Reveal
+    if (irisGate) {
+      if (rect.top <= windowH && rect.top > 0) {
+        const enterRatio = 1 - (rect.top / windowH);
+        irisGate.style.clipPath = `circle(${Math.min(150, enterRatio * 180)}% at 50% 0%)`;
+      } else {
+        irisGate.style.clipPath = 'circle(150% at 50% 0%)';
+      }
+    }
+
+    // 2. Kinetic Typography Scroll Scrubbing (Text Explosion)
+    if (kineticStage) {
+      const explodeFactor = Math.min(1, Math.max(0, progress / 0.18));
+      
+      if (progress > 0.32) {
+        kineticStage.style.opacity = '0';
+        kineticStage.style.pointerEvents = 'none';
+      } else {
+        kineticStage.style.opacity = '1';
+        kineticWords.forEach(word => {
+          const sx = parseFloat(word.getAttribute('data-speed-x')) || 0;
+          const sy = parseFloat(word.getAttribute('data-speed-y')) || 0;
+          const rot = parseFloat(word.getAttribute('data-rot')) || 0;
+
+          const currentX = sx * explodeFactor;
+          const currentY = sy * explodeFactor;
+          const currentRot = rot * explodeFactor;
+          const currentOp = Math.max(0, 1 - (explodeFactor * 1.3));
+
+          word.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${currentRot}deg)`;
+          word.style.opacity = currentOp.toFixed(2);
+        });
+      }
+    }
+
+    // 3. Highlight de Step Pills según la tarjeta visible
+    let activeStep = 1;
+    cards.forEach(card => {
+      const cRect = card.getBoundingClientRect();
+      if (cRect.top < windowH * 0.6 && cRect.bottom > windowH * 0.2) {
+        activeStep = parseInt(card.getAttribute('data-step')) || 1;
+      }
+    });
+
+    if (pill1 && pill2 && pill3) {
+      pill1.classList.toggle('active', activeStep === 1);
+      pill2.classList.toggle('active', activeStep === 2);
+      pill3.classList.toggle('active', activeStep === 3);
+    }
+
+    isTicking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      requestAnimationFrame(updateScrolly);
+      isTicking = true;
+    }
+  }, { passive: true });
+
+  updateScrolly();
 }
