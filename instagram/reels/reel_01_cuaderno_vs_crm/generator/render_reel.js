@@ -12,7 +12,7 @@ const POSTER_IMAGE = path.resolve(__dirname, '../renders/reel_01_poster.jpg');
 const WIDTH = 1080;
 const HEIGHT = 1920;
 const FPS = 25;
-const TOTAL_FRAMES = 370; // 14.8 seconds
+const TOTAL_FRAMES = 393; // 15.72 seconds
 
 async function main() {
   console.log(`Starting Reel #01 render (${WIDTH}x${HEIGHT} @ ${FPS}fps, ${TOTAL_FRAMES} frames)...`);

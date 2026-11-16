@@ -336,6 +336,7 @@
       <div id="sub-3" class="subtitle-line">AUTOMATIZA TU NEGOCIO</div>
       <div id="sub-4" class="subtitle-line highlight-cyan">CON UN CRM MODERNO EN 1 CLIC</div>
       <div id="sub-5" class="subtitle-line highlight-emerald">LA ENTREGA MÁS RÁPIDA DEL MERCADO</div>
+      <div id="sub-6" class="subtitle-line highlight-yellow">COMENTA "CRM" O LINK EN BIO</div>
     </div>
 
     <!-- Glitch Transition Stage -->
@@ -360,9 +361,9 @@
   </div>
 
   <script>
-    // Frame controller for Puppeteer (25 fps, 370 frames total = 14.8 seconds)
+    // Frame controller for Puppeteer (25 fps, 393 frames total = 15.72 seconds)
     const FPS = 25;
-    const TOTAL_FRAMES = 370;
+    const TOTAL_FRAMES = 393;
 
     const s1 = document.getElementById('scene1');
     const s2 = document.getElementById('scene2');
@@ -381,9 +382,10 @@
     const sub3 = document.getElementById('sub-3');
     const sub4 = document.getElementById('sub-4');
     const sub5 = document.getElementById('sub-5');
+    const sub6 = document.getElementById('sub-6');
 
     function hideAllSubs() {
-      [sub1, sub2, sub3, sub4, sub5].forEach(el => {
+      [sub1, sub2, sub3, sub4, sub5, sub6].forEach(el => {
         el.style.opacity = 0;
         el.style.display = 'none';
       });
@@ -403,41 +405,41 @@
 
       hideAllSubs();
 
-      // ACT 1: Frames 0 - 85 (0.0s - 3.4s) | Scene 1: Cuaderno
-      if (frame < 85) {
+      // ACT 1: Frames 0 - 78 (0.0s - 3.12s) | Scene 1: Cuaderno
+      if (frame < 78) {
         s1.style.opacity = 1;
         s2.style.opacity = 0;
         glitch.style.opacity = 0;
         outro.style.opacity = 0;
 
         // Push-in Zoom
-        const p1 = frame / 85;
+        const p1 = frame / 78;
         const scale1 = 1.0 + p1 * 0.12;
         img1.style.transform = `scale(${scale1}) translate(${Math.sin(p1 * 6) * 4}px, ${p1 * 8}px)`;
 
         // HUD Alert
-        if (frame > 15) {
-          hudAlert.style.opacity = Math.min(1, (frame - 15) / 10);
+        if (frame > 12) {
+          hudAlert.style.opacity = Math.min(1, (frame - 12) / 8);
           hudAlert.style.transform = `translateY(0)`;
         } else {
           hudAlert.style.opacity = 0;
         }
 
         // Subtitles 1 & 2
-        if (frame >= 5 && frame < 45) {
-          showSub(sub1, 1.0 + ((frame - 5) % 15) * 0.005);
-        } else if (frame >= 45 && frame < 85) {
+        if (frame >= 3 && frame < 38) {
+          showSub(sub1, 1.0 + ((frame - 3) % 15) * 0.005);
+        } else if (frame >= 38 && frame < 78) {
           showSub(sub2, 1.05 + Math.sin(frame * 0.2) * 0.02);
         }
       }
-      // ACT 2: Frames 85 - 105 (3.4s - 4.2s) | GLITCH TRANSITION CARIBIA LABS
-      else if (frame < 105) {
+      // ACT 2: Frames 78 - 95 (3.12s - 3.8s) | GLITCH TRANSITION CARIBIA LABS
+      else if (frame < 95) {
         s1.style.opacity = 0;
         s2.style.opacity = 0;
         outro.style.opacity = 0;
         hudAlert.style.opacity = 0;
 
-        const gProgress = (frame - 85) / 20;
+        const gProgress = (frame - 78) / 17;
         glitch.style.opacity = 1;
 
         // Glitch shake and scale
@@ -445,36 +447,36 @@
         const shakeY = (Math.random() * 2 - 1) * 20;
         glitch.style.transform = `translate(${shakeX}px, ${shakeY}px) scale(${1.0 + gProgress * 0.1})`;
       }
-      // ACT 3: Frames 105 - 235 (4.2s - 9.4s) | Scene 2: Laptop & CRM Moderno
-      else if (frame < 235) {
+      // ACT 3: Frames 95 - 245 (3.8s - 9.8s) | Scene 2: Laptop & CRM Moderno
+      else if (frame < 245) {
         glitch.style.opacity = 0;
         s1.style.opacity = 0;
         s2.style.opacity = 1;
         outro.style.opacity = 0;
 
         // Pull-out Zoom & Pan
-        const p2 = (frame - 105) / 130;
+        const p2 = (frame - 95) / 150;
         const scale2 = 1.15 - p2 * 0.10;
         img2.style.transform = `scale(${scale2}) translate(0px, ${-p2 * 12}px)`;
 
         // HUD CRM items
-        if (frame > 115) {
-          hudCrm1.style.opacity = Math.min(1, (frame - 115) / 10);
+        if (frame > 105) {
+          hudCrm1.style.opacity = Math.min(1, (frame - 105) / 10);
           hudCrm1.style.transform = `translateY(0)`;
         }
-        if (frame > 140) {
-          hudCrm2.style.opacity = Math.min(1, (frame - 140) / 10);
+        if (frame > 135) {
+          hudCrm2.style.opacity = Math.min(1, (frame - 135) / 10);
           hudCrm2.style.transform = `translateY(0)`;
         }
 
         // Subtitles 3 & 4
-        if (frame >= 108 && frame < 165) {
-          showSub(sub3, 1.0 + ((frame - 108) % 20) * 0.003);
-        } else if (frame >= 165 && frame < 235) {
+        if (frame >= 96 && frame < 170) {
+          showSub(sub3, 1.0 + ((frame - 96) % 20) * 0.003);
+        } else if (frame >= 170 && frame < 245) {
           showSub(sub4, 1.04 + Math.sin(frame * 0.2) * 0.02);
         }
       }
-      // ACT 4: Frames 235 - 370 (9.4s - 14.8s) | OUTRO & CTA
+      // ACT 4: Frames 245 - 393 (9.8s - 15.72s) | OUTRO & CTA
       else {
         s1.style.opacity = 0;
         s2.style.opacity = 0;
@@ -483,11 +485,13 @@
         hudCrm2.style.opacity = 0;
         outro.style.opacity = 1;
 
-        const p3 = (frame - 235) / 135;
+        const p3 = (frame - 245) / 148;
         outro.style.transform = `scale(${1.0 + Math.sin(p3 * Math.PI) * 0.02})`;
 
-        if (frame < 290) {
+        if (frame < 325) {
           showSub(sub5, 1.02);
+        } else {
+          showSub(sub6, 1.05 + Math.sin(frame * 0.2) * 0.02);
         }
       }
     };
