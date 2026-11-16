@@ -326,10 +326,11 @@
     <div class="subtitles-stage">
       <div id="sub-1" class="subtitle-line">SON LAS 11:30 DE LA NOCHE</div>
       <div id="sub-2" class="subtitle-line highlight-yellow">Y UN CLIENTE PIDE PRECIOS</div>
-      <div id="sub-3" class="subtitle-line">TU CHATBOT IA RESPONDE EN 2s</div>
-      <div id="sub-4" class="subtitle-line highlight-cyan">Y COBRA MIENTRAS TÚ DUERMES</div>
-      <div id="sub-5" class="subtitle-line highlight-emerald">LA ENTREGA MÁS RÁPIDA DEL MERCADO</div>
-      <div id="sub-6" class="subtitle-line highlight-yellow">COMENTA "BOT" O LINK EN BIO</div>
+      <div id="sub-3" class="subtitle-line highlight-yellow">SI TARDAS, LE COMPRA A TU COMPETENCIA</div>
+      <div id="sub-4" class="subtitle-line">TU CHATBOT IA RESPONDE EN 2s</div>
+      <div id="sub-5" class="subtitle-line highlight-cyan">Y COBRA POR MERCADO PAGO MIENTRAS DUERMES</div>
+      <div id="sub-6" class="subtitle-line highlight-emerald">LA ENTREGA MÁS RÁPIDA DEL MERCADO</div>
+      <div id="sub-7" class="subtitle-line highlight-yellow">COMENTA "BOT" O LINK EN BIO</div>
     </div>
 
     <!-- Glitch Transition Stage -->
@@ -355,7 +356,7 @@
 
   <script>
     const FPS = 25;
-    const TOTAL_FRAMES = 390;
+    const TOTAL_FRAMES = 589; // 23.56 seconds
 
     const s1 = document.getElementById('scene1');
     const s2 = document.getElementById('scene2');
@@ -375,9 +376,10 @@
     const sub4 = document.getElementById('sub-4');
     const sub5 = document.getElementById('sub-5');
     const sub6 = document.getElementById('sub-6');
+    const sub7 = document.getElementById('sub-7');
 
     function hideAllSubs() {
-      [sub1, sub2, sub3, sub4, sub5, sub6].forEach(el => {
+      [sub1, sub2, sub3, sub4, sub5, sub6, sub7].forEach(el => {
         el.style.opacity = 0;
         el.style.display = 'none';
       });
@@ -397,71 +399,73 @@
 
       hideAllSubs();
 
-      // ACT 1: Frames 0 - 78 (0.0s - 3.1s) | Scene 1: Celular de noche
-      if (frame < 78) {
+      // ACT 1: Frames 0 - 210 (0.0s - 8.4s) | Scene 1: Celular de noche
+      if (frame < 210) {
         s1.style.opacity = 1;
         s2.style.opacity = 0;
         glitch.style.opacity = 0;
         outro.style.opacity = 0;
 
-        const p1 = frame / 78;
+        const p1 = frame / 210;
         const scale1 = 1.0 + p1 * 0.12;
         img1.style.transform = `scale(${scale1}) translate(${Math.sin(p1 * 6) * 4}px, ${p1 * 8}px)`;
 
         if (frame > 10) {
-          hudAlert.style.opacity = Math.min(1, (frame - 10) / 8);
+          hudAlert.style.opacity = Math.min(1, (frame - 10) / 10);
           hudAlert.style.transform = `translateY(0)`;
         } else {
           hudAlert.style.opacity = 0;
         }
 
-        if (frame >= 3 && frame < 38) {
+        if (frame >= 3 && frame < 45) {
           showSub(sub1, 1.0 + ((frame - 3) % 15) * 0.005);
-        } else if (frame >= 38 && frame < 78) {
+        } else if (frame >= 45 && frame < 105) {
           showSub(sub2, 1.05 + Math.sin(frame * 0.2) * 0.02);
+        } else if (frame >= 105 && frame < 210) {
+          showSub(sub3, 1.04 + Math.sin(frame * 0.18) * 0.02);
         }
       }
-      // ACT 2: Frames 78 - 95 (3.1s - 3.8s) | GLITCH TRANSITION CARIBIA LABS
-      else if (frame < 95) {
+      // ACT 2: Frames 210 - 230 (8.4s - 9.2s) | GLITCH TRANSITION CARIBIA LABS
+      else if (frame < 230) {
         s1.style.opacity = 0;
         s2.style.opacity = 0;
         outro.style.opacity = 0;
         hudAlert.style.opacity = 0;
 
-        const gProgress = (frame - 78) / 17;
+        const gProgress = (frame - 210) / 20;
         glitch.style.opacity = 1;
 
         const shakeX = (Math.random() * 2 - 1) * 20;
         const shakeY = (Math.random() * 2 - 1) * 20;
         glitch.style.transform = `translate(${shakeX}px, ${shakeY}px) scale(${1.0 + gProgress * 0.1})`;
       }
-      // ACT 3: Frames 95 - 245 (3.8s - 9.8s) | Scene 2: Chatbot IA WhatsApp
-      else if (frame < 245) {
+      // ACT 3: Frames 230 - 415 (9.2s - 16.6s) | Scene 2: Chatbot IA WhatsApp
+      else if (frame < 415) {
         glitch.style.opacity = 0;
         s1.style.opacity = 0;
         s2.style.opacity = 1;
         outro.style.opacity = 0;
 
-        const p2 = (frame - 95) / 150;
+        const p2 = (frame - 230) / 185;
         const scale2 = 1.15 - p2 * 0.10;
         img2.style.transform = `scale(${scale2}) translate(0px, ${-p2 * 12}px)`;
 
-        if (frame > 105) {
-          hudBot1.style.opacity = Math.min(1, (frame - 105) / 10);
+        if (frame > 240) {
+          hudBot1.style.opacity = Math.min(1, (frame - 240) / 10);
           hudBot1.style.transform = `translateY(0)`;
         }
-        if (frame > 135) {
-          hudBot2.style.opacity = Math.min(1, (frame - 135) / 10);
+        if (frame > 275) {
+          hudBot2.style.opacity = Math.min(1, (frame - 275) / 10);
           hudBot2.style.transform = `translateY(0)`;
         }
 
-        if (frame >= 96 && frame < 170) {
-          showSub(sub3, 1.0 + ((frame - 96) % 20) * 0.003);
-        } else if (frame >= 170 && frame < 245) {
-          showSub(sub4, 1.04 + Math.sin(frame * 0.2) * 0.02);
+        if (frame >= 230 && frame < 325) {
+          showSub(sub4, 1.0 + ((frame - 230) % 20) * 0.003);
+        } else if (frame >= 325 && frame < 415) {
+          showSub(sub5, 1.04 + Math.sin(frame * 0.2) * 0.02);
         }
       }
-      // ACT 4: Frames 245 - 390 (9.8s - 15.6s) | OUTRO & CTA
+      // ACT 4: Frames 415 - 589 (16.6s - 23.56s) | OUTRO & CTA
       else {
         s1.style.opacity = 0;
         s2.style.opacity = 0;
@@ -470,13 +474,13 @@
         hudBot2.style.opacity = 0;
         outro.style.opacity = 1;
 
-        const p3 = (frame - 245) / 145;
+        const p3 = (frame - 415) / 174;
         outro.style.transform = `scale(${1.0 + Math.sin(p3 * Math.PI) * 0.02})`;
 
-        if (frame < 325) {
-          showSub(sub5, 1.02);
+        if (frame < 500) {
+          showSub(sub6, 1.02);
         } else {
-          showSub(sub6, 1.05 + Math.sin(frame * 0.2) * 0.02);
+          showSub(sub7, 1.05 + Math.sin(frame * 0.2) * 0.02);
         }
       }
     };

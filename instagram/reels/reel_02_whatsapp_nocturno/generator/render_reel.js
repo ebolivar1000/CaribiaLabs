@@ -6,16 +6,16 @@ const fs = require('fs');
 const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const HTML_PATH = path.resolve(__dirname, 'reel_scene.html');
 const AUDIO_PATH = path.resolve(__dirname, '../audio/master_audio.wav');
-const OUTPUT_VIDEO = path.resolve(__dirname, '../renders/reel_01_cuaderno_vs_crm.mp4');
-const POSTER_IMAGE = path.resolve(__dirname, '../renders/reel_01_poster.jpg');
+const OUTPUT_VIDEO = path.resolve(__dirname, '../renders/reel_02_whatsapp_nocturno.mp4');
+const POSTER_IMAGE = path.resolve(__dirname, '../renders/reel_02_poster.jpg');
 
 const WIDTH = 1080;
 const HEIGHT = 1920;
 const FPS = 25;
-const TOTAL_FRAMES = 393; // 15.72 seconds
+const TOTAL_FRAMES = 589; // 23.56 seconds
 
 async function main() {
-  console.log(`Starting Reel #01 render (${WIDTH}x${HEIGHT} @ ${FPS}fps, ${TOTAL_FRAMES} frames)...`);
+  console.log(`Starting Reel #02 render (${WIDTH}x${HEIGHT} @ ${FPS}fps, ${TOTAL_FRAMES} frames)...`);
 
   // Ensure renders directory exists
   const rendersDir = path.dirname(OUTPUT_VIDEO);
