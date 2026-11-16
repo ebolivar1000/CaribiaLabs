@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Hero Automation Video Scene</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      width: 540px;
+      height: 760px;
+      overflow: hidden;
+      background: #090d16;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f1f5f9;
+      position: relative;
+    }
+
+    /* Fondo WhatsApp Tech con sutil brillo */
+    .bg-canvas {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+                  radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.1) 0%, transparent 45%),
+                  #070b14;
+      z-index: 0;
+    }
+
+    /* Barra Superior de Estado (iOS) */
+    .status-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 38px;
+      padding: 10px 22px 0 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #94a3b8;
+      z-index: 40;
+    }
+
+    .status-time {
+      color: #ffffff;
+      font-size: 13px;
+      letter-spacing: -0.2px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .battery-pill {
+      width: 20px;
+      height: 10px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 3px;
+      padding: 1px;
+      display: flex;
+      align-items: center;
+    }
+    .battery-level {
+      width: 100%;
+      height: 100%;
+      background: #10b981;
+      border-radius: 1px;
+    }
+
+    /* WhatsApp Header */
+    .wsp-bar {
+      position: absolute;
+      top: 38px;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      z-index: 30;
+    }
+
+    .wsp-back-arrow {
+      color: #38bdf8;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .wsp-avatar-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+      padding: 2px;
+      position: relative;
+    }
+
+    .wsp-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #0b0f19;
+    }
+
+    .wsp-online-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 11px;
+      height: 11px;
+      background: #10b981;
+      border: 2px solid #0f172a;
+      border-radius: 50%;
+    }
+
+    .wsp-info {
+      flex: 1;
+      line-height: 1.25;
+    }
+
+    .wsp-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .wsp-verified-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      background: #06b6d4;
+      border-radius: 50%;
+      font-size: 9px;
+      color: #000;
+      font-weight: 900;
+    }
+
+    .wsp-sub {
+      font-size: 11px;
+      color: #34d399;
+      font-weight: 500;
+    }
+
+    .wsp-actions {
+      display: flex;
+      gap: 14px;
+      color: #38bdf8;
+      font-size: 16px;
+    }
+
+    /* Contenedor de Chat con Scroll */
+    .chat-scroll-container {
+      position: absolute;
+      top: 98px;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      overflow-y: hidden;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    /* Burbujas de Chat */
+    .bubble {
+      max-width: 86%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .bubble.bot {
+      align-self: flex-start;
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border-top-left-radius: 4px;
+    }
+
+    .bubble.user {
+      align-self: flex-end;
+      background: #065f46;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #ffffff;
+      border-top-right-radius: 4px;
+    }
+
+    .bubble-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .tag-ai {
+      background: rgba(6, 182, 212, 0.18);
+      color: #38bdf8;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+
+    .tag-invoice {
+      background: rgba(139, 92, 246, 0.18);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .tag-payment {
+      background: rgba(0, 158, 227, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(0, 158, 227, 0.4);
+    }
+
+    .bubble-meta {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      margin-top: 4px;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .check-blue {
+      color: #38bdf8;
+      font-weight: 800;
+    }
+
+    /* Tarjeta de Documento Adjunto (Presupuesto PDF) */
+    .doc-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .doc-icon-pdf {
+      width: 32px;
+      height: 38px;
+      background: #ef4444;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 900;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .doc-icon-pdf::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-width: 0 8px 8px 0;
+      border-style: solid;
+      border-color: #b91c1c #065f46;
+    }
+
+    .doc-details {
+      overflow: hidden;
+      line-height: 1.25;
+    }
+
+    .doc-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .doc-size {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Tarjeta de Factura Oficial Emitida */
+    .invoice-card {
+      background: #0f172a;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .invoice-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #06b6d4, #8b5cf6);
+    }
+
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #38bdf8;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+    }
+
+    .invoice-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      margin-bottom: 3px;
+      color: #cbd5e1;
+    }
+
+    .invoice-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 800;
+      color: #10b981;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 5px;
+      margin-top: 4px;
+    }
+
+    .invoice-btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 5px 0;
+      border-radius: 6px;
+      margin-top: 6px;
+      text-decoration: none;
+    }
+
+    /* Tarjeta de Mercado Pago */
+    .mp-card {
+      background: #0b1329;
+      border: 1px solid #009ee3;
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 6px;
+      box-shadow: 0 0 15px rgba(0, 158, 227, 0.25);
+    }
+
+    .mp-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .mp-logo {
+      height: 16px;
+      width: auto;
+    }
+
+    .mp-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #009ee3;
+    }
+
+    .mp-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #009ee3, #007bb2);
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 8px 0;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 158, 227, 0.4);
+      margin-bottom: 4px;
+      position: relative;
+    }
+
+    .mp-alias-sub {
+      font-size: 9.5px;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    /* Indicador de Escritura / Pensando IA */
+    .typing-box {
+      align-self: flex-start;
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      border-top-left-radius: 4px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #94a3b8;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .typing-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #06b6d4;
+      animation: pulseDot 1s infinite alternate;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes pulseDot {
+      from { transform: scale(0.8); opacity: 0.4; }
+      to { transform: scale(1.3); opacity: 1; }
+    }
+
+    /* Notificación Push Flotante de Mercado Pago */
+    .push-notification {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      right: 14px;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 158, 227, 0.5);
+      border-radius: 16px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 158, 227, 0.35);
+      z-index: 50;
+      transform: translateY(-120px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .push-notification.active {
+      transform: translateY(0);
+    }
+
+    .push-icon-mp {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #009ee3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 3px 8px rgba(0, 158, 227, 0.5);
+    }
+
+    .push-text {
+      flex: 1;
+      line-height: 1.25;
+    }
+
+    .push-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .push-time {
+      font-size: 10px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    .push-body {
+      font-size: 11px;
+      color: #38bdf8;
+      margin-top: 1px;
+      font-weight: 600;
+    }
+
+    /* Toast Inferior de Automatización */
+    .bottom-status-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: rgba(11, 15, 25, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 11px;
+      z-index: 30;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-weight: 700;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    /* Efecto de Toque / Dedo */
+    .tap-indicator {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.6);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 15px #38bdf8;
+      pointer-events: none;
+      z-index: 60;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .tap-indicator.active {
+      transform: translate(-50%, -50%) scale(1.4);
+      opacity: 1;
+    }
+
+    /* Fade Overlay para Loop */
+    .fade-overlay {
+      position: absolute;
+      inset: 0;
+      background: #090d16;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-canvas"></div>
+
+  <!-- iOS Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">09:41</span>
+    <div class="status-icons">
+      <span>5G</span>
+      <div class="battery-pill">
+        <div class="battery-level"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp App Bar -->
+  <div class="wsp-bar">
+    <span class="wsp-back-arrow">&#8592;</span>
+    <div class="wsp-avatar-wrap">
+      <img src="../Logo_Caribia_labs.png" alt="CaribIA Labs" class="wsp-avatar-img">
+      <div class="wsp-online-badge"></div>
+    </div>
+    <div class="wsp-info">
+      <div class="wsp-title">
+        <span>CaribIA Bot PyME</span>
+        <span class="wsp-verified-check">&#10003;</span>
+      </div>
+      <div class="wsp-sub">● En línea · Responde en 1s con IA</div>
+    </div>
+    <div class="wsp-actions">
+      <span>&#128222;</span>
+      <span>&#8942;</span>
+    </div>
+  </div>
+
+  <!-- Push Notification de Mercado Pago -->
+  <div id="push-toast" class="push-notification">
+    <div class="push-icon-mp">💳</div>
+    <div class="push-text">
+      <div class="push-title">
+        <span>Mercado Pago</span>
+        <span class="push-time">Ahora</span>
+      </div>
+      <div class="push-body">¡Cobro Aprobado! Acreditaste $225.000 ARS</div>
+      <div style="font-size: 10px; color: #94a3b8; margin-top: 1px;">Cliente: TechSolutions SRL · Factura #12891 Pagada</div>
+    </div>
+  </div>
+
+  <!-- Contenedor Principal de Mensajes -->
+  <div id="chat-box" class="chat-scroll-container">
+    
+    <!-- Mensaje 0: Bienvenida fija del Bot -->
+    <div id="msg-0" class="bubble bot" style="opacity: 1;">
+      <div class="bubble-tag tag-ai">⚡ CaribIA Labs Asistente</div>
+      <p>¡Hola! Adjúntame cualquier presupuesto de proveedor o lista de precios. Nuestro sistema analizará los ítems, calculará el margen, emitirá la factura y generará el link de Mercado Pago en segundos.</p>
+      <div class="bubble-meta">09:40</div>
+    </div>
+
+    <!-- Mensaje 1: Usuario adjunta presupuesto PDF -->
+    <div id="msg-user" class="bubble user" style="opacity: 0; display: none;">
+      <div class="doc-card">
+        <div class="doc-icon-pdf">PDF</div>
+        <div class="doc-details">
+          <div class="doc-name">Presupuesto_Servicios_Nov.pdf</div>
+          <div class="doc-size">1.4 MB · 3 páginas · Proveedor Tech</div>
+        </div>
+      </div>
+      <p>Hola CaribIA! Te adjunto el presupuesto del proveedor. ¿Podés analizar los costos, calcular nuestro margen del 25% y emitir la factura con link de cobro?</p>
+      <div class="bubble-meta">
+        <span>09:41</span>
+        <span class="check-blue">&#10003;&#10003;</span>
+      </div>
+    </div>
+
+    <!-- Indicador 1: IA analizando presupuesto -->
+    <div id="typing-1" class="typing-box" style="display: none;">
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+      <span>✦ Analizando presupuesto con Visión IA...</span>
+    </div>
+
+    <!-- Mensaje 2: Bot entrega análisis cognitivo -->
+    <div id="msg-bot-analysis" class="bubble bot" style="opacity: 0; display: none;">
+      <div class="bubble-tag tag-ai">🧠 Análisis Cognitivo IA · 1.4s</div>
+      <p><strong>¡Presupuesto procesado con éxito!</strong></p>
+      <p style="margin-top: 4px; font-size: 11.5px; color: #cbd5e1;">
+        • 3 Ítems extraídos: Web, Bot WhatsApp, Cloud<br>
+        • Costo Proveedor Base: $180.000 ARS<br>
+        • Margen PyME (+25%): +$45.000 ARS<br>
+        <span style="color: #38bdf8; font-weight: 700;">• Total a Facturar: $225.000 ARS</span>
+      </p>
+      <div class="bubble-meta">
+        <span>09:41</span>
+        <span class="check-blue">&#10003;&#10003;</span>
+      </div>
+    </div>
+
+    <!-- Indicador 2: Emitiendo Factura -->
+    <div id="typing-2" class="typing-box" style="display: none;">
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+      <span>✦ Emitiendo Factura Electrónica Oficial...</span>
+    </div>
+
+    <!-- Mensaje 3: Bot entrega Factura A Oficial -->
+    <div id="msg-bot-invoice" class="bubble bot" style="opacity: 0; display: none;">
+      <div class="bubble-tag tag-invoice">📑 Factura Electrónica #0004-00012891</div>
+      <p>Factura emitida y registrada contablemente:</p>
+      
+      <div class="invoice-card">
+        <div class="invoice-header">
+          <span>FACTURA ELECTRÓNICA 'A'</span>
+          <span>CAE: 74928192019482</span>
+        </div>
+        <div class="invoice-row">
+          <span>Cliente:</span>
+          <span style="font-weight: 700; color: #fff;">TechSolutions SRL</span>
+        </div>
+        <div class="invoice-row">
+          <span>CUIT:</span>
+          <span>30-71829384-9</span>
+        </div>
+        <div class="invoice-row">
+          <span>Concepto:</span>
+          <span>Desarrollo Software & Automatización</span>
+        </div>
+        <div class="invoice-total-row">
+          <span>TOTAL FACTURADO:</span>
+          <span>$225.000 ARS</span>
+        </div>
+        <div class="invoice-btn-download">
+          <span>⬇ Descargar PDF Oficial AFIP</span>
+        </div>
+      </div>
+
+      <div class="bubble-meta">
+        <span>09:42</span>
+        <span class="check-blue">&#10003;&#10003;</span>
+      </div>
+    </div>
+
+    <!-- Mensaje 4: Bot entrega Link de Mercado Pago -->
+    <div id="msg-bot-payment" class="bubble bot" style="opacity: 0; display: none;">
+      <div class="bubble-tag tag-payment">💳 Cobro Seguro Mercado Pago</div>
+      <p>Link de cobro enviado al cliente. Acepta todas las tarjetas y cuotas sin interés:</p>
+      
+      <div class="mp-card" id="mp-card-target">
+        <div class="mp-header">
+          <span style="font-size: 14px;">⚡</span>
+          <span class="mp-badge">Mercado Pago Checkout Pro</span>
+        </div>
+        <div class="mp-btn" id="mp-btn-elem">
+          <span>💳 Pagar $225.000 ARS (3 Cuotas)</span>
+        </div>
+        <div class="mp-alias-sub">O abonar con 10% OFF Alias: caribia.labs.mp</div>
+      </div>
+
+      <div class="bubble-meta">
+        <span>09:42</span>
+        <span class="check-blue" id="mp-checkmarks">&#10003;&#10003;</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Barra Inferior de Estado -->
+  <div class="bottom-status-bar">
+    <div class="status-pill">
+      <div class="live-dot"></div>
+      <span id="bottom-status-text">Proceso Automatizado con IA</span>
+    </div>
+    <span style="font-size: 10px; color: #64748b; font-family: monospace;">CARIBIA ENGINE v2.6</span>
+  </div>
+
+  <!-- Efecto Toque / Tap -->
+  <div id="tap-pointer" class="tap-indicator"></div>
+
+  <!-- Fade Overlay para Loop -->
+  <div id="fade-overlay" class="fade-overlay"></div>
+
+  <script>
+    // Deterministic Seek Function para generar fotogramas exactos
+    window.seekToTime = function(t) {
+      const msgUser = document.getElementById('msg-user');
+      const typing1 = document.getElementById('typing-1');
+      const msgAnalysis = document.getElementById('msg-bot-analysis');
+      const typing2 = document.getElementById('typing-2');
+      const msgInvoice = document.getElementById('msg-bot-invoice');
+      const msgPayment = document.getElementById('msg-bot-payment');
+      const pushToast = document.getElementById('push-toast');
+      const bottomText = document.getElementById('bottom-status-text');
+      const tapPointer = document.getElementById('tap-pointer');
+      const mpBtn = document.getElementById('mp-btn-elem');
+      const fadeOverlay = document.getElementById('fade-overlay');
+      const chatBox = document.getElementById('chat-box');
+
+      // 1. Mensaje de Usuario (Adjuntar Presupuesto PDF) (t >= 2.0s)
+      if (t < 2.0) {
+        msgUser.style.display = 'none';
+        msgUser.style.opacity = '0';
+      } else {
+        msgUser.style.display = 'block';
+        msgUser.style.opacity = '1';
+      }
+
+      // 2. Typing 1: Analizando con Visión IA (2.8s <= t < 5.8s)
+      if (t >= 2.8 && t < 5.8) {
+        typing1.style.display = 'flex';
+      } else {
+        typing1.style.display = 'none';
+      }
+
+      // 3. Mensaje Análisis Cognitivo (t >= 5.8s)
+      if (t < 5.8) {
+        msgAnalysis.style.display = 'none';
+        msgAnalysis.style.opacity = '0';
+      } else {
+        msgAnalysis.style.display = 'block';
+        msgAnalysis.style.opacity = '1';
+      }
+
+      // 4. Typing 2: Generando Factura (7.5s <= t < 10.2s)
+      if (t >= 7.5 && t < 10.2) {
+        typing2.style.display = 'flex';
+      } else {
+        typing2.style.display = 'none';
+      }
+
+      // 5. Mensaje Factura Electrónica (t >= 10.2s)
+      if (t < 10.2) {
+        msgInvoice.style.display = 'none';
+        msgInvoice.style.opacity = '0';
+      } else {
+        msgInvoice.style.display = 'block';
+        msgInvoice.style.opacity = '1';
+      }
+
+      // 6. Mensaje Mercado Pago (t >= 13.8s)
+      if (t < 13.8) {
+        msgPayment.style.display = 'none';
+        msgPayment.style.opacity = '0';
+      } else {
+        msgPayment.style.display = 'block';
+        msgPayment.style.opacity = '1';
+      }
+
+      // 7. Scroll Dinámico Suave
+      if (t < 5.8) {
+        chatBox.scrollTop = 0;
+      } else if (t >= 5.8 && t < 10.2) {
+        chatBox.scrollTop = Math.min(130, (t - 5.8) * 100);
+      } else if (t >= 10.2 && t < 13.8) {
+        chatBox.scrollTop = 130 + Math.min(230, (t - 10.2) * 150);
+      } else if (t >= 13.8) {
+        chatBox.scrollTop = 360 + Math.min(300, (t - 13.8) * 160);
+      }
+
+      // 8. Efecto Tap en Botón Mercado Pago (15.8s <= t <= 16.8s)
+      if (t >= 15.8 && t <= 16.8) {
+        const rect = mpBtn.getBoundingClientRect();
+        tapPointer.style.left = (rect.left + rect.width / 2) + 'px';
+        tapPointer.style.top = (rect.top + rect.height / 2) + 'px';
+        tapPointer.classList.add('active');
+        mpBtn.style.transform = 'scale(0.97)';
+      } else {
+        tapPointer.classList.remove('active');
+        mpBtn.style.transform = 'scale(1)';
+      }
+
+      // 9. Push Notification de Mercado Pago (t >= 17.2s && t < 21.0s)
+      if (t >= 17.2 && t < 21.0) {
+        pushToast.classList.add('active');
+        bottomText.textContent = '🎉 ¡Venta y Cobro Completados!';
+      } else {
+        pushToast.classList.remove('active');
+        bottomText.textContent = 'Proceso Automatizado con IA';
+      }
+
+      // 10. Fade a Negro para Loop Perfecto (21.0s <= t <= 22.0s)
+      if (t >= 21.0) {
+        fadeOverlay.style.opacity = Math.min(1, (t - 21.0) / 1.0);
+      } else {
+        fadeOverlay.style.opacity = 0;
+      }
+    };
+  </script>
+</body>
+</html>

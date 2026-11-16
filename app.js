@@ -172,17 +172,28 @@ function initCalculator() {
 }
 
 // ====================================================================
-// 3. ANIMACIÓN EN BUCLE DEL CHAT DE WHATSAPP (HERO MOCKUP)
+// 3. VIDEO EN BUCLE DEL HERO: PROCESO AUTOMATIZADO 24/7
 // ====================================================================
 function initHeroChatLoop() {
-  const chatContainer = document.getElementById('hero-chat-container');
-  if (!chatContainer) return;
+  const video = document.getElementById('hero-automation-video');
+  if (!video) return;
 
-  // El chat ya está renderizado en el HTML con contenido realista,
-  // agregamos una suave animación de pulso y scroll interactivo si el usuario pasa el mouse
-  chatContainer.addEventListener('mouseenter', () => {
-    chatContainer.style.overflowY = 'auto';
-  });
+  // Garantizar reproducción automática en iOS, Android y Desktop
+  video.muted = true;
+  video.playsInline = true;
+  const playPromise = video.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(() => {
+      // Si el navegador bloqueó el autoplay inicial, reintentar al primer toque o scroll
+      const resumeOnInteraction = () => {
+        video.play().catch(() => {});
+        window.removeEventListener('touchstart', resumeOnInteraction);
+        window.removeEventListener('scroll', resumeOnInteraction);
+      };
+      window.addEventListener('touchstart', resumeOnInteraction, { passive: true });
+      window.addEventListener('scroll', resumeOnInteraction, { passive: true });
+    });
+  }
 }
 
 // ====================================================================

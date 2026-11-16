@@ -190,72 +190,34 @@
             </div>
           </div>
 
-          <!-- Hero Visual: Mockup de Celular Interactivo con Simulación en Vivo -->
+          <!-- Hero Visual: Video en Bucle de Automatización Real (Presupuesto + Factura + Mercado Pago) -->
           <div class="hero-visual-card">
             <div class="phone-mockup-outer">
-              <div class="phone-screen">
-                <div class="phone-status-bar">
-                  <span>09:41</span>
-                  <div class="flex gap-1 items-center">
-                    <span class="text-xs">5G</span>
-                    <span class="w-4 h-2.5 bg-emerald-400 rounded-sm inline-block"></span>
-                  </div>
+              <div class="phone-screen phone-screen-video-container">
+                <!-- Video de Alta Definición en Bucle Infinito -->
+                <video
+                  id="hero-automation-video"
+                  class="phone-screen-video"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                  poster="assets/demo_automatizacion_poster.jpg"
+                  preload="auto"
+                  title="Demostración de Automatización de Presupuestos, Facturación y Mercado Pago con IA"
+                >
+                  <source src="assets/demo_automatizacion_hero.mp4" type="video/mp4" />
+                </video>
+
+                <!-- Badge Flotante Superior: En Vivo / Automático -->
+                <div class="video-overlay-badge top">
+                  <span class="live-pulse-dot"></span>
+                  <span>PROCESO AUTOMATIZADO 24/7</span>
                 </div>
 
-                <!-- Chat Header WhatsApp Simulado -->
-                <div class="wsp-header">
-                  <div class="wsp-avatar">
-                    <img src="Logo_Caribia_labs.png" alt="CaribIA Bot" />
-                  </div>
-                  <div>
-                    <div class="wsp-name">CaribIA Asistente PyME</div>
-                    <div class="wsp-status">● Respondiendo en segundos con IA</div>
-                  </div>
-                </div>
-
-                <!-- Mensajes del Chat en Bucle -->
-                <div class="wsp-chat-body" id="hero-chat-container">
-                  <div class="chat-msg chat-in">
-                    <p>Hola! ¿Tienen la Remera Oversize Heavyweight en talle L disponible para enviar hoy?</p>
-                    <span class="chat-time">09:41</span>
-                  </div>
-
-                  <div class="chat-msg chat-out chat-ai">
-                    <div class="ai-tag">✦ Respuesta Automática IA</div>
-                    <p>¡Hola! Sí, tenemos <strong>2 unidades en stock</strong> en Talle L color Negro Carbón. 🖤</p>
-                    <p class="text-xs text-slate-300 mt-1">Precio: $38.000 ARS (15% OFF abonando por Transferencia Alias: $32.300).</p>
-                    <span class="chat-time">09:41 ✓✓</span>
-                  </div>
-
-                  <div class="chat-msg chat-in">
-                    <p>Genial, la quiero con transferencia. ¿Cómo abono?</p>
-                    <span class="chat-time">09:42</span>
-                  </div>
-
-                  <div class="chat-msg chat-out chat-ai">
-                    <div class="ai-tag">✦ Orden Generada #2084</div>
-                    <p>¡Listo! Te reservé tu talle por 15 min. Puedes abonar aquí:</p>
-                    <div class="payment-preview-box">
-                      <div class="flex justify-between text-xs font-bold text-white mb-1">
-                        <span>Total: $32.300 ARS</span>
-                        <span class="text-emerald-400">15% OFF Aplicado</span>
-                      </div>
-                      <div class="pay-btn-alias">Alias: aura.studio.mp</div>
-                      <div class="pay-btn-mp">O pagar con Mercado Pago en 3 cuotas</div>
-                    </div>
-                    <span class="chat-time">09:42 ✓✓</span>
-                  </div>
-                </div>
-
-                <!-- Notificación Flotante de Venta -->
-                <div class="live-sale-toast">
-                  <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
-                    $
-                  </div>
-                  <div>
-                    <div class="text-xs font-bold text-white">¡Venta aprobada automáticamente!</div>
-                    <div class="text-[11px] text-slate-300">Mercado Pago acreditó $38.000 · Stock descontado</div>
-                  </div>
+                <!-- Badge Flotante Inferior: Tiempo Récord -->
+                <div class="video-overlay-badge bottom">
+                  <span>⚡ Presupuesto ➔ Factura ➔ Cobro en 20s</span>
                 </div>
               </div>
             </div>
