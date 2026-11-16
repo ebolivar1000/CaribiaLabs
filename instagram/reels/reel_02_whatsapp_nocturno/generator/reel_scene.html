@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reel 2: WhatsApp a las 11:30 PM vs Chatbot IA - CaribIA Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: #000000;
+      overflow: hidden;
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
+      color: #ffffff;
+    }
+    #stage {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+
+    .scene-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      opacity: 0;
+      transition: none;
+    }
+    .scene-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-origin: center center;
+    }
+
+    .vignette-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+    }
+    .scanline-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .top-telemetry {
+      position: absolute;
+      top: 90px;
+      left: 70px;
+      right: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      background: rgba(10, 15, 29, 0.85);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #25d366;
+      box-shadow: 0 0 12px #25d366;
+    }
+    .brand-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+    .time-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      color: #94a3b8;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hud-card {
+      position: absolute;
+      border-radius: 20px;
+      padding: 24px 32px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+      z-index: 40;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .hud-alert {
+      top: 260px;
+      left: 70px;
+      background: rgba(239, 68, 68, 0.25);
+      border: 2px solid rgba(239, 68, 68, 0.8);
+      color: #fca5a5;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .hud-bot-1 {
+      top: 260px;
+      left: 70px;
+      background: rgba(37, 211, 102, 0.25);
+      border: 2px solid rgba(37, 211, 102, 0.8);
+      color: #86efac;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .hud-bot-2 {
+      top: 360px;
+      left: 70px;
+      background: rgba(6, 182, 212, 0.25);
+      border: 2px solid rgba(6, 182, 212, 0.8);
+      color: #a5f3fc;
+      font-size: 26px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .subtitles-stage {
+      position: absolute;
+      bottom: 240px;
+      left: 60px;
+      right: 60px;
+      text-align: center;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .subtitle-line {
+      font-family: 'Archivo', sans-serif;
+      font-size: 54px;
+      font-weight: 900;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      padding: 12px 28px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+      display: inline-block;
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .highlight-yellow {
+      color: #fde047;
+      border-color: rgba(253, 224, 71, 0.5);
+      text-shadow: 0 0 24px rgba(253, 224, 71, 0.6);
+    }
+    .highlight-cyan {
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.5);
+      text-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
+    }
+    .highlight-emerald {
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.5);
+      text-shadow: 0 0 24px rgba(52, 211, 153, 0.6);
+    }
+
+    #glitch-stage {
+      position: absolute;
+      inset: 0;
+      background: #020617;
+      z-index: 80;
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .glitch-logo {
+      width: 600px;
+      border-radius: 24px;
+      box-shadow: 0 0 80px rgba(6, 182, 212, 0.8);
+      margin-bottom: 30px;
+    }
+    .glitch-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 72px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 30px #06b6d4;
+    }
+    .glitch-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 32px;
+      color: #38bdf8;
+      margin-top: 14px;
+      letter-spacing: 0.1em;
+    }
+
+    #outro-stage {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+      z-index: 70;
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px;
+      text-align: center;
+    }
+    .outro-banner {
+      width: 720px;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      margin-bottom: 40px;
+      border: 2px solid rgba(6, 182, 212, 0.4);
+    }
+    .outro-slogan {
+      font-family: 'Archivo', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 50px;
+      max-width: 850px;
+      text-transform: uppercase;
+    }
+    .outro-slogan span {
+      color: #38bdf8;
+    }
+    .outro-cta-card {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.25) 0%, rgba(6, 182, 212, 0.2) 100%);
+      border: 2px solid rgba(37, 211, 102, 0.6);
+      padding: 36px 60px;
+      border-radius: 30px;
+      box-shadow: 0 16px 40px rgba(37, 211, 102, 0.3);
+      margin-bottom: 30px;
+    }
+    .outro-cta-text {
+      font-family: 'Archivo', sans-serif;
+      font-size: 52px;
+      font-weight: 900;
+      color: #fde047;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .outro-handle {
+      font-family: 'Space Mono', monospace;
+      font-size: 32px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <!-- Scene 1: WhatsApp a las 11:30 PM -->
+    <div id="scene1" class="scene-layer">
+      <img id="img1" src="../assets/scene1_whatsapp_night.jpg" class="scene-img" alt="Celular Noche">
+      <div class="vignette-overlay"></div>
+      <div class="scanline-overlay"></div>
+    </div>
+
+    <!-- Scene 2: Chatbot IA WhatsApp Respondiendo en Tiempo Real -->
+    <div id="scene2" class="scene-layer">
+      <img id="img2" src="../assets/scene2_whatsapp_bot_paid.jpg" class="scene-img" alt="Chatbot IA WhatsApp">
+      <div class="vignette-overlay"></div>
+    </div>
+
+    <!-- Top Telemetry -->
+    <div class="top-telemetry">
+      <div class="brand-pill">
+        <span class="brand-dot"></span>
+        <span class="brand-text">CARIBIA LABS • REEL #02</span>
+      </div>
+      <div id="time-badge" class="time-badge">00:00</div>
+    </div>
+
+    <!-- HUD Badges -->
+    <div id="hud-alert" class="hud-card hud-alert">
+      <span>🌙</span>
+      <span>23:30 PM • CLIENTE PREGUNTANDO PRECIOS</span>
+    </div>
+    <div id="hud-bot-1" class="hud-card hud-bot-1">
+      <span>⚡</span>
+      <span>BOT IA: RESPUESTA AL INSTANTE (2s)</span>
+    </div>
+    <div id="hud-bot-2" class="hud-card hud-bot-2">
+      <span>🟢</span>
+      <span>MERCADO PAGO: $35.000 COBRADO EN AUTOMÁTICO</span>
+    </div>
+
+    <!-- Kinetic Subtitles Stage -->
+    <div class="subtitles-stage">
+      <div id="sub-1" class="subtitle-line">SON LAS 11:30 DE LA NOCHE</div>
+      <div id="sub-2" class="subtitle-line highlight-yellow">Y UN CLIENTE PIDE PRECIOS</div>
+      <div id="sub-3" class="subtitle-line">TU CHATBOT IA RESPONDE EN 2s</div>
+      <div id="sub-4" class="subtitle-line highlight-cyan">Y COBRA MIENTRAS TÚ DUERMES</div>
+      <div id="sub-5" class="subtitle-line highlight-emerald">LA ENTREGA MÁS RÁPIDA DEL MERCADO</div>
+      <div id="sub-6" class="subtitle-line highlight-yellow">COMENTA "BOT" O LINK EN BIO</div>
+    </div>
+
+    <!-- Glitch Transition Stage -->
+    <div id="glitch-stage">
+      <img src="../assets/banner_caribialabs.jpg" class="glitch-logo" alt="CaribIA Labs">
+      <h1 class="glitch-title">CARIBIA LABS</h1>
+      <p class="glitch-subtitle">CHATBOTS IA PARA WHATSAPP</p>
+    </div>
+
+    <!-- Outro Stage -->
+    <div id="outro-stage">
+      <img src="../assets/banner_caribialabs.jpg" class="outro-banner" alt="CaribIA Labs">
+      <h2 class="outro-slogan">
+        LA ENTREGA PERSONALIZADA<br>
+        <span>MÁS RÁPIDA DEL MERCADO</span>
+      </h2>
+      <div class="outro-cta-card">
+        <div class="outro-cta-text">💬 COMENTA "BOT"</div>
+      </div>
+      <p class="outro-handle">O TOCA EL LINK EN NUESTRA BIO • @CARIBIALABS</p>
+    </div>
+  </div>
+
+  <script>
+    const FPS = 25;
+    const TOTAL_FRAMES = 390;
+
+    const s1 = document.getElementById('scene1');
+    const s2 = document.getElementById('scene2');
+    const img1 = document.getElementById('img1');
+    const img2 = document.getElementById('img2');
+    const glitch = document.getElementById('glitch-stage');
+    const outro = document.getElementById('outro-stage');
+    const timeBadge = document.getElementById('time-badge');
+
+    const hudAlert = document.getElementById('hud-alert');
+    const hudBot1 = document.getElementById('hud-bot-1');
+    const hudBot2 = document.getElementById('hud-bot-2');
+
+    const sub1 = document.getElementById('sub-1');
+    const sub2 = document.getElementById('sub-2');
+    const sub3 = document.getElementById('sub-3');
+    const sub4 = document.getElementById('sub-4');
+    const sub5 = document.getElementById('sub-5');
+    const sub6 = document.getElementById('sub-6');
+
+    function hideAllSubs() {
+      [sub1, sub2, sub3, sub4, sub5, sub6].forEach(el => {
+        el.style.opacity = 0;
+        el.style.display = 'none';
+      });
+    }
+
+    function showSub(el, scale = 1.0) {
+      el.style.display = 'inline-block';
+      el.style.opacity = 1;
+      el.style.transform = `scale(${scale})`;
+    }
+
+    window.renderFrame = function(frame) {
+      const timeSec = frame / FPS;
+      const mm = String(Math.floor(timeSec / 60)).padStart(2, '0');
+      const ss = String(Math.floor(timeSec % 60)).padStart(2, '0');
+      timeBadge.innerText = `${mm}:${ss}`;
+
+      hideAllSubs();
+
+      // ACT 1: Frames 0 - 78 (0.0s - 3.1s) | Scene 1: Celular de noche
+      if (frame < 78) {
+        s1.style.opacity = 1;
+        s2.style.opacity = 0;
+        glitch.style.opacity = 0;
+        outro.style.opacity = 0;
+
+        const p1 = frame / 78;
+        const scale1 = 1.0 + p1 * 0.12;
+        img1.style.transform = `scale(${scale1}) translate(${Math.sin(p1 * 6) * 4}px, ${p1 * 8}px)`;
+
+        if (frame > 10) {
+          hudAlert.style.opacity = Math.min(1, (frame - 10) / 8);
+          hudAlert.style.transform = `translateY(0)`;
+        } else {
+          hudAlert.style.opacity = 0;
+        }
+
+        if (frame >= 3 && frame < 38) {
+          showSub(sub1, 1.0 + ((frame - 3) % 15) * 0.005);
+        } else if (frame >= 38 && frame < 78) {
+          showSub(sub2, 1.05 + Math.sin(frame * 0.2) * 0.02);
+        }
+      }
+      // ACT 2: Frames 78 - 95 (3.1s - 3.8s) | GLITCH TRANSITION CARIBIA LABS
+      else if (frame < 95) {
+        s1.style.opacity = 0;
+        s2.style.opacity = 0;
+        outro.style.opacity = 0;
+        hudAlert.style.opacity = 0;
+
+        const gProgress = (frame - 78) / 17;
+        glitch.style.opacity = 1;
+
+        const shakeX = (Math.random() * 2 - 1) * 20;
+        const shakeY = (Math.random() * 2 - 1) * 20;
+        glitch.style.transform = `translate(${shakeX}px, ${shakeY}px) scale(${1.0 + gProgress * 0.1})`;
+      }
+      // ACT 3: Frames 95 - 245 (3.8s - 9.8s) | Scene 2: Chatbot IA WhatsApp
+      else if (frame < 245) {
+        glitch.style.opacity = 0;
+        s1.style.opacity = 0;
+        s2.style.opacity = 1;
+        outro.style.opacity = 0;
+
+        const p2 = (frame - 95) / 150;
+        const scale2 = 1.15 - p2 * 0.10;
+        img2.style.transform = `scale(${scale2}) translate(0px, ${-p2 * 12}px)`;
+
+        if (frame > 105) {
+          hudBot1.style.opacity = Math.min(1, (frame - 105) / 10);
+          hudBot1.style.transform = `translateY(0)`;
+        }
+        if (frame > 135) {
+          hudBot2.style.opacity = Math.min(1, (frame - 135) / 10);
+          hudBot2.style.transform = `translateY(0)`;
+        }
+
+        if (frame >= 96 && frame < 170) {
+          showSub(sub3, 1.0 + ((frame - 96) % 20) * 0.003);
+        } else if (frame >= 170 && frame < 245) {
+          showSub(sub4, 1.04 + Math.sin(frame * 0.2) * 0.02);
+        }
+      }
+      // ACT 4: Frames 245 - 390 (9.8s - 15.6s) | OUTRO & CTA
+      else {
+        s1.style.opacity = 0;
+        s2.style.opacity = 0;
+        glitch.style.opacity = 0;
+        hudBot1.style.opacity = 0;
+        hudBot2.style.opacity = 0;
+        outro.style.opacity = 1;
+
+        const p3 = (frame - 245) / 145;
+        outro.style.transform = `scale(${1.0 + Math.sin(p3 * Math.PI) * 0.02})`;
+
+        if (frame < 325) {
+          showSub(sub5, 1.02);
+        } else {
+          showSub(sub6, 1.05 + Math.sin(frame * 0.2) * 0.02);
+        }
+      }
+    };
+  </script>
+</body>
+</html>
