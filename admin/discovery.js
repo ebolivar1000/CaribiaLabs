@@ -420,6 +420,19 @@ function setupDiscoveryCrmModule() {
     });
   }
 
+  const btnDetailCopyAi = document.getElementById('btn-detail-copy-ai-prompt');
+  if (btnDetailCopyAi) {
+    btnDetailCopyAi.addEventListener('click', () => {
+      if (activeViewingLeadId) copyAiPromptForLead(activeViewingLeadId);
+    });
+  }
+
+  // Cablear inputs de campos manuales / personalizados en todas las secciones
+  wireAddCustomChip('btn-add-physical', 'input-add-physical', 'chips-physical-scope', false);
+  wireAddCustomChip('btn-add-virtual', 'input-add-virtual', 'chips-virtual-scope', true);
+  wireAddCustomChip('btn-add-channel', 'input-add-channel', 'chips-contact-channels', false);
+  wireAddCustomChip('btn-add-bottleneck', 'input-add-bottleneck', 'chips-bottlenecks', true);
+
   // Render inicial de tarjetas y KPIs
   renderDiscoveryLeads();
   renderDiscoveryKpis();
@@ -427,8 +440,47 @@ function setupDiscoveryCrmModule() {
 }
 
 // --------------------------------------------------------------------
-// MANEJO DE CHIPS INTERACTIVOS (SELECCIÓN CON UN TOQUE)
+// MANEJO DE CHIPS INTERACTIVOS (SELECCIÓN CON UN TOQUE Y MANUALES)
 // --------------------------------------------------------------------
+function wireAddCustomChip(btnId, inputId, containerId, isDanger = false) {
+  const btn = document.getElementById(btnId);
+  const input = document.getElementById(inputId);
+  const container = document.getElementById(containerId);
+  if (!btn || !input || !container) return;
+
+  function doAdd() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    const chips = Array.from(container.querySelectorAll('.chip-toggle'));
+    const existing = chips.find(c => (c.getAttribute('data-val') || c.textContent.trim()).toLowerCase() === text.toLowerCase());
+
+    if (existing) {
+      if (isDanger) {
+        existing.classList.add('active-danger');
+      } else {
+        existing.classList.add('active');
+      }
+    } else {
+      const span = document.createElement('span');
+      span.className = 'chip-toggle ' + (isDanger ? 'active-danger' : 'active');
+      span.setAttribute('data-val', text);
+      span.innerHTML = `<span>✏️ ${escapeHtml(text)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove();">✕</span>`;
+      container.appendChild(span);
+    }
+
+    input.value = '';
+  }
+
+  btn.addEventListener('click', doAdd);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      doAdd();
+    }
+  });
+}
+
 function setupChipToggles(containerId, isDanger = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -463,14 +515,26 @@ function setSelectedChips(containerId, valuesArray, isDanger = false) {
   const values = Array.isArray(valuesArray) ? valuesArray : [];
 
   container.querySelectorAll('.chip-toggle').forEach(chip => {
-    const val = chip.getAttribute('data-val') || chip.textContent.trim();
     chip.classList.remove('active', 'active-danger', 'active-emerald');
-    if (values.includes(val)) {
+  });
+
+  values.forEach(val => {
+    if (!val) return;
+    const chips = Array.from(container.querySelectorAll('.chip-toggle'));
+    const existing = chips.find(c => (c.getAttribute('data-val') || c.textContent.trim()).toLowerCase() === val.toLowerCase());
+
+    if (existing) {
       if (isDanger) {
-        chip.classList.add('active-danger');
+        existing.classList.add('active-danger');
       } else {
-        chip.classList.add('active');
+        existing.classList.add('active');
       }
+    } else {
+      const span = document.createElement('span');
+      span.className = 'chip-toggle ' + (isDanger ? 'active-danger' : 'active');
+      span.setAttribute('data-val', val);
+      span.innerHTML = `<span>✏️ ${escapeHtml(val)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove();">✕</span>`;
+      container.appendChild(span);
     }
   });
 }
@@ -833,9 +897,18 @@ function renderDiscoveryLeads() {
             type="button"
             onclick="copyWhatsAppPitch('${lead.id}')"
             class="px-2.5 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
-            title="Copiar resumen para WhatsApp"
+            title="Copiar propuesta resumida para enviar por WhatsApp"
           >
-            <span>📱 Propuesta</span>
+            <span>📱 WhatsApp</span>
+          </button>
+
+          <button
+            type="button"
+            onclick="copyAiPromptForLead('${lead.id}')"
+            class="px-2.5 py-1.5 rounded-lg bg-purple-950/60 hover:bg-purple-900 border border-purple-500/30 text-purple-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+            title="Copiar diagnóstico para pasar a Antigravity (IA)"
+          >
+            <span>🤖 IA</span>
           </button>
 
           ${!isWon ? `
@@ -1156,6 +1229,98 @@ ${painsText}
     });
   } else {
     prompt('Copia tu propuesta para WhatsApp:', pitchText);
+  }
+};
+
+// --------------------------------------------------------------------
+// COPIAR PROMPT DE DIAGNÓSTICO COMPLETO PARA ANTIGRAVITY (IA)
+// --------------------------------------------------------------------
+window.copyAiPromptForLead = function(leadId) {
+  const lead = discoveryLeads.find(l => l.id === leadId);
+  if (!lead) return;
+
+  const physicalText = (lead.physical_scope && lead.physical_scope.length > 0)
+    ? lead.physical_scope.join(', ')
+    : 'No especificado';
+
+  const virtualText = (lead.virtual_scope && lead.virtual_scope.length > 0)
+    ? lead.virtual_scope.join(', ')
+    : 'No especificado';
+
+  const channelsText = (lead.contact_channels && lead.contact_channels.length > 0)
+    ? lead.contact_channels.join(', ')
+    : 'No especificado';
+
+  const painsList = (lead.bottlenecks && lead.bottlenecks.length > 0)
+    ? lead.bottlenecks.map(b => '  - ' + b).join('\n')
+    : '  - Ningún cuello de botella crítico registrado';
+
+  const qasList = (lead.custom_qa && lead.custom_qa.length > 0)
+    ? lead.custom_qa.map((q, i) => `  ${i + 1}. **${q.question}**: ${q.answer || 'Sin respuesta'}`).join('\n')
+    : '  *(No se registraron preguntas personalizadas adicionales)*';
+
+  const promptText = 
+`# 📋 LEVANTAMIENTO COMERCIAL & DIAGNÓSTICO OPERATIVO: ${lead.business_name}
+> Generado desde el CRM de CaribIA Labs para análisis con Antigravity AI
+
+**Instrucción para Antigravity:**
+Por favor revisa detenidamente el siguiente levantamiento comercial y diagnóstico de este cliente prospecto. Con base en sus cuellos de botella, canales actuales y metas, genera:
+1. **Diagnóstico Estratégico & Detección de Fugas:** Dónde están perdiendo dinero y clientes exactamente.
+2. **Propuesta Comercial Escalonada (3 Niveles):**
+   - **Nivel Básico (MVP rápido en 48-72hs):** Solución puntual de alto impacto.
+   - **Nivel Recomendado (Recomendado CaribIA):** Solución integral automatizada (web/landing + bot WhatsApp 24/7 + catálogo sincronizado).
+   - **Nivel Pro / Expansión:** Automatización avanzada, reportes en vivo y retención postventa.
+3. **Estructura de Precios & ROI Estimado:** Sugerencia de Setup Inicial y Abono Mensual recurrente (Servidores ultrarrápidos, soporte y mantenimiento).
+4. **Guión de Cierre Persuasivo para WhatsApp:** Mensaje directo para enviarle al decisor (${lead.contact_name}).
+
+---
+### 🏢 1. Datos Generales de la Empresa
+- **Nombre:** ${lead.business_name}
+- **Rubro:** ${getRubroLabel(lead.rubro)}
+- **Contacto Decisor:** ${lead.contact_name} ${lead.role_title ? `(${lead.role_title})` : ''}
+- **WhatsApp:** ${lead.whatsapp_phone || 'No indicado'}
+- **Email:** ${lead.email || 'No indicado'}
+- **Redes Sociales / Perfil:** ${lead.social_network || 'No indicado'}
+- **Ubicación Geográfica:** ${lead.location || 'No indicada'}
+
+### 🌐 2. Alcance Operativo & Canales
+- **Alcance Físico:** ${physicalText}
+- **Alcance Virtual & Presencia Web:** ${virtualText}
+- **Canales de Captación Actuales:** ${channelsText}
+
+### ⚡ 3. Operación y Cuellos de Botella
+- **Volumen de Consultas Diarias:** ${lead.volume_level || 'medio'}
+- **Horarios Pico / Saturación:** ${lead.peak_hours || 'No indicado'}
+- **Ticket Promedio:** ${lead.avg_ticket ? formatMoney(lead.avg_ticket, lead.currency) : 'No especificado'}
+- **Tamaño del Equipo:** ${lead.team_size || 'No especificado'}
+- **Herramientas Actuales:** ${lead.tools_used || 'Ninguna / Solo chat'}
+- **Cuellos de Botella Críticos (Lo que les hace perder dinero):**
+${painsList}
+
+### 🎯 4. Metas a 90 Días
+- ${lead.goals || 'Optimizar atención al cliente y aumentar conversiones'}
+
+### 💬 5. Preguntas Dinámicas & Conversación Personalizada (Q&A en Vivo)
+${qasList}
+
+### 💰 6. Solución Tentativa y Cotización Preliminar
+- **Solución CaribIA Labs:** ${lead.solution_name || 'Bot WhatsApp IA 24/7'}
+- **Plazo de Entrega Comprometido:** ${lead.delivery_time || '72 horas hábiles'} *(Slogan: "La entrega personalizada más rápida del mercado")*
+- **Setup Estimado:** ${formatMoney(lead.setup_fee, lead.currency)}
+- **Abono Mensual:** ${formatMoney(lead.monthly_fee, lead.currency)}/mes
+- **Estado Actual:** ${lead.status}
+- **Próximo Paso Acordado:** ${lead.next_step || 'Enviar propuesta formal'}
+${lead.notes ? `- **Notas Internas:** ${lead.notes}` : ''}
+`;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(promptText).then(() => {
+      showToastNotification('✓ Prompt para Antigravity copiado al portapapeles. ¡Pégalo aquí en el chat!');
+    }).catch(() => {
+      prompt('Copia el prompt para Antigravity:', promptText);
+    });
+  } else {
+    prompt('Copia el prompt para Antigravity:', promptText);
   }
 };
 

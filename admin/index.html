@@ -907,7 +907,7 @@
 
             <div>
               <label class="block font-bold text-slate-300 mb-2">
-                Alcance Físico de la Empresa (Haz clic en los que apliquen):
+                Alcance Físico de la Empresa (Haz clic en los que apliquen o añade uno manual):
               </label>
               <div class="flex flex-wrap gap-2" id="chips-physical-scope">
                 <span class="chip-toggle" data-val="1 Local a la calle">🏢 1 Local a la calle</span>
@@ -918,11 +918,15 @@
                 <span class="chip-toggle" data-val="Depósito Logístico">📦 Depósito Logístico</span>
                 <span class="chip-toggle" data-val="100% Sin local físico">☁️ 100% Sin local físico</span>
               </div>
+              <div class="flex items-center gap-2 mt-2.5">
+                <input type="text" id="input-add-physical" placeholder="Agregar alcance físico personalizado (ej: Atiende desde su casa, Envíos a domicilio)..." class="glass-input px-3 py-1.5 rounded-lg text-xs flex-1" />
+                <button type="button" id="btn-add-physical" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 font-bold text-xs whitespace-nowrap transition cursor-pointer">+ Agregar</button>
+              </div>
             </div>
 
             <div>
               <label class="block font-bold text-slate-300 mb-2">
-                Alcance Virtual & Presencia Digital Actual (Haz clic en los que apliquen):
+                Alcance Virtual & Presencia Digital Actual (Haz clic en los que apliquen o añade uno manual):
               </label>
               <div class="flex flex-wrap gap-2" id="chips-virtual-scope">
                 <span class="chip-toggle active-danger" data-val="Sin sitio web">❌ Sin sitio web</span>
@@ -932,6 +936,10 @@
                 <span class="chip-toggle" data-val="Mercado Libre activo">📦 Mercado Libre activo</span>
                 <span class="chip-toggle" data-val="Catálogo en PDF estático">📄 Catálogo en PDF estático</span>
                 <span class="chip-toggle" data-val="Solo atienden por WhatsApp">💬 Solo atienden por WhatsApp</span>
+              </div>
+              <div class="flex items-center gap-2 mt-2.5">
+                <input type="text" id="input-add-virtual" placeholder="Agregar alcance virtual personalizado (ej: Grupo cerrado de Telegram, Ventas por TikTok Live)..." class="glass-input px-3 py-1.5 rounded-lg text-xs flex-1" />
+                <button type="button" id="btn-add-virtual" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 font-bold text-xs whitespace-nowrap transition cursor-pointer">+ Agregar</button>
               </div>
             </div>
           </div>
@@ -955,6 +963,10 @@
                 <span class="chip-toggle" data-val="Tráfico peatonal a la calle">🚶 Tráfico peatonal a la calle</span>
                 <span class="chip-toggle" data-val="Llamadas o prospección fría">📞 Llamadas o prospección fría</span>
               </div>
+              <div class="flex items-center gap-2 mt-2.5">
+                <input type="text" id="input-add-channel" placeholder="Agregar canal personalizado (ej: Radio local, Volantes mano a mano, Influencers)..." class="glass-input px-3 py-1.5 rounded-lg text-xs flex-1" />
+                <button type="button" id="btn-add-channel" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 font-bold text-xs whitespace-nowrap transition cursor-pointer">+ Agregar</button>
+              </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -975,7 +987,7 @@
 
             <div>
               <label class="block font-bold text-slate-300 mb-2">
-                Cuellos de Botella Críticos (Lo que les hace perder dinero):
+                Cuellos de Botella Críticos (Lo que les hace perder dinero o añade uno manual):
               </label>
               <div class="flex flex-wrap gap-2" id="chips-bottlenecks">
                 <span class="chip-toggle active-danger" data-val="Pérdida de ventas de noche">🌙 Pierden ventas de noche (22hs a 8hs)</span>
@@ -985,6 +997,10 @@
                 <span class="chip-toggle" data-val="Turnos superpuestos o cancelados">📅 Turnos superpuestos o cancelaciones</span>
                 <span class="chip-toggle" data-val="Quiebres de stock sin avisar">📦 Quiebres de stock no sincronizados</span>
                 <span class="chip-toggle" data-val="Cero base de datos para recompras">📇 No guardan datos de clientes para revender</span>
+              </div>
+              <div class="flex items-center gap-2 mt-2.5">
+                <input type="text" id="input-add-bottleneck" placeholder="Agregar cuello de botella personalizado (ej: Cadetes se pierden, Falta personal los sábados)..." class="glass-input px-3 py-1.5 rounded-lg text-xs flex-1" />
+                <button type="button" id="btn-add-bottleneck" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-rose-300 border border-rose-500/30 font-bold text-xs whitespace-nowrap transition cursor-pointer">+ Agregar Dolor</button>
               </div>
             </div>
           </div>
@@ -1147,10 +1163,14 @@
         </div>
 
         <div class="flex items-center justify-between flex-wrap gap-3 pt-6 border-t border-slate-800 mt-6">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
             <button id="btn-detail-copy-pitch" type="button" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
               <span>📋</span>
               <span>Copiar Propuesta para WhatsApp</span>
+            </button>
+            <button id="btn-detail-copy-ai-prompt" type="button" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer" title="Copia el diagnóstico completo formateado para que Antigravity analice mejoras y arme el presupuesto">
+              <span>🤖</span>
+              <span>Copiar Prompt para IA (Antigravity)</span>
             </button>
             <button id="btn-detail-convert-client" type="button" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
               <span>⚡</span>
