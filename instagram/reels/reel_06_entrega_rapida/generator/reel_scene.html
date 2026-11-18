@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reel 6: El Mito de los 6 Meses de Desarrollo - CaribIA Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: #020617;
+      overflow: hidden;
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
+      color: #ffffff;
+    }
+    #stage {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+
+    .scene-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      opacity: 0;
+      transition: none;
+    }
+    .scene-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-origin: center center;
+    }
+
+    .vignette-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+    }
+    .scanline-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(6, 182, 212, 0.02), rgba(0, 0, 0, 0.01), rgba(239, 68, 68, 0.02));
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+
+    /* Telemetry Header */
+    .top-telemetry {
+      position: absolute;
+      top: 90px;
+      left: 70px;
+      right: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      background: rgba(10, 15, 29, 0.85);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #06b6d4;
+      box-shadow: 0 0 12px #06b6d4;
+    }
+    .brand-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+    .time-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      color: #94a3b8;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* HUD Floaters */
+    .hud-card {
+      position: absolute;
+      border-radius: 20px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      z-index: 40;
+      transition: none;
+      opacity: 0;
+    }
+
+    /* Scene 1 HUD: Slow Agency Drain */
+    .hud-slow-agency {
+      top: 250px;
+      left: 70px;
+      right: 70px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 2px solid rgba(239, 68, 68, 0.6);
+      padding: 24px 30px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .hud-slow-icon { font-size: 50px; }
+    .hud-slow-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: #ef4444;
+      line-height: 1.1;
+    }
+    .hud-slow-sub {
+      font-size: 22px;
+      color: #cbd5e1;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Scene 2 HUD: Rapid Delivery */
+    .hud-rapid-card {
+      top: 240px;
+      left: 70px;
+      right: 70px;
+      background: rgba(10, 15, 29, 0.94);
+      border: 2px solid rgba(6, 182, 212, 0.6);
+      padding: 26px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .hud-rapid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 12px;
+    }
+    .hud-rapid-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #22d3ee;
+    }
+    .hud-rapid-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 16px;
+      padding: 4px 12px;
+      background: rgba(6, 182, 212, 0.2);
+      color: #67e8f9;
+      border-radius: 9999px;
+      border: 1px solid rgba(6, 182, 212, 0.4);
+    }
+    .hud-rapid-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 24px;
+      color: #f1f5f9;
+      font-weight: 700;
+    }
+
+    /* Subtitles Layer */
+    .subtitles-wrapper {
+      position: absolute;
+      bottom: 240px;
+      left: 60px;
+      right: 60px;
+      text-align: center;
+      z-index: 60;
+      display: flex;
+      justify-content: center;
+    }
+    .sub-box {
+      display: inline-block;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-size: 56px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      padding: 24px 38px;
+      background: rgba(0, 0, 0, 0.88);
+      border-radius: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(6, 182, 212, 0.25);
+      letter-spacing: -0.02em;
+    }
+    .hl-cyan { color: #22d3ee; text-shadow: 0 0 20px rgba(34, 211, 238, 0.6); }
+    .hl-yellow { color: #fde047; text-shadow: 0 0 20px rgba(253, 224, 71, 0.6); }
+    .hl-red { color: #f87171; text-shadow: 0 0 20px rgba(248, 113, 113, 0.6); }
+    .hl-emerald { color: #34d399; text-shadow: 0 0 20px rgba(52, 211, 153, 0.6); }
+
+    /* Glitch Stage */
+    #glitch-stage {
+      position: absolute;
+      inset: 0;
+      background: #030712;
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+    }
+    .glitch-logo {
+      font-family: 'Archivo', sans-serif;
+      font-size: 92px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      text-shadow: 4px 0 #ef4444, -4px 0 #06b6d4;
+    }
+    .glitch-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 32px;
+      color: #22d3ee;
+      letter-spacing: 0.15em;
+      margin-top: 10px;
+    }
+
+    /* Outro Stage */
+    #outro-stage {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+      z-index: 80;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px;
+      text-align: center;
+      opacity: 0;
+    }
+    .outro-badge {
+      display: inline-block;
+      padding: 10px 28px;
+      border-radius: 9999px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.5);
+      color: #22d3ee;
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+    .outro-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 74px;
+      font-weight: 900;
+      line-height: 1.05;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    .outro-slogan {
+      font-size: 32px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 60px;
+      max-width: 800px;
+    }
+    .outro-cta-card {
+      width: 100%;
+      background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+      border-radius: 30px;
+      padding: 36px 40px;
+      box-shadow: 0 20px 60px rgba(6, 182, 212, 0.5);
+      margin-bottom: 35px;
+    }
+    .outro-cta-text {
+      font-family: 'Archivo', sans-serif;
+      font-size: 52px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+    .outro-handle {
+      font-family: 'Space Mono', monospace;
+      font-size: 24px;
+      color: #64748b;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <!-- Scene 1: The 6 Months Agency Myth -->
+    <div class="scene-layer" id="scene1">
+      <img src="../assets/scene1_slow_agency.jpg" class="scene-img" id="img1" alt="Lentitud tradicional">
+      <div class="vignette-overlay"></div>
+      <div class="scanline-overlay"></div>
+
+      <!-- HUD Slow Agency Alert -->
+      <div class="hud-card hud-slow-agency" id="hud-slow">
+        <span class="hud-slow-icon">⏳</span>
+        <div>
+          <div class="hud-slow-title">AGENCIA TRADICIONAL</div>
+          <div class="hud-slow-sub">6 meses de espera • Miles de dólares</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 2: CaribIA Rapid Delivery -->
+    <div class="scene-layer" id="scene2">
+      <img src="../assets/scene2_rapid_delivery.jpg" class="scene-img" id="img2" alt="Entrega Rápida CaribIA">
+      <div class="vignette-overlay"></div>
+      <div class="scanline-overlay"></div>
+
+      <!-- HUD Rapid Delivery -->
+      <div class="hud-card hud-rapid-card" id="hud-rapid">
+        <div class="hud-rapid-header">
+          <span class="hud-rapid-title">CARIBIA LABS CORE</span>
+          <span class="hud-rapid-tag">72 HORAS</span>
+        </div>
+        <div class="hud-rapid-item"><span>⚡</span> <span>Desarrollo modular ágil</span></div>
+        <div class="hud-rapid-item"><span>🚀</span> <span>Listo y testeado en días</span></div>
+        <div class="hud-rapid-item"><span>💰</span> <span>ROI inmediato en tu negocio</span></div>
+      </div>
+    </div>
+
+    <!-- Telemetry Header -->
+    <div class="top-telemetry">
+      <div class="brand-pill">
+        <div class="brand-dot"></div>
+        <span class="brand-text">CARIBIA LABS</span>
+      </div>
+      <div class="time-badge" id="time-badge">00:00</div>
+    </div>
+
+    <!-- Subtitles Layer -->
+    <div class="subtitles-wrapper">
+      <div class="sub-box" id="sub-1" style="display:none;">
+        ¿SOFTWARE EN <span class="hl-red">6 MESES?</span><br>EL <span class="hl-yellow">GRAN ENGAÑO ⏳</span>
+      </div>
+      <div class="sub-box" id="sub-2" style="display:none;">
+        EN <span class="hl-cyan">CARIBIA LABS</span><br>LO ENTREGAMOS EN <span class="hl-emerald">3 DÍAS ⚡</span>
+      </div>
+      <div class="sub-box" id="sub-3" style="display:none;">
+        LA ENTREGA <span class="hl-cyan">MÁS RÁPIDA</span><br>DEL MERCADO 🚀
+      </div>
+      <div class="sub-box" id="sub-4" style="display:none;">
+        COMENTA <span class="hl-cyan">"AGIL"</span><br>O ENTRA A LA BIO 🔥
+      </div>
+    </div>
+
+    <!-- Glitch Rupture Stage -->
+    <div id="glitch-stage">
+      <div class="glitch-logo">CARIBIA LABS</div>
+      <div class="glitch-sub">VELOCIDAD RADICAL</div>
+    </div>
+
+    <!-- Outro Stage -->
+    <div id="outro-stage">
+      <div class="outro-badge">TENDENCIA TECH #06</div>
+      <h1 class="outro-title">DIGITALIZA EN<br><span class="hl-cyan">3 DÍAS</span></h1>
+      <p class="outro-slogan">"La entrega personalizada más rápida del mercado"</p>
+      <div class="outro-cta-card">
+        <div class="outro-cta-text">💬 COMENTA "AGIL"</div>
+      </div>
+      <p class="outro-handle">O TOCA EL LINK EN LA BIO • @CARIBIALABS</p>
+    </div>
+  </div>
+
+  <script>
+    const FPS = 25;
+    const TOTAL_FRAMES = 344; // Exactly 13.76 seconds
+
+    const s1 = document.getElementById('scene1');
+    const s2 = document.getElementById('scene2');
+    const img1 = document.getElementById('img1');
+    const img2 = document.getElementById('img2');
+    const glitch = document.getElementById('glitch-stage');
+    const outro = document.getElementById('outro-stage');
+    const timeBadge = document.getElementById('time-badge');
+    const hudSlow = document.getElementById('hud-slow');
+    const hudRapid = document.getElementById('hud-rapid');
+
+    const subs = {
+      s1: document.getElementById('sub-1'),
+      s2: document.getElementById('sub-2'),
+      s3: document.getElementById('sub-3'),
+      s4: document.getElementById('sub-4')
+    };
+
+    function hideAllSubs() {
+      Object.values(subs).forEach(el => {
+        if (el) {
+          el.style.display = 'none';
+          el.style.opacity = 0;
+        }
+      });
+    }
+
+    function showSub(el, scale = 1.0) {
+      if (!el) return;
+      el.style.display = 'inline-block';
+      el.style.opacity = 1;
+      el.style.transform = `scale(${scale})`;
+    }
+
+    window.renderFrame = function(frame) {
+      const timeSec = frame / FPS;
+      const mm = String(Math.floor(timeSec / 60)).padStart(2, '0');
+      const ss = String(Math.floor(timeSec % 60)).padStart(2, '0');
+      timeBadge.innerText = `${mm}:${ss}`;
+
+      hideAllSubs();
+
+      // ACT 1: Frames 0 - 114 (0.0s - 4.56s) | Mito de los 6 meses
+      if (frame < 114) {
+        s1.style.opacity = 1;
+        s2.style.opacity = 0;
+        glitch.style.opacity = 0;
+        outro.style.opacity = 0;
+
+        const p1 = frame / 114;
+        img1.style.transform = `scale(${1.0 + p1 * 0.1}) translate(${Math.sin(p1 * 4) * 4}px, ${p1 * 8}px)`;
+
+        if (frame > 5) {
+          hudSlow.style.opacity = Math.min(1, (frame - 5) / 8);
+          hudSlow.style.transform = `translateY(${Math.max(0, 14 - (frame - 5))}px)`;
+        }
+
+        if (frame >= 3 && frame < 114) {
+          showSub(subs.s1, 1.0 + ((frame - 3) % 15) * 0.003);
+        }
+      }
+      // ACT 2: Frames 114 - 126 (4.56s - 5.04s) | Glitch Rupture
+      else if (frame < 126) {
+        s1.style.opacity = 0;
+        s2.style.opacity = 0;
+        outro.style.opacity = 0;
+        hudSlow.style.opacity = 0;
+
+        const gProgress = (frame - 114) / 12;
+        glitch.style.opacity = 1;
+        const shakeX = (Math.random() * 2 - 1) * 22;
+        const shakeY = (Math.random() * 2 - 1) * 22;
+        glitch.style.transform = `translate(${shakeX}px, ${shakeY}px) scale(${1.0 + gProgress * 0.1})`;
+      }
+      // ACT 3: Frames 126 - 226 (5.04s - 9.04s) | CaribIA Labs en 3 Días
+      else if (frame < 226) {
+        glitch.style.opacity = 0;
+        s1.style.opacity = 0;
+        s2.style.opacity = 1;
+        outro.style.opacity = 0;
+
+        const p2 = (frame - 126) / 100;
+        img2.style.transform = `scale(${1.12 - p2 * 0.08}) translate(0px, ${-p2 * 10}px)`;
+
+        if (frame > 132) {
+          hudRapid.style.opacity = Math.min(1, (frame - 132) / 8);
+          hudRapid.style.transform = `translateY(${Math.max(0, 12 - (frame - 132))}px)`;
+        }
+
+        if (frame >= 126 && frame < 226) {
+          showSub(subs.s2, 1.04 + Math.sin(frame * 0.2) * 0.02);
+        }
+      }
+      // ACT 4: Frames 226 - 286 (9.04s - 11.44s) | La Entrega más Rápida del Mercado
+      else if (frame < 286) {
+        s1.style.opacity = 0;
+        s2.style.opacity = 1;
+        glitch.style.opacity = 0;
+        outro.style.opacity = 0;
+
+        if (frame >= 226 && frame < 286) {
+          showSub(subs.s3, 1.0 + ((frame - 226) % 18) * 0.003);
+        }
+      }
+      // ACT 5: Frames 286 - 344 (11.44s - 13.76s) | Outro & CTA "COMENTA AGIL"
+      else {
+        s1.style.opacity = 0;
+        s2.style.opacity = 0;
+        glitch.style.opacity = 0;
+        hudRapid.style.opacity = 0;
+        outro.style.opacity = 1;
+
+        const p4 = (frame - 286) / 58;
+        outro.style.transform = `scale(${1.0 + Math.sin(p4 * Math.PI) * 0.02})`;
+
+        if (frame >= 286 && frame < 344) {
+          showSub(subs.s4, 1.02);
+        }
+      }
+    };
+  </script>
+</body>
+</html>

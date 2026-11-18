@@ -1,0 +1,30 @@
+[
+  {
+    "text": "Te dijeron que un software para tu negocio tarda seis meses y cuesta una fortuna?",
+    "offset_ms": 100.0,
+    "duration_ms": 4473.3,
+    "start_sec": 0.1,
+    "end_sec": 4.57
+  },
+  {
+    "text": "En CaribIA Labs rompemos ese mito: entregamos tu solución en tres días.",
+    "offset_ms": 4523.3,
+    "duration_ms": 4544.49,
+    "start_sec": 4.52,
+    "end_sec": 9.07
+  },
+  {
+    "text": "La entrega más rápida del mercado.",
+    "offset_ms": 9067.8,
+    "duration_ms": 2394.07,
+    "start_sec": 9.07,
+    "end_sec": 11.46
+  },
+  {
+    "text": "Comenta AGIL o entra a la bio.",
+    "offset_ms": 11461.86,
+    "duration_ms": 2224.58,
+    "start_sec": 11.46,
+    "end_sec": 13.69
+  }
+]
