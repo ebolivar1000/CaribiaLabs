@@ -1,0 +1,30 @@
+[
+  {
+    "text": "Tu local cierra a las ocho, pero tus clientes siguen comprando.",
+    "offset_ms": 100.0,
+    "duration_ms": 3579.03,
+    "start_sec": 0.1,
+    "end_sec": 3.68
+  },
+  {
+    "text": "Con CaribIA Labs tu catálogo vende y cobra por Mercado Pago veinticuatro siete.",
+    "offset_ms": 3629.03,
+    "duration_ms": 4294.35,
+    "start_sec": 3.63,
+    "end_sec": 7.92
+  },
+  {
+    "text": "La entrega más rápida del mercado: tu tienda lista en tres días.",
+    "offset_ms": 7923.39,
+    "duration_ms": 3810.48,
+    "start_sec": 7.92,
+    "end_sec": 11.73
+  },
+  {
+    "text": "Comenta TIENDA o entra al link de la bio.",
+    "offset_ms": 11733.87,
+    "duration_ms": 2469.76,
+    "start_sec": 11.73,
+    "end_sec": 14.2
+  }
+]
