@@ -177,3 +177,44 @@ CREATE TABLE IF NOT EXISTS crm_invoices (
 CREATE INDEX IF NOT EXISTS idx_crm_clients_status ON crm_clients(status);
 CREATE INDEX IF NOT EXISTS idx_crm_invoices_client ON crm_invoices(client_id);
 
+-- ====================================================================
+-- 7. TABLA DE LEVANTAMIENTOS COMERCIALES & COTIZACIONES (HOMEPAGE 1 CRM)
+-- ====================================================================
+CREATE TABLE IF NOT EXISTS discovery_leads (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    business_name VARCHAR(128) NOT NULL,
+    rubro VARCHAR(64) NOT NULL,                   -- 'retail', 'gastronomia', 'salud', 'belleza', 'inmobiliaria', 'servicios', 'otro'
+    contact_name VARCHAR(128) NOT NULL,
+    role_title VARCHAR(128),                      -- 'Dueño', 'Gerente Comercial', etc.
+    whatsapp_phone VARCHAR(32) NOT NULL,
+    email VARCHAR(128),
+    social_network VARCHAR(128),
+    location VARCHAR(128),                        -- Ciudad, Provincia, País
+    physical_scope TEXT[] DEFAULT ARRAY[]::TEXT[],-- Locales, depósitos, showrooms
+    virtual_scope TEXT[] DEFAULT ARRAY[]::TEXT[], -- Web, tienda, ML, Instagram
+    contact_channels TEXT[] DEFAULT ARRAY[]::TEXT[], -- WhatsApp manual, Meta Ads, Google Ads
+    volume_level VARCHAR(32) DEFAULT 'medio',     -- 'bajo', 'medio', 'alto', 'masivo'
+    peak_hours VARCHAR(128),
+    bottlenecks TEXT[] DEFAULT ARRAY[]::TEXT[],   -- Dolores: ventas de noche, demora en cotizar
+    goals TEXT,                                   -- Metas a 90 días
+    tools_used TEXT,                              -- Excel, papel, WhatsApp
+    avg_ticket NUMERIC(12,2) DEFAULT 0,
+    team_size VARCHAR(64),
+    custom_qa JSONB DEFAULT '[]'::jsonb,          -- Preguntas y respuestas dinámicas [{question, answer}]
+    solution_name VARCHAR(128) NOT NULL,          -- Solución CaribIA propuesta
+    delivery_time VARCHAR(64) DEFAULT '72 horas hábiles',
+    setup_fee NUMERIC(12,2) DEFAULT 0,
+    monthly_fee NUMERIC(12,2) NOT NULL DEFAULT 0,
+    currency VARCHAR(8) DEFAULT 'ARS',
+    status VARCHAR(32) DEFAULT 'diagnostic',      -- 'diagnostic', 'quoted', 'negotiation', 'won', 'lost'
+    next_step TEXT,
+    notes TEXT,
+    converted_client_id UUID REFERENCES crm_clients(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_discovery_leads_status ON discovery_leads(status);
+CREATE INDEX IF NOT EXISTS idx_discovery_leads_rubro ON discovery_leads(rubro);
+
+

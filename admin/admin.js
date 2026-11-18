@@ -159,6 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
   setupAuth();
   setupNavigationTabs();
   setupSecurityModal();
+  if (typeof setupDiscoveryCrmModule === 'function') {
+    setupDiscoveryCrmModule();
+  }
   setupCrmModule();
   setupSlugGenerator();
   setupProvisionForm();
@@ -306,39 +309,50 @@ function setupSecurityModal() {
 }
 
 // ====================================================================
-// 3. CAMBIO DE PESTAÑAS DEL DASHBOARD (TABS)
+// 3. CAMBIO DE PESTAÑAS DEL DASHBOARD (TABS - 2 HOMEPAGES ARCHITECTURE)
 // ====================================================================
 function setupNavigationTabs() {
   const tabBtns = document.querySelectorAll('.tab-btn');
   const panels = {
+    'tab-discovery': document.getElementById('panel-discovery'),
+    'tab-finances': document.getElementById('panel-finances'),
     'tab-crm': document.getElementById('panel-crm'),
     'tab-provision': document.getElementById('panel-provision'),
     'tab-simulator': document.getElementById('panel-simulator'),
     'tab-sites': document.getElementById('panel-sites')
   };
 
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-tab');
-
-      // Actualizar estilo botones
-      tabBtns.forEach(b => {
+  function switchTab(target) {
+    if (!panels[target]) return;
+    tabBtns.forEach(b => {
+      if (b.getAttribute('data-tab') === target) {
+        b.classList.add('active');
+        b.classList.remove('text-slate-400');
+      } else {
         b.classList.remove('active', 'text-cyan-300', 'bg-cyan-500/15');
         b.classList.add('text-slate-400');
-      });
-      btn.classList.add('active');
-      btn.classList.remove('text-slate-400');
+      }
+    });
 
-      // Mostrar panel correspondiente
-      Object.keys(panels).forEach(key => {
+    Object.keys(panels).forEach(key => {
+      if (panels[key]) {
         if (key === target) {
           panels[key].classList.remove('hidden');
         } else {
           panels[key].classList.add('hidden');
         }
-      });
+      }
+    });
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+      switchTab(target);
     });
   });
+
+  window.switchAdminTab = switchTab;
 }
 
 // ====================================================================

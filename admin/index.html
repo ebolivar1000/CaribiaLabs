@@ -81,6 +81,77 @@
         color: #f87171;
         border: 1px solid rgba(239, 68, 68, 0.3);
       }
+      .chip-toggle {
+        padding: 6px 14px;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s ease;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #94a3b8;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .chip-toggle:hover {
+        border-color: rgba(6, 182, 212, 0.5);
+        color: #e2e8f0;
+      }
+      .chip-toggle.active {
+        background: rgba(6, 182, 212, 0.22);
+        border-color: #06b6d4;
+        color: #22d3ee;
+        box-shadow: 0 0 14px rgba(6, 182, 212, 0.3);
+      }
+      .chip-toggle.active-danger {
+        background: rgba(239, 68, 68, 0.22);
+        border-color: #ef4444;
+        color: #fca5a5;
+        box-shadow: 0 0 14px rgba(239, 68, 68, 0.3);
+      }
+      .chip-toggle.active-emerald {
+        background: rgba(16, 185, 129, 0.22);
+        border-color: #10b981;
+        color: #6ee7b7;
+        box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+      }
+      .status-pill {
+        padding: 4px 11px;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .status-diagnostic {
+        background: rgba(148, 163, 184, 0.15);
+        color: #cbd5e1;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+      }
+      .status-quoted {
+        background: rgba(56, 189, 248, 0.15);
+        color: #38bdf8;
+        border: 1px solid rgba(56, 189, 248, 0.35);
+      }
+      .status-negotiation {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.35);
+      }
+      .status-won {
+        background: rgba(16, 185, 129, 0.18);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.4);
+      }
+      .status-lost {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.35);
+      }
     </style>
   </head>
   <body class="min-h-screen flex flex-col antialiased">
@@ -141,18 +212,26 @@
             </div>
           </div>
 
-          <!-- Pestañas de Navegación del Panel -->
-          <nav class="flex items-center gap-1 sm:gap-2">
-            <button type="button" class="tab-btn active px-3 py-1.5 rounded-lg text-xs font-bold transition border border-transparent" data-tab="tab-crm">
-              👥 CRM & Facturación
+          <!-- Pestañas de Navegación del Panel (2 Homepages de CaribIA Labs) -->
+          <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto py-1">
+            <button type="button" class="tab-btn active px-3 py-1.5 rounded-lg text-xs font-bold transition border border-transparent whitespace-nowrap flex items-center gap-1.5" data-tab="tab-discovery">
+              <span>🎯 Levantamiento & Cotizaciones</span>
+              <span class="text-[9px] px-1.5 py-0.5 bg-cyan-500/20 text-cyan-300 rounded font-mono">Home 1</span>
             </button>
-            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent" data-tab="tab-provision">
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent whitespace-nowrap flex items-center gap-1.5" data-tab="tab-finances">
+              <span>📊 Ingresos & Egresos</span>
+              <span class="text-[9px] px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded font-mono">Fase 2</span>
+            </button>
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent whitespace-nowrap" data-tab="tab-crm">
+              👥 Clientes Activos
+            </button>
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent whitespace-nowrap" data-tab="tab-provision">
               ⚡ Aprovisionar
             </button>
-            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent" data-tab="tab-simulator">
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent whitespace-nowrap" data-tab="tab-simulator">
               🤖 Simulador IA
             </button>
-            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent" data-tab="tab-sites">
+            <button type="button" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white border border-transparent whitespace-nowrap" data-tab="tab-sites">
               🌐 Sitios Activos
             </button>
           </nav>
@@ -175,9 +254,205 @@
       <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
 
         <!-- ============================================================ -->
-        <!-- PESTAÑA 1: CRM & FACTURACIÓN DE CLIENTES (ESTILO ODOO/LINEAR) -->
+        <!-- HOMEPAGE 1: LEVANTAMIENTO, INVESTIGACIÓN & COTIZACIONES CRM   -->
         <!-- ============================================================ -->
-        <section id="panel-crm" class="space-y-6">
+        <section id="panel-discovery" class="space-y-6">
+          <!-- Banner Superior & Call to Action -->
+          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-cyan-500/25 relative overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+              <div>
+                <div class="flex items-center gap-2.5 flex-wrap">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                    HOMEPAGE 1 · DISCOVERY CRM
+                  </span>
+                  <span class="text-xs text-slate-400 font-medium">Investigación & Cotizaciones de Empresas</span>
+                </div>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-2">
+                  Levantamiento de Información & Cotizaciones
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1 leading-relaxed">
+                  Registra llamadas de diagnóstico en vivo, analiza el alcance físico y virtual, detecta cuellos de botella y compara cotizaciones contra clientes que cerraron efectivamente.
+                </p>
+              </div>
+
+              <div class="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+                <button id="btn-open-discovery-modal" type="button" class="btn-glow px-5 py-3 rounded-xl text-xs sm:text-sm font-bold text-white flex items-center gap-2 whitespace-nowrap shadow-lg cursor-pointer">
+                  <span class="text-base">✨</span>
+                  <span>+ Nuevo Levantamiento / Cotización</span>
+                </button>
+                <button id="btn-export-discovery-json" type="button" class="px-3.5 py-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer" title="Descargar backup de cotizaciones en JSON">
+                  <span>📥</span>
+                  <span class="hidden sm:inline">Exportar JSON</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPIs de Conversión & Inteligencia de Ventas -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-cyan-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Empresas Investigadas</span>
+              <div class="text-2xl font-extrabold text-white mt-1.5" id="kpi-disc-total">0</div>
+              <span class="text-[11px] text-cyan-400 mt-1 block">Conversaciones & diagnósticos registrados</span>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-amber-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pipeline Cotizado Activo</span>
+              <div class="text-2xl font-extrabold text-amber-300 mt-1.5" id="kpi-disc-pipeline">$0 ARS</div>
+              <span class="text-[11px] text-amber-400/90 mt-1 block" id="kpi-disc-pipeline-sub">En diagnóstico y negociación</span>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-emerald-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Clientes Ganados / Cerrados</span>
+              <div class="text-2xl font-extrabold text-emerald-400 mt-1.5" id="kpi-disc-won">0</div>
+              <span class="text-[11px] text-emerald-400 mt-1 block" id="kpi-disc-won-mrr">$0 ARS / mes en abonos</span>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border-l-4 border-l-purple-500">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tasa de Conversión Real</span>
+              <div class="text-2xl font-extrabold text-white mt-1.5 flex items-baseline gap-2">
+                <span id="kpi-disc-rate">0%</span>
+                <span class="text-xs font-bold text-purple-400">Cierre efectivo</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div id="kpi-disc-progress" class="bg-gradient-to-r from-purple-500 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de Búsqueda, Filtros y Selector de Rubro -->
+          <div class="glass-card p-4 sm:p-5 rounded-2xl flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <span class="text-xs font-bold text-slate-400 mr-1">Estado:</span>
+              <button type="button" class="disc-filter-btn active px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 cursor-pointer" data-status="todos">
+                Todos (<span id="count-disc-all">0</span>)
+              </button>
+              <button type="button" class="disc-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 cursor-pointer" data-status="diagnostic">
+                🔍 Diagnóstico (<span id="count-disc-diag">0</span>)
+              </button>
+              <button type="button" class="disc-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 cursor-pointer" data-status="quoted">
+                📄 Cotizadas (<span id="count-disc-quoted">0</span>)
+              </button>
+              <button type="button" class="disc-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 cursor-pointer" data-status="negotiation">
+                💬 Negociación (<span id="count-disc-nego">0</span>)
+              </button>
+              <button type="button" class="disc-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 cursor-pointer" data-status="won">
+                🏆 Ganadas (<span id="count-disc-won">0</span>)
+              </button>
+              <button type="button" class="disc-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 cursor-pointer" data-status="lost">
+                ❌ Perdidas (<span id="count-disc-lost">0</span>)
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap sm:flex-nowrap">
+              <select id="discovery-rubro-select" class="glass-input px-3 py-2 rounded-xl text-xs bg-slate-900 cursor-pointer">
+                <option value="todos">Todos los rubros</option>
+                <option value="retail">👗 Retail & Indumentaria</option>
+                <option value="gastronomia">🍔 Gastronomía & Delivery</option>
+                <option value="salud">🩺 Salud & Citas Médicas</option>
+                <option value="belleza">💄 Estética & Belleza</option>
+                <option value="inmobiliaria">🏢 Inmobiliarias & Alquiler</option>
+                <option value="servicios">⚡ Servicios B2B & Otros</option>
+              </select>
+
+              <input
+                type="text"
+                id="discovery-search-input"
+                placeholder="Buscar por empresa, contacto, dolor..."
+                class="glass-input px-3.5 py-2 rounded-xl text-xs w-full sm:w-64"
+              />
+            </div>
+          </div>
+
+          <!-- Contenedor de Tarjetas de Empresas & Cotizaciones (Modern Glass Grid) -->
+          <div id="discovery-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Inyectado dinámicamente por admin.js -->
+          </div>
+
+          <!-- Caja de Comparativa & Aprendizajes de Conversión -->
+          <div class="glass-card p-6 rounded-3xl border border-slate-800">
+            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🧠</span>
+                <h4 class="font-display font-bold text-white text-sm sm:text-base">
+                  Auditoría Inteligente: Cotizaciones vs Clientes Ganados
+                </h4>
+              </div>
+              <span class="text-[11px] text-cyan-400 font-mono">Feedback para próximos Reels & Pitch de Ventas</span>
+            </div>
+            <div id="discovery-insights-box" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300 pt-2">
+              <!-- Inyectado dinámicamente por admin.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- HOMEPAGE 2: INGRESOS & EGRESOS DE CARIBIA LABS (FASE 2)       -->
+        <!-- ============================================================ -->
+        <section id="panel-finances" class="hidden space-y-6">
+          <div class="glass-card p-8 rounded-3xl border border-amber-500/25 relative overflow-hidden">
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-3xl">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                  HOMEPAGE 2 · FASE 2
+                </span>
+                <span class="text-xs text-slate-400 font-medium">Control Financiero & Flujo de Caja</span>
+              </div>
+              <h2 class="font-display text-2xl sm:text-3xl font-bold text-white">
+                📊 Ingresos y Egresos de CaribIA Labs
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+                Este módulo consolidará en la Fase 2 todos los cobros recurrentes de clientes, pagos por desarrollos a medida, costos de servidores en Cloudflare, saldo de ElevenLabs y gastos operativos para calcular el margen neto real de la empresa en tiempo real.
+              </p>
+            </div>
+
+            <!-- Mockup Visual del Módulo de Finanzas (Fase 2) -->
+            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 opacity-90">
+              <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">Ingresos Totales (Mes)</span>
+                <div class="text-xl font-bold text-emerald-400 mt-1">$485.000 ARS</div>
+                <span class="text-[10px] text-slate-500">Abonos + Setup inicial</span>
+              </div>
+              <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">Egresos Operativos</span>
+                <div class="text-xl font-bold text-rose-400 mt-1">$48.200 ARS</div>
+                <span class="text-[10px] text-slate-500">Cloudflare + ElevenLabs + Hosting</span>
+              </div>
+              <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">Margen Operativo</span>
+                <div class="text-xl font-bold text-cyan-400 mt-1">90.1%</div>
+                <span class="text-[10px] text-slate-500">Alta rentabilidad SaaS / IA</span>
+              </div>
+              <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">Beneficio Neto Proyectado</span>
+                <div class="text-xl font-bold text-white mt-1">$436.800 ARS</div>
+                <span class="text-[10px] text-emerald-400">Flujo de caja positivo</span>
+              </div>
+            </div>
+
+            <div class="mt-8 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between flex-wrap gap-3">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">⏳</span>
+                <p class="text-xs text-amber-200">
+                  <strong>Estado:</strong> Arquitectura inicial lista. Estamos puliendo la <strong>Fase 1 (Levantamiento & Cotizaciones)</strong> para validar la carga de datos antes de enlazar la facturación automática.
+                </p>
+              </div>
+              <button type="button" class="tab-btn px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition cursor-pointer" data-tab="tab-discovery">
+                Ir a Homepage 1 (Levantamiento) &rarr;
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- PESTAÑA 3: CRM & FACTURACIÓN DE CLIENTES (CLIENTES ACTIVOS) -->
+        <!-- ============================================================ -->
+        <section id="panel-crm" class="hidden space-y-6">
           <!-- KPIs Financieros -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="glass-card p-5 rounded-2xl border-l-4 border-l-cyan-500">
@@ -544,6 +819,358 @@
     </div>
 
     <!-- ============================================================ -->
+    <!-- MODAL: LEVANTAMIENTO & COTIZACIÓN CRM (HOMEPAGE 1)            -->
+    <!-- ============================================================ -->
+    <div id="modal-discovery" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 hidden">
+      <div class="glass-card max-w-4xl w-full p-6 sm:p-8 rounded-3xl border border-cyan-500/40 max-h-[92vh] overflow-y-auto relative">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800 sticky -top-6 bg-slate-950/90 backdrop-blur-md z-20 -mx-6 px-6 sm:-mx-8 sm:px-8 mb-6">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🎯</span>
+              <h3 id="discovery-modal-title" class="font-display text-lg sm:text-xl font-bold text-white">
+                Ficha de Levantamiento de Información & Cotización
+              </h3>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Registra los datos de prospección en vivo durante la llamada o reunión comercial
+            </p>
+          </div>
+          <button id="btn-close-discovery-modal" type="button" class="text-slate-400 hover:text-white text-2xl px-2 py-1 cursor-pointer">✕</button>
+        </div>
+
+        <form id="form-discovery" class="space-y-6 text-xs">
+          <input type="hidden" id="disc-id" value="" />
+
+          <!-- BLOQUE 1: Identidad del Negocio & Contacto -->
+          <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs uppercase tracking-wider">
+              <span>🏢</span>
+              <span>1. Identidad de la Empresa & Contacto Clave</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="sm:col-span-2">
+                <label class="block font-bold text-slate-300 mb-1">Nombre Comercial de la Empresa *</label>
+                <input type="text" id="disc-business" required placeholder="Ej. Óptica Visión del Sol" class="glass-input w-full p-2.5 rounded-xl text-sm" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Rubro / Industria *</label>
+                <select id="disc-rubro" class="glass-input w-full p-2.5 rounded-xl cursor-pointer">
+                  <option value="retail">👗 Retail & Indumentaria</option>
+                  <option value="gastronomia">🍔 Gastronomía & Delivery</option>
+                  <option value="salud">🩺 Salud & Citas Médicas</option>
+                  <option value="belleza">💄 Estética & Belleza</option>
+                  <option value="inmobiliaria">🏢 Inmobiliarias & Alquiler</option>
+                  <option value="servicios">⚡ Servicios B2B / Profesionales</option>
+                  <option value="otro">📦 Otro Comercio / Mayorista</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Contacto Principal *</label>
+                <input type="text" id="disc-contact" required placeholder="Ej. Martín Gómez" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Cargo / Rol</label>
+                <input type="text" id="disc-role" placeholder="Ej. Dueño / Socio / Gerente Comercial" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">WhatsApp de Contacto *</label>
+                <input type="text" id="disc-phone" required placeholder="5491154188294" class="glass-input w-full p-2.5 rounded-xl font-mono" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Email</label>
+                <input type="email" id="disc-email" placeholder="contacto@empresa.com" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Instagram / Redes</label>
+                <input type="text" id="disc-social" placeholder="@empresa_oficial" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Ubicación (Ciudad, País)</label>
+                <input type="text" id="disc-location" placeholder="Ej. Palermo, CABA, Argentina" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOQUE 2: Alcance Físico vs Alcance Virtual -->
+          <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs uppercase tracking-wider">
+              <span>🌐</span>
+              <span>2. Alcance Físico vs Alcance Virtual</span>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-2">
+                Alcance Físico de la Empresa (Haz clic en los que apliquen):
+              </label>
+              <div class="flex flex-wrap gap-2" id="chips-physical-scope">
+                <span class="chip-toggle" data-val="1 Local a la calle">🏢 1 Local a la calle</span>
+                <span class="chip-toggle" data-val="2 a 5 Sucursales">🏬 2 a 5 Sucursales</span>
+                <span class="chip-toggle" data-val="Cadena (+5 locales)">🏛️ Cadena (+5 locales)</span>
+                <span class="chip-toggle" data-val="Distribuidor / Mayorista">🏭 Distribuidor / Mayorista</span>
+                <span class="chip-toggle" data-val="Showroom con cita previa">🏠 Showroom con cita previa</span>
+                <span class="chip-toggle" data-val="Depósito Logístico">📦 Depósito Logístico</span>
+                <span class="chip-toggle" data-val="100% Sin local físico">☁️ 100% Sin local físico</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-2">
+                Alcance Virtual & Presencia Digital Actual (Haz clic en los que apliquen):
+              </label>
+              <div class="flex flex-wrap gap-2" id="chips-virtual-scope">
+                <span class="chip-toggle active-danger" data-val="Sin sitio web">❌ Sin sitio web</span>
+                <span class="chip-toggle" data-val="Web informativa básica">🌐 Web informativa básica</span>
+                <span class="chip-toggle" data-val="Tienda Online / E-commerce">🛍️ Tienda Online / E-commerce</span>
+                <span class="chip-toggle" data-val="Instagram Shop activo">📸 Instagram Shop activo</span>
+                <span class="chip-toggle" data-val="Mercado Libre activo">📦 Mercado Libre activo</span>
+                <span class="chip-toggle" data-val="Catálogo en PDF estático">📄 Catálogo en PDF estático</span>
+                <span class="chip-toggle" data-val="Solo atienden por WhatsApp">💬 Solo atienden por WhatsApp</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOQUE 3: Captación de Clientes & Cuellos de Botella -->
+          <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs uppercase tracking-wider">
+              <span>⚠️</span>
+              <span>3. Captación Actual & Cuellos de Botella (Dolores Críticos)</span>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-2">
+                ¿Cómo captan y contactan clientes hoy en día? (Selecciona los canales):
+              </label>
+              <div class="flex flex-wrap gap-2" id="chips-contact-channels">
+                <span class="chip-toggle" data-val="WhatsApp manual">💬 WhatsApp manual</span>
+                <span class="chip-toggle" data-val="Anuncios Meta (IG / FB)">🎯 Anuncios Meta (IG / FB)</span>
+                <span class="chip-toggle" data-val="Google Ads / Búsqueda">🔍 Google Ads / Búsqueda</span>
+                <span class="chip-toggle" data-val="Boca a boca / Referidos">🗣️ Boca a boca / Referidos</span>
+                <span class="chip-toggle" data-val="Tráfico peatonal a la calle">🚶 Tráfico peatonal a la calle</span>
+                <span class="chip-toggle" data-val="Llamadas o prospección fría">📞 Llamadas o prospección fría</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Volumen Diario Aproximado de Consultas</label>
+                <select id="disc-volume" class="glass-input w-full p-2.5 rounded-xl cursor-pointer">
+                  <option value="bajo">Bajo: Menos de 15 mensajes por día</option>
+                  <option value="medio" selected>Medio: Entre 15 y 50 mensajes por día</option>
+                  <option value="alto">Alto: Entre 50 y 150 mensajes por día</option>
+                  <option value="masivo">Masivo: Más de 150 mensajes por día</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Horario en que más les escriben</label>
+                <input type="text" id="disc-peak-hours" placeholder="Ej. Tardes y noches (20:00 a 23:30 hs)" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-2">
+                Cuellos de Botella Críticos (Lo que les hace perder dinero):
+              </label>
+              <div class="flex flex-wrap gap-2" id="chips-bottlenecks">
+                <span class="chip-toggle active-danger" data-val="Pérdida de ventas de noche">🌙 Pierden ventas de noche (22hs a 8hs)</span>
+                <span class="chip-toggle" data-val="Demoran horas en cotizar">⏳ Demoran horas en armar presupuestos</span>
+                <span class="chip-toggle" data-val="Dueño atrapado respondiendo lo mismo">😵 El dueño pasa horas respondiendo lo mismo</span>
+                <span class="chip-toggle" data-val="Caos al confirmar transferencias">💳 Caos al confirmar transferencias bancarias</span>
+                <span class="chip-toggle" data-val="Turnos superpuestos o cancelados">📅 Turnos superpuestos o cancelaciones</span>
+                <span class="chip-toggle" data-val="Quiebres de stock sin avisar">📦 Quiebres de stock no sincronizados</span>
+                <span class="chip-toggle" data-val="Cero base de datos para recompras">📇 No guardan datos de clientes para revender</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOQUE 4: Metas del Negocio & Expectativas -->
+          <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs uppercase tracking-wider">
+              <span>🚀</span>
+              <span>4. Metas del Negocio & Operación Actual</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Meta Principal a 90 Días</label>
+                <input type="text" id="disc-goals" placeholder="Ej. Aumentar ventas 35% y no perder mensajes nocturnos" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Herramientas Actuales Usadas</label>
+                <input type="text" id="disc-tools" placeholder="Ej. Cuaderno a mano, Excel desactualizado, WhatsApp personal" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Ticket Promedio por Venta ($)</label>
+                <input type="number" id="disc-ticket" placeholder="Ej. 35000" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Cantidad de Personas Atendiendo Clientes</label>
+                <input type="text" id="disc-team-size" placeholder="Ej. 1 persona (el dueño) / 3 vendedores" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOQUE 5: Preguntas y Respuestas Abiertas / Personalizadas Dinámicas -->
+          <div class="bg-slate-900/70 p-5 rounded-2xl border border-cyan-500/30 space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2 text-cyan-300 font-bold text-xs uppercase tracking-wider">
+                <span>💬</span>
+                <span>5. Preguntas & Respuestas Personalizadas (Dynamic Q&A)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" id="btn-suggest-questions" class="px-3 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 hover:text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+                  <span>💡</span>
+                  <span>Sugerir Preguntas Clave</span>
+                </button>
+                <button type="button" id="btn-add-custom-qa" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+                  <span>+</span>
+                  <span>Agregar Pregunta Libre</span>
+                </button>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-slate-400">
+              Agrega preguntas específicas de la llamada. Todas las preguntas y respuestas quedan indexadas en la ficha para comparar cotizaciones:
+            </p>
+
+            <!-- Lista Dinámica de Preguntas y Respuestas -->
+            <div id="dynamic-qa-list" class="space-y-3">
+              <!-- Inyectado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- BLOQUE 6: Propuesta CaribIA Labs & Cotización Económica -->
+          <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
+              <span>💼</span>
+              <span>6. Solución CaribIA Labs Propuesta & Cotización</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Solución CaribIA Recomendada *</label>
+                <select id="disc-solution" class="glass-input w-full p-2.5 rounded-xl cursor-pointer">
+                  <option value="Bot WhatsApp IA 24/7">🤖 Bot WhatsApp IA 24/7 (Ventas + Precios + FAQ)</option>
+                  <option value="Web Express + Bot IA">⚡ Web Express + Bot WhatsApp IA 24/7</option>
+                  <option value="Tienda Online + Mercado Pago">🛍️ Tienda Online + Carrito + Mercado Pago</option>
+                  <option value="Menú & Delivery 0% Comisión">🍔 Menú Gastronómico & Delivery WhatsApp (0% Comisión)</option>
+                  <option value="Agenda Médica & Turnos IA">🩺 Agenda Médica & Turnos Automatizados</option>
+                  <option value="Desarrollo CRM / Software a Medida">🚀 Desarrollo de Software / CRM a Medida</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Plazo de Entrega Comprometido</label>
+                <input type="text" id="disc-delivery-time" value="72 horas hábiles" placeholder="Ej. 72 horas hábiles / 5 días" class="glass-input w-full p-2.5 rounded-xl font-bold text-cyan-300" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Setup / Inversión Inicial ($)</label>
+                <input type="number" id="disc-setup-fee" placeholder="Ej. 180000" class="glass-input w-full p-2.5 rounded-xl font-mono text-sm" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Abono Mensual Recurrente ($) *</label>
+                <input type="number" id="disc-monthly-fee" required placeholder="Ej. 45000" class="glass-input w-full p-2.5 rounded-xl font-mono text-sm" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Moneda</label>
+                <select id="disc-currency" class="glass-input w-full p-2.5 rounded-xl cursor-pointer">
+                  <option value="ARS" selected>ARS ($ Pesos Argentinos)</option>
+                  <option value="USD">USD ($ Dólares)</option>
+                  <option value="COP">COP ($ Pesos Colombianos)</option>
+                  <option value="CLP">CLP ($ Pesos Chilenos)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Estado de la Oportunidad *</label>
+                <select id="disc-status" class="glass-input w-full p-2.5 rounded-xl cursor-pointer font-bold">
+                  <option value="diagnostic">🔍 En Diagnóstico / Investigación</option>
+                  <option value="quoted" selected>📄 Cotización Enviada</option>
+                  <option value="negotiation">💬 En Negociación / Resolviendo Objeciones</option>
+                  <option value="won">🏆 Ganado (Convertir en Cliente Activo)</option>
+                  <option value="lost">❌ Perdido / No cerró</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Próximo Paso Acordado</label>
+                <input type="text" id="disc-next-step" placeholder="Ej. Llamar el jueves a las 15hs tras revisar la propuesta" class="glass-input w-full p-2.5 rounded-xl" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Notas Adicionales de la Conversación</label>
+              <textarea id="disc-notes" rows="2" placeholder="Observaciones sobre objeciones, preferencias de diseño, plazos de pago..." class="glass-input w-full p-2.5 rounded-xl"></textarea>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <button type="button" id="btn-cancel-discovery" class="px-5 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs cursor-pointer">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-glow px-6 py-3 rounded-xl font-bold text-white text-xs flex items-center gap-2 cursor-pointer">
+              <span>💾</span>
+              <span>Guardar Levantamiento en la Base de Datos</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODAL: FICHA DETALLADA DE LEVANTAMIENTO & ACCIONES           -->
+    <!-- ============================================================ -->
+    <div id="modal-lead-detail" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 hidden">
+      <div class="glass-card max-w-3xl w-full p-6 sm:p-8 rounded-3xl border border-cyan-500/30 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+          <div class="flex items-center gap-3">
+            <div id="detail-status-pill" class="status-pill status-quoted">📄 Cotización Enviada</div>
+            <h3 id="detail-business-name" class="font-display text-xl font-bold text-white">Nombre Empresa</h3>
+          </div>
+          <button id="btn-close-lead-detail" class="text-slate-400 hover:text-white text-2xl px-2 py-1 cursor-pointer">✕</button>
+        </div>
+
+        <div id="detail-body-content" class="space-y-6 text-xs text-slate-300">
+          <!-- Inyectado dinámicamente -->
+        </div>
+
+        <div class="flex items-center justify-between flex-wrap gap-3 pt-6 border-t border-slate-800 mt-6">
+          <div class="flex items-center gap-2">
+            <button id="btn-detail-copy-pitch" type="button" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
+              <span>📋</span>
+              <span>Copiar Propuesta para WhatsApp</span>
+            </button>
+            <button id="btn-detail-convert-client" type="button" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
+              <span>⚡</span>
+              <span>Convertir a Cliente Activo</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="btn-detail-edit" type="button" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs cursor-pointer">
+              ✏️ Editar
+            </button>
+            <button id="btn-detail-close" type="button" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 font-bold text-xs cursor-pointer">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
     <!-- MODAL: NUEVO CLIENTE & CONTRATO CRM                          -->
     <!-- ============================================================ -->
     <div id="modal-new-client" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 hidden">
@@ -676,6 +1303,7 @@
       </div>
     </div>
 
+    <script src="discovery.js"></script>
     <script src="admin.js"></script>
   </body>
 </html>
