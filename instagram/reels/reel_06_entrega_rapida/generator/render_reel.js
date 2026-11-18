@@ -41,11 +41,20 @@ async function main() {
   console.log('Navigating to scene:', fileUrl);
   await page.goto(fileUrl, { waitUntil: 'networkidle0' });
 
-  // Save poster at frame 40 (Hook: 6 Meses el gran engaño)
-  console.log('Capturing poster frame...');
-  await page.evaluate(() => window.renderFrame(40));
-  await page.screenshot({ path: POSTER_IMAGE, type: 'jpeg', quality: 92 });
+  // Save high-converting cover poster for Instagram
+  console.log('Capturing high-converting poster cover...');
+  await page.evaluate(() => window.renderFrame('poster'));
+  await page.screenshot({ path: POSTER_IMAGE, type: 'jpeg', quality: 94 });
   console.log('Saved poster image at:', POSTER_IMAGE);
+
+  // Copy poster to artifacts directory
+  const artifactPoster = 'C:/Users/Everth/.gemini/antigravity/brain/a36dc656-c3c6-4fb0-a2d2-110f2cb6faca/reel_06_poster.jpg';
+  try {
+    fs.copyFileSync(POSTER_IMAGE, artifactPoster);
+    console.log('Copied poster to artifacts:', artifactPoster);
+  } catch (err) {
+    console.warn('Could not copy to artifacts:', err.message);
+  }
 
   const ffmpegArgs = [
     '-y',
@@ -105,6 +114,15 @@ async function main() {
   const totalTime = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n🎉 RENDER FINISHED in ${totalTime}s!`);
   console.log(`Master Video: ${OUTPUT_VIDEO}`);
+
+  // Copy to artifacts
+  const artifactVideo = 'C:/Users/Everth/.gemini/antigravity/brain/a36dc656-c3c6-4fb0-a2d2-110f2cb6faca/reel_06_entrega_rapida.mp4';
+  try {
+    fs.copyFileSync(OUTPUT_VIDEO, artifactVideo);
+    console.log('Copied video to artifacts:', artifactVideo);
+  } catch (err) {
+    console.warn('Could not copy video to artifacts:', err.message);
+  }
 }
 
 main().catch(err => {

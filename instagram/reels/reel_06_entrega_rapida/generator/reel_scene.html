@@ -142,6 +142,86 @@
       margin-top: 4px;
     }
 
+    /* Calendar Myth Card in Scene 1 */
+    .cal-myth-card {
+      position: absolute;
+      top: 410px;
+      left: 70px;
+      right: 70px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1.5px solid rgba(239, 68, 68, 0.5);
+      border-radius: 22px;
+      padding: 26px 30px;
+      z-index: 45;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(239, 68, 68, 0.15);
+      backdrop-filter: blur(16px);
+      opacity: 0;
+    }
+    .cal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .cal-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+    .badge-delayed {
+      font-family: 'Space Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      padding: 4px 14px;
+      border-radius: 9999px;
+    }
+    .cal-months-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .cal-month-box {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 14px 6px;
+      text-align: center;
+    }
+    .cal-m-name {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .cal-cross {
+      font-size: 22px;
+      color: #ef4444;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .cal-pulse {
+      font-size: 22px;
+      color: #fde047;
+      line-height: 1;
+    }
+    .cal-footer {
+      font-size: 19px;
+      color: #cbd5e1;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 14px;
+    }
+
     /* Scene 2 HUD: Rapid Delivery */
     .hud-rapid-card {
       top: 240px;
@@ -184,6 +264,69 @@
       color: #f1f5f9;
       font-weight: 700;
     }
+
+    /* Terminal Fast Deploy Card in Scene 2 */
+    .term-code-card {
+      position: absolute;
+      top: 480px;
+      left: 70px;
+      right: 70px;
+      background: rgba(2, 6, 23, 0.95);
+      border: 1.5px solid rgba(6, 182, 212, 0.5);
+      border-radius: 22px;
+      padding: 24px 28px;
+      z-index: 45;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(6, 182, 212, 0.2);
+      backdrop-filter: blur(16px);
+      opacity: 0;
+      font-family: 'Space Mono', monospace;
+    }
+    .term-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 10px;
+    }
+    .term-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .term-dot.r { background: #ef4444; }
+    .term-dot.y { background: #eab308; }
+    .term-dot.g { background: #22c55e; }
+    .term-title {
+      font-size: 15px;
+      color: #94a3b8;
+      margin-left: 8px;
+      flex-grow: 1;
+    }
+    .term-speed-tag {
+      font-size: 14px;
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      padding: 2px 10px;
+      border-radius: 9999px;
+    }
+    .term-line {
+      font-size: 19px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    .term-line.highlight {
+      color: #34d399;
+      font-weight: 700;
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: rgba(52, 211, 153, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+    .t-cyan { color: #22d3ee; }
+    .t-green { color: #34d399; font-weight: 700; }
 
     /* Subtitles Layer */
     .subtitles-wrapper {
@@ -306,6 +449,144 @@
       color: #64748b;
       letter-spacing: 0.1em;
     }
+
+    /* Poster Stage (High-Converting Instagram Cover) */
+    #poster-stage {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, #0f172a 0%, #020617 100%);
+      z-index: 150;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 70px 60px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .poster-bg-glow {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .poster-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: #22d3ee;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1.5px solid rgba(6, 182, 212, 0.6);
+      padding: 12px 30px;
+      border-radius: 9999px;
+      margin-bottom: 35px;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+    .poster-hero-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 82px;
+      font-weight: 900;
+      line-height: 1.04;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 50px;
+      text-align: center;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.9);
+      position: relative;
+      z-index: 2;
+    }
+    .poster-hero-title .t-red {
+      color: #f87171;
+      text-shadow: 0 0 35px rgba(248, 113, 113, 0.7);
+    }
+    .poster-hero-title .t-yellow {
+      color: #fde047;
+      text-shadow: 0 0 35px rgba(253, 224, 71, 0.7);
+    }
+    .poster-card {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.94);
+      border: 2px solid rgba(255, 255, 255, 0.16);
+      border-radius: 32px;
+      padding: 38px 40px;
+      margin-bottom: 45px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+      z-index: 2;
+    }
+    .poster-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      text-align: left;
+    }
+    .poster-icon {
+      font-size: 54px;
+      line-height: 1;
+    }
+    .poster-row-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .poster-row-sub {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .poster-row.slow .poster-row-sub { color: #f87171; }
+    .poster-row.fast .poster-row-sub { color: #34d399; }
+    .poster-vs-pill {
+      align-self: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 900;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 6px 22px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .poster-cta-box {
+      width: 100%;
+      background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+      border-radius: 26px;
+      padding: 32px 30px;
+      box-shadow: 0 15px 45px rgba(6, 182, 212, 0.5);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .poster-cta-text {
+      font-family: 'Archivo', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+    .poster-cta-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: #e0f2fe;
+      margin-top: 10px;
+      letter-spacing: 0.05em;
+    }
   </style>
 </head>
 <body>
@@ -322,6 +603,26 @@
         <div>
           <div class="hud-slow-title">AGENCIA TRADICIONAL</div>
           <div class="hud-slow-sub">6 meses de espera • Miles de dólares</div>
+        </div>
+      </div>
+
+      <!-- Calendar Myth Card -->
+      <div class="cal-myth-card" id="cal-myth">
+        <div class="cal-header">
+          <span class="cal-title">CRONOGRAMA DE ENTREGA</span>
+          <span class="badge-delayed">RETRASADO</span>
+        </div>
+        <div class="cal-months-grid">
+          <div class="cal-month-box"><span class="cal-m-name">MES 1</span><div class="cal-cross">✕</div></div>
+          <div class="cal-month-box"><span class="cal-m-name">MES 2</span><div class="cal-cross">✕</div></div>
+          <div class="cal-month-box"><span class="cal-m-name">MES 3</span><div class="cal-cross">✕</div></div>
+          <div class="cal-month-box"><span class="cal-m-name">MES 4</span><div class="cal-cross">✕</div></div>
+          <div class="cal-month-box"><span class="cal-m-name">MES 5</span><div class="cal-cross">✕</div></div>
+          <div class="cal-month-box"><span class="cal-m-name">MES 6</span><div class="cal-pulse">⏳</div></div>
+        </div>
+        <div class="cal-footer">
+          <span>Presupuesto: $8,500+ USD</span>
+          <span>Sprint 14: En espera</span>
         </div>
       </div>
     </div>
@@ -341,6 +642,20 @@
         <div class="hud-rapid-item"><span>⚡</span> <span>Desarrollo modular ágil</span></div>
         <div class="hud-rapid-item"><span>🚀</span> <span>Listo y testeado en días</span></div>
         <div class="hud-rapid-item"><span>💰</span> <span>ROI inmediato en tu negocio</span></div>
+      </div>
+
+      <!-- Terminal Fast Deploy Card -->
+      <div class="term-code-card" id="term-card">
+        <div class="term-header">
+          <div class="term-dot r"></div>
+          <div class="term-dot y"></div>
+          <div class="term-dot g"></div>
+          <span class="term-title">caribia-fast-deploy.sh</span>
+          <span class="term-speed-tag">72H CORE</span>
+        </div>
+        <div class="term-line"><span class="t-cyan">></span> Arquitectura modular IA... <span class="t-green">OK</span></div>
+        <div class="term-line"><span class="t-cyan">></span> Conectando catálogo + cobros... <span class="t-green">OK</span></div>
+        <div class="term-line highlight"><span class="t-green">✔ LISTO EN PRODUCCIÓN: 48 HORAS</span></div>
       </div>
     </div>
 
@@ -385,6 +700,41 @@
       </div>
       <p class="outro-handle">O TOCA EL LINK EN LA BIO • @CARIBIALABS</p>
     </div>
+
+    <!-- Poster Stage (High-Converting Instagram Cover) -->
+    <div id="poster-stage">
+      <div class="poster-bg-glow"></div>
+      <div class="poster-tag">
+        <div class="brand-dot"></div>
+        <span>TENDENCIA TECH #06</span>
+      </div>
+      <h1 class="poster-hero-title">
+        ¿SOFTWARE EN<br>
+        <span class="t-red">6 MESES?</span><br>
+        <span class="t-yellow">EL GRAN ENGAÑO ⏳💥</span>
+      </h1>
+      <div class="poster-card">
+        <div class="poster-row slow">
+          <div class="poster-icon">❌</div>
+          <div>
+            <div class="poster-row-title">AGENCIA TRADICIONAL</div>
+            <div class="poster-row-sub">6 meses de espera • Miles de USD</div>
+          </div>
+        </div>
+        <div class="poster-vs-pill">VS</div>
+        <div class="poster-row fast">
+          <div class="poster-icon">⚡</div>
+          <div>
+            <div class="poster-row-title">CARIBIA LABS</div>
+            <div class="poster-row-sub">De la idea a producción en 72 HORAS</div>
+          </div>
+        </div>
+      </div>
+      <div class="poster-cta-box">
+        <div class="poster-cta-text">🚀 LA ENTREGA MÁS RÁPIDA</div>
+        <div class="poster-cta-sub">COMENTA "AGIL" • @CARIBIALABS</div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -397,9 +747,13 @@
     const img2 = document.getElementById('img2');
     const glitch = document.getElementById('glitch-stage');
     const outro = document.getElementById('outro-stage');
+    const posterStage = document.getElementById('poster-stage');
     const timeBadge = document.getElementById('time-badge');
+    const topTelemetry = document.querySelector('.top-telemetry');
     const hudSlow = document.getElementById('hud-slow');
+    const calMyth = document.getElementById('cal-myth');
     const hudRapid = document.getElementById('hud-rapid');
+    const termCard = document.getElementById('term-card');
 
     const subs = {
       s1: document.getElementById('sub-1'),
@@ -425,6 +779,20 @@
     }
 
     window.renderFrame = function(frame) {
+      if (frame === 'poster') {
+        posterStage.style.display = 'flex';
+        s1.style.opacity = 0;
+        s2.style.opacity = 0;
+        glitch.style.opacity = 0;
+        outro.style.opacity = 0;
+        if (topTelemetry) topTelemetry.style.display = 'none';
+        hideAllSubs();
+        return;
+      }
+
+      posterStage.style.display = 'none';
+      if (topTelemetry) topTelemetry.style.display = 'flex';
+
       const timeSec = frame / FPS;
       const mm = String(Math.floor(timeSec / 60)).padStart(2, '0');
       const ss = String(Math.floor(timeSec % 60)).padStart(2, '0');
@@ -438,6 +806,8 @@
         s2.style.opacity = 0;
         glitch.style.opacity = 0;
         outro.style.opacity = 0;
+        hudRapid.style.opacity = 0;
+        termCard.style.opacity = 0;
 
         const p1 = frame / 114;
         img1.style.transform = `scale(${1.0 + p1 * 0.1}) translate(${Math.sin(p1 * 4) * 4}px, ${p1 * 8}px)`;
@@ -445,6 +815,11 @@
         if (frame > 5) {
           hudSlow.style.opacity = Math.min(1, (frame - 5) / 8);
           hudSlow.style.transform = `translateY(${Math.max(0, 14 - (frame - 5))}px)`;
+        }
+
+        if (frame > 15) {
+          calMyth.style.opacity = Math.min(1, (frame - 15) / 8);
+          calMyth.style.transform = `translateY(${Math.max(0, 14 - (frame - 15))}px)`;
         }
 
         if (frame >= 3 && frame < 114) {
@@ -457,6 +832,7 @@
         s2.style.opacity = 0;
         outro.style.opacity = 0;
         hudSlow.style.opacity = 0;
+        calMyth.style.opacity = 0;
 
         const gProgress = (frame - 114) / 12;
         glitch.style.opacity = 1;
@@ -470,13 +846,20 @@
         s1.style.opacity = 0;
         s2.style.opacity = 1;
         outro.style.opacity = 0;
+        hudSlow.style.opacity = 0;
+        calMyth.style.opacity = 0;
 
         const p2 = (frame - 126) / 100;
         img2.style.transform = `scale(${1.12 - p2 * 0.08}) translate(0px, ${-p2 * 10}px)`;
 
-        if (frame > 132) {
-          hudRapid.style.opacity = Math.min(1, (frame - 132) / 8);
-          hudRapid.style.transform = `translateY(${Math.max(0, 12 - (frame - 132))}px)`;
+        if (frame > 130) {
+          hudRapid.style.opacity = Math.min(1, (frame - 130) / 8);
+          hudRapid.style.transform = `translateY(${Math.max(0, 12 - (frame - 130))}px)`;
+        }
+
+        if (frame > 142) {
+          termCard.style.opacity = Math.min(1, (frame - 142) / 8);
+          termCard.style.transform = `translateY(${Math.max(0, 12 - (frame - 142))}px)`;
         }
 
         if (frame >= 126 && frame < 226) {
@@ -489,6 +872,8 @@
         s2.style.opacity = 1;
         glitch.style.opacity = 0;
         outro.style.opacity = 0;
+        hudSlow.style.opacity = 0;
+        calMyth.style.opacity = 0;
 
         if (frame >= 226 && frame < 286) {
           showSub(subs.s3, 1.0 + ((frame - 226) % 18) * 0.003);
@@ -500,6 +885,9 @@
         s2.style.opacity = 0;
         glitch.style.opacity = 0;
         hudRapid.style.opacity = 0;
+        termCard.style.opacity = 0;
+        hudSlow.style.opacity = 0;
+        calMyth.style.opacity = 0;
         outro.style.opacity = 1;
 
         const p4 = (frame - 286) / 58;
