@@ -233,6 +233,14 @@ function initLeadForm() {
 
     showFeedback('¡Excelente! Abriendo WhatsApp con los datos de tu consulta...', 'success');
 
+    // Notificar a Google Tag Manager / Analytics (Mejor práctica de agencia)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'solicitud_diagnostico',
+      form_name: 'Diagnostico Gratuito',
+      lead_rubro: rubro
+    });
+
     // Redirigir a WhatsApp después de 1 segundo
     setTimeout(() => {
       window.open(wspUrl, '_blank');
