@@ -946,7 +946,7 @@
                 Alcance Virtual & Presencia Digital Actual (Haz clic en los que apliquen o añade uno manual):
               </label>
               <div class="flex flex-wrap gap-2" id="chips-virtual-scope">
-                <span class="chip-toggle active-danger" data-val="Sin sitio web">❌ Sin sitio web</span>
+                <span class="chip-toggle" data-val="Sin sitio web">❌ Sin sitio web</span>
                 <span class="chip-toggle" data-val="Web informativa básica">🌐 Web informativa básica</span>
                 <span class="chip-toggle" data-val="Tienda Online / E-commerce">🛍️ Tienda Online / E-commerce</span>
                 <span class="chip-toggle" data-val="Instagram Shop activo">📸 Instagram Shop activo</span>
@@ -1007,7 +1007,7 @@
                 Cuellos de Botella Críticos (Lo que les hace perder dinero o añade uno manual):
               </label>
               <div class="flex flex-wrap gap-2" id="chips-bottlenecks">
-                <span class="chip-toggle active-danger" data-val="Pérdida de ventas de noche">🌙 Pierden ventas de noche (22hs a 8hs)</span>
+                <span class="chip-toggle" data-val="Pérdida de ventas de noche">🌙 Pierden ventas de noche (22hs a 8hs)</span>
                 <span class="chip-toggle" data-val="Demoran horas en cotizar">⏳ Demoran horas en armar presupuestos</span>
                 <span class="chip-toggle" data-val="Dueño atrapado respondiendo lo mismo">😵 El dueño pasa horas respondiendo lo mismo</span>
                 <span class="chip-toggle" data-val="Caos al confirmar transferencias">💳 Caos al confirmar transferencias bancarias</span>
@@ -1088,22 +1088,41 @@
               <span>6. Solución CaribIA Labs Propuesta & Cotización</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="block font-bold text-slate-300 mb-1">Solución CaribIA Recomendada *</label>
-                <select id="disc-solution" class="glass-input w-full p-2.5 rounded-xl cursor-pointer">
-                  <option value="Bot WhatsApp IA 24/7">🤖 Bot WhatsApp IA 24/7 (Ventas + Precios + FAQ)</option>
-                  <option value="Web Express + Bot IA">⚡ Web Express + Bot WhatsApp IA 24/7</option>
-                  <option value="Tienda Online + Mercado Pago">🛍️ Tienda Online + Carrito + Mercado Pago</option>
-                  <option value="Menú & Delivery 0% Comisión">🍔 Menú Gastronómico & Delivery WhatsApp (0% Comisión)</option>
-                  <option value="Agenda Médica & Turnos IA">🩺 Agenda Médica & Turnos Automatizados</option>
-                  <option value="Desarrollo CRM / Software a Medida">🚀 Desarrollo de Software / CRM a Medida</option>
-                </select>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1.5">
+                Soluciones CaribIA Recomendadas (Selección Múltiple o Añade Manual) *
+              </label>
+              <div class="flex flex-wrap gap-2 mb-2" id="chips-solutions">
+                <span class="chip-toggle" data-val="Bot WhatsApp IA 24/7">🤖 Bot WhatsApp IA 24/7</span>
+                <span class="chip-toggle" data-val="Web Express + Bot IA">⚡ Web Express + Bot IA</span>
+                <span class="chip-toggle" data-val="Tienda Online + Mercado Pago">🛍️ Tienda Online + Mercado Pago</span>
+                <span class="chip-toggle" data-val="Menú & Delivery 0% Comisión">🍔 Menú & Delivery 0% Comisión</span>
+                <span class="chip-toggle" data-val="Agenda Médica & Turnos IA">🩺 Agenda Médica & Turnos IA</span>
+                <span class="chip-toggle" data-val="Campaña de Marketing">📢 Campaña de Marketing</span>
+                <span class="chip-toggle" data-val="Software / CRM a Medida">🚀 Software / CRM a Medida</span>
+                <span class="chip-toggle" data-val="OTRAS">✨ OTRAS</span>
               </div>
-              <div>
-                <label class="block font-bold text-slate-300 mb-1">Plazo de Entrega Comprometido</label>
-                <input type="text" id="disc-delivery-time" value="72 horas hábiles" placeholder="Ej. 72 horas hábiles / 5 días" class="glass-input w-full p-2.5 rounded-xl font-bold text-cyan-300" />
+              <div class="flex items-center gap-2 mt-2.5">
+                <input
+                  type="text"
+                  id="input-add-solution"
+                  placeholder="Agregar otra solución personalizada (ej: Campaña Meta Ads + Google, Integración ERP)..."
+                  class="glass-input px-3 py-1.5 rounded-lg text-xs flex-1"
+                />
+                <button
+                  type="button"
+                  id="btn-add-solution"
+                  class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 font-bold text-xs whitespace-nowrap transition cursor-pointer"
+                >
+                  + Agregar Solución
+                </button>
               </div>
+              <input type="hidden" id="disc-solution" value="Bot WhatsApp IA 24/7" />
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Plazo de Entrega Comprometido</label>
+              <input type="text" id="disc-delivery-time" value="72 horas hábiles" placeholder="Ej. 72 horas hábiles / 5 días" class="glass-input w-full p-2.5 rounded-xl font-bold text-cyan-300" />
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1340,7 +1359,7 @@
       </div>
     </div>
 
-    <script src="discovery.js?v=20261120_v2"></script>
-    <script src="admin.js?v=20261120_v2"></script>
+    <script src="discovery.js?v=20261120_v3"></script>
+    <script src="admin.js?v=20261120_v3"></script>
   </body>
 </html>

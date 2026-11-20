@@ -115,9 +115,10 @@ function setupDiscoveryCrmModule() {
 
   // Inicializar toggles de chips interactivos
   setupChipToggles('chips-physical-scope', false);
-  setupChipToggles('chips-virtual-scope', false);
+  setupChipToggles('chips-virtual-scope', true);
   setupChipToggles('chips-contact-channels', false);
   setupChipToggles('chips-bottlenecks', true);
+  setupChipToggles('chips-solutions', false, true);
 
   // Filtros de estado (Todos, Diagnóstico, Cotizada, Negociación, Ganada, Perdida)
   filterBtns.forEach(btn => {
@@ -271,6 +272,7 @@ function setupDiscoveryCrmModule() {
   wireAddCustomChip('btn-add-virtual', 'input-add-virtual', 'chips-virtual-scope', true);
   wireAddCustomChip('btn-add-channel', 'input-add-channel', 'chips-contact-channels', false);
   wireAddCustomChip('btn-add-bottleneck', 'input-add-bottleneck', 'chips-bottlenecks', true);
+  wireAddCustomChip('btn-add-solution', 'input-add-solution', 'chips-solutions', false, true);
 
   // Render inicial de tarjetas y KPIs
   renderDiscoveryLeads();
@@ -281,7 +283,15 @@ function setupDiscoveryCrmModule() {
 // --------------------------------------------------------------------
 // MANEJO DE CHIPS INTERACTIVOS (SELECCIÓN CON UN TOQUE Y MANUALES)
 // --------------------------------------------------------------------
-function wireAddCustomChip(btnId, inputId, containerId, isDanger = false) {
+function syncHiddenSolutionInput() {
+  const selected = getSelectedChips('chips-solutions');
+  const hiddenInput = document.getElementById('disc-solution');
+  if (hiddenInput) {
+    hiddenInput.value = selected.join(' + ') || 'Bot WhatsApp IA 24/7';
+  }
+}
+
+function wireAddCustomChip(btnId, inputId, containerId, isDanger = false, isEmerald = false) {
   const btn = document.getElementById(btnId);
   const input = document.getElementById(inputId);
   const container = document.getElementById(containerId);
@@ -297,15 +307,24 @@ function wireAddCustomChip(btnId, inputId, containerId, isDanger = false) {
     if (existing) {
       if (isDanger) {
         existing.classList.add('active-danger');
+      } else if (isEmerald) {
+        existing.classList.add('active-emerald');
       } else {
         existing.classList.add('active');
       }
     } else {
       const span = document.createElement('span');
-      span.className = 'chip-toggle ' + (isDanger ? 'active-danger' : 'active');
+      let activeClass = 'active';
+      if (isDanger) activeClass = 'active-danger';
+      else if (isEmerald) activeClass = 'active-emerald';
+      span.className = 'chip-toggle ' + activeClass;
       span.setAttribute('data-val', text);
-      span.innerHTML = `<span>✏️ ${escapeHtml(text)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove(); if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();">✕</span>`;
+      span.innerHTML = `<span>✏️ ${escapeHtml(text)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove(); if (typeof syncHiddenSolutionInput === 'function') syncHiddenSolutionInput(); if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();">✕</span>`;
       container.appendChild(span);
+    }
+
+    if (containerId === 'chips-solutions') {
+      syncHiddenSolutionInput();
     }
 
     input.value = '';
@@ -321,7 +340,7 @@ function wireAddCustomChip(btnId, inputId, containerId, isDanger = false) {
   });
 }
 
-function setupChipToggles(containerId, isDanger = false) {
+function setupChipToggles(containerId, isDanger = false, isEmerald = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -329,11 +348,27 @@ function setupChipToggles(containerId, isDanger = false) {
     const chip = e.target.closest('.chip-toggle');
     if (!chip) return;
 
-    if (isDanger) {
-      chip.classList.toggle('active-danger');
+    // Si ya está activo con cualquiera de las clases, al hacer clic se APAGA completamente
+    const isActive = chip.classList.contains('active') ||
+                     chip.classList.contains('active-danger') ||
+                     chip.classList.contains('active-emerald');
+
+    if (isActive) {
+      chip.classList.remove('active', 'active-danger', 'active-emerald');
     } else {
-      chip.classList.toggle('active');
+      if (isDanger || chip.getAttribute('data-danger') === 'true') {
+        chip.classList.add('active-danger');
+      } else if (isEmerald || chip.getAttribute('data-emerald') === 'true') {
+        chip.classList.add('active-emerald');
+      } else {
+        chip.classList.add('active');
+      }
     }
+
+    if (containerId === 'chips-solutions') {
+      syncHiddenSolutionInput();
+    }
+
     if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();
   });
 }
@@ -350,7 +385,7 @@ function getSelectedChips(containerId) {
   return selected;
 }
 
-function setSelectedChips(containerId, valuesArray, isDanger = false) {
+function setSelectedChips(containerId, valuesArray, isDanger = false, isEmerald = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
   const values = Array.isArray(valuesArray) ? valuesArray : [];
@@ -365,19 +400,28 @@ function setSelectedChips(containerId, valuesArray, isDanger = false) {
     const existing = chips.find(c => (c.getAttribute('data-val') || c.textContent.trim()).toLowerCase() === val.toLowerCase());
 
     if (existing) {
-      if (isDanger) {
+      if (isDanger || existing.getAttribute('data-danger') === 'true') {
         existing.classList.add('active-danger');
+      } else if (isEmerald || existing.getAttribute('data-emerald') === 'true') {
+        existing.classList.add('active-emerald');
       } else {
         existing.classList.add('active');
       }
     } else {
       const span = document.createElement('span');
-      span.className = 'chip-toggle ' + (isDanger ? 'active-danger' : 'active');
+      let activeClass = 'active';
+      if (isDanger) activeClass = 'active-danger';
+      else if (isEmerald) activeClass = 'active-emerald';
+      span.className = 'chip-toggle ' + activeClass;
       span.setAttribute('data-val', val);
-      span.innerHTML = `<span>✏️ ${escapeHtml(val)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove();">✕</span>`;
+      span.innerHTML = `<span>✏️ ${escapeHtml(val)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove(); if (typeof syncHiddenSolutionInput === 'function') syncHiddenSolutionInput(); if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();">✕</span>`;
       container.appendChild(span);
     }
   });
+
+  if (containerId === 'chips-solutions') {
+    syncHiddenSolutionInput();
+  }
 }
 
 // --------------------------------------------------------------------
@@ -482,6 +526,9 @@ function saveDiscoveryDraft() {
   // Solo auto-guardar si estamos registrando un nuevo lead, no editando uno existente
   if (existingId) return;
 
+  const solutions = getSelectedChips('chips-solutions');
+  const solutionName = solutions.length > 0 ? solutions.join(' + ') : (document.getElementById('disc-solution')?.value || 'Bot WhatsApp IA 24/7');
+
   const draft = {
     business_name: document.getElementById('disc-business')?.value || '',
     rubro: document.getElementById('disc-rubro')?.value || 'retail',
@@ -502,7 +549,8 @@ function saveDiscoveryDraft() {
     avg_ticket: document.getElementById('disc-ticket')?.value || '',
     team_size: document.getElementById('disc-team-size')?.value || '',
     custom_qa: currentCustomQas,
-    solution_name: document.getElementById('disc-solution')?.value || 'Bot WhatsApp IA 24/7',
+    solutions: solutions,
+    solution_name: solutionName,
     delivery_time: document.getElementById('disc-delivery-time')?.value || '72 horas hábiles',
     setup_fee: document.getElementById('disc-setup-fee')?.value || '',
     monthly_fee: document.getElementById('disc-monthly-fee')?.value || '',
@@ -515,7 +563,8 @@ function saveDiscoveryDraft() {
 
   const hasAnyData = Boolean(
     draft.business_name || draft.contact_name || draft.whatsapp_phone ||
-    draft.notes || draft.physical_scope.length > 1 || draft.custom_qa.some(q => q.answer)
+    draft.notes || draft.physical_scope.length > 0 || draft.virtual_scope.length > 0 ||
+    draft.bottlenecks.length > 0 || draft.solutions.length > 0 || draft.custom_qa.some(q => q.answer)
   );
 
   if (hasAnyData) {
@@ -544,7 +593,13 @@ function openDiscoveryFormForCreate(forceClean = false) {
   document.getElementById('disc-id').value = '';
   form.reset();
 
-  const savedDraft = !forceClean ? JSON.parse(localStorage.getItem('caribia_discovery_draft') || 'null') : null;
+  let savedDraft = !forceClean ? JSON.parse(localStorage.getItem('caribia_discovery_draft') || 'null') : null;
+
+  // Si el borrador era solo el dummy automático sin datos reales de negocio, descartarlo
+  if (savedDraft && !savedDraft.business_name && !savedDraft.contact_name && !savedDraft.whatsapp_phone) {
+    savedDraft = null;
+    clearDiscoveryDraft();
+  }
 
   if (savedDraft) {
     // Restaurar borrador previo intacto
@@ -562,7 +617,6 @@ function openDiscoveryFormForCreate(forceClean = false) {
     if (document.getElementById('disc-tools')) document.getElementById('disc-tools').value = savedDraft.tools_used || '';
     if (document.getElementById('disc-ticket')) document.getElementById('disc-ticket').value = savedDraft.avg_ticket || '';
     if (document.getElementById('disc-team-size')) document.getElementById('disc-team-size').value = savedDraft.team_size || '';
-    if (document.getElementById('disc-solution')) document.getElementById('disc-solution').value = savedDraft.solution_name || 'Bot WhatsApp IA 24/7';
     if (document.getElementById('disc-delivery-time')) document.getElementById('disc-delivery-time').value = savedDraft.delivery_time || '72 horas hábiles';
     if (document.getElementById('disc-setup-fee')) document.getElementById('disc-setup-fee').value = savedDraft.setup_fee || '';
     if (document.getElementById('disc-monthly-fee')) document.getElementById('disc-monthly-fee').value = savedDraft.monthly_fee || '';
@@ -571,10 +625,11 @@ function openDiscoveryFormForCreate(forceClean = false) {
     if (document.getElementById('disc-next-step')) document.getElementById('disc-next-step').value = savedDraft.next_step || '';
     if (document.getElementById('disc-notes')) document.getElementById('disc-notes').value = savedDraft.notes || '';
 
-    setSelectedChips('chips-physical-scope', savedDraft.physical_scope || ['1 Local a la calle']);
-    setSelectedChips('chips-virtual-scope', savedDraft.virtual_scope || ['Sin sitio web', 'Solo atienden por WhatsApp'], true);
-    setSelectedChips('chips-contact-channels', savedDraft.contact_channels || ['WhatsApp manual', 'Boca a boca / Referidos']);
-    setSelectedChips('chips-bottlenecks', savedDraft.bottlenecks || ['Pérdida de ventas de noche', 'Demoran horas en cotizar'], true);
+    setSelectedChips('chips-physical-scope', savedDraft.physical_scope || []);
+    setSelectedChips('chips-virtual-scope', savedDraft.virtual_scope || [], true);
+    setSelectedChips('chips-contact-channels', savedDraft.contact_channels || []);
+    setSelectedChips('chips-bottlenecks', savedDraft.bottlenecks || [], true);
+    setSelectedChips('chips-solutions', savedDraft.solutions || (savedDraft.solution_name ? savedDraft.solution_name.split(' + ') : []), false, true);
 
     currentCustomQas = Array.isArray(savedDraft.custom_qa) && savedDraft.custom_qa.length > 0
       ? savedDraft.custom_qa
@@ -583,11 +638,12 @@ function openDiscoveryFormForCreate(forceClean = false) {
 
     if (draftBar) draftBar.classList.remove('hidden');
   } else {
-    // Defaults limpios
-    setSelectedChips('chips-physical-scope', ['1 Local a la calle']);
-    setSelectedChips('chips-virtual-scope', ['Sin sitio web', 'Solo atienden por WhatsApp'], true);
-    setSelectedChips('chips-contact-channels', ['WhatsApp manual', 'Boca a boca / Referidos']);
-    setSelectedChips('chips-bottlenecks', ['Pérdida de ventas de noche', 'Demoran horas en cotizar'], true);
+    // Defaults 100% limpios - NADA pre-tildado por defecto
+    setSelectedChips('chips-physical-scope', []);
+    setSelectedChips('chips-virtual-scope', [], true);
+    setSelectedChips('chips-contact-channels', []);
+    setSelectedChips('chips-bottlenecks', [], true);
+    setSelectedChips('chips-solutions', [], false, true);
 
     currentCustomQas = SMART_DISCOVERY_QUESTIONS.map(q => ({ question: q.question, answer: '' }));
     renderDynamicQaList();
@@ -620,9 +676,10 @@ function openEditDiscoveryModal(leadId) {
 
   // Chips
   setSelectedChips('chips-physical-scope', lead.physical_scope || []);
-  setSelectedChips('chips-virtual-scope', lead.virtual_scope || []);
+  setSelectedChips('chips-virtual-scope', lead.virtual_scope || [], true);
   setSelectedChips('chips-contact-channels', lead.contact_channels || []);
   setSelectedChips('chips-bottlenecks', lead.bottlenecks || [], true);
+  setSelectedChips('chips-solutions', lead.solutions || (lead.solution_name ? lead.solution_name.split(' + ') : []), false, true);
 
   document.getElementById('disc-volume').value = lead.volume_level || 'medio';
   document.getElementById('disc-peak-hours').value = lead.peak_hours || '';
@@ -634,7 +691,8 @@ function openEditDiscoveryModal(leadId) {
   currentCustomQas = Array.isArray(lead.custom_qa) ? JSON.parse(JSON.stringify(lead.custom_qa)) : [];
   renderDynamicQaList();
 
-  document.getElementById('disc-solution').value = lead.solution_name || 'Bot WhatsApp IA 24/7';
+  const solName = lead.solution_name || (lead.solutions ? lead.solutions.join(' + ') : 'Bot WhatsApp IA 24/7');
+  if (document.getElementById('disc-solution')) document.getElementById('disc-solution').value = solName;
   document.getElementById('disc-delivery-time').value = lead.delivery_time || '72 horas hábiles';
   document.getElementById('disc-setup-fee').value = lead.setup_fee || '';
   document.getElementById('disc-monthly-fee').value = lead.monthly_fee || 0;
@@ -668,6 +726,8 @@ function saveDiscoveryLeadFromForm() {
   const validQas = currentCustomQas.filter(q => (q.question && q.question.trim().length > 0) || (q.answer && q.answer.trim().length > 0));
   const contactName = document.getElementById('disc-contact')?.value.trim() || 'Contacto comercial';
   const whatsappPhone = document.getElementById('disc-phone')?.value.trim() || '';
+  const solutions = getSelectedChips('chips-solutions');
+  const solutionName = solutions.length > 0 ? solutions.join(' + ') : (document.getElementById('disc-solution')?.value || 'Bot WhatsApp IA 24/7');
 
   const leadData = {
     id: existingId || ('disc-' + Date.now().toString(36)),
@@ -690,7 +750,8 @@ function saveDiscoveryLeadFromForm() {
     avg_ticket: Number(document.getElementById('disc-ticket').value) || 0,
     team_size: document.getElementById('disc-team-size').value.trim(),
     custom_qa: validQas,
-    solution_name: document.getElementById('disc-solution').value,
+    solutions: solutions,
+    solution_name: solutionName,
     delivery_time: document.getElementById('disc-delivery-time').value.trim() || '72 horas hábiles',
     setup_fee: Number(document.getElementById('disc-setup-fee').value) || 0,
     monthly_fee: Number(document.getElementById('disc-monthly-fee').value) || 0,
@@ -1166,9 +1227,15 @@ window.viewDiscoveryLeadDetail = function(leadId) {
     <!-- Propuesta Económica CaribIA Labs -->
     <div class="bg-gradient-to-r from-cyan-950/40 to-slate-900 p-4 rounded-2xl border border-cyan-500/30 flex items-center justify-between flex-wrap gap-3">
       <div>
-        <span class="text-[10px] text-cyan-400 uppercase font-bold block">Solución Comprometida</span>
-        <strong class="text-white text-sm sm:text-base">${escapeHtml(lead.solution_name)}</strong>
-        <span class="text-slate-400 text-xs block mt-0.5">⏱️ Plazo de entrega: ${escapeHtml(lead.delivery_time || '72hs')}</span>
+        <span class="text-[10px] text-cyan-400 uppercase font-bold block">Solución(es) CaribIA Propuesta(s)</span>
+        <div class="flex flex-wrap gap-1.5 mt-1">
+          ${(lead.solutions && lead.solutions.length > 0 ? lead.solutions : [lead.solution_name || 'Bot WhatsApp IA 24/7']).map(sol => `
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+              ${escapeHtml(sol)}
+            </span>
+          `).join('')}
+        </div>
+        <span class="text-slate-400 text-xs block mt-1">⏱️ Plazo de entrega: ${escapeHtml(lead.delivery_time || '72hs')}</span>
       </div>
       <div class="text-right">
         <span class="text-[10px] text-slate-400 uppercase font-bold block">Inversión Propuesta</span>
