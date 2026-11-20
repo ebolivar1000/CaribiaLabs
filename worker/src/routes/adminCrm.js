@@ -8,7 +8,7 @@ import { getDb } from '../db.js';
 
 export const adminCrmRouter = new Hono();
 
-// Datos iniciales de demostración para el CRM
+// Datos iniciales para el CRM (Solo clientes reales)
 const INITIAL_CRM_CLIENTS = [
   {
     id: 'crm-001',
@@ -21,74 +21,10 @@ const INITIAL_CRM_CLIENTS = [
     currency: 'ARS',
     billing_day: 5,
     payment_method: 'Transferencia Alias',
-    status: 'al_dia',
+    status: 'pendiente', // Cobro pendiente (0 ARS cobrados al momento)
     next_due_date: '2026-12-05',
-    last_payment_date: '2026-11-05',
-    notes: 'Abonó por Mercado Pago Alias. Muy conforme con la velocidad de despacho.'
-  },
-  {
-    id: 'crm-002',
-    business_name: 'Forno & Co. Palermo',
-    contact_name: 'Federico Rossi',
-    whatsapp_phone: '5491154188294',
-    email: 'pedidos@fornopalermo.ar',
-    plan_name: 'Menú & Delivery Gastronómico',
-    monthly_fee: 55000,
-    currency: 'ARS',
-    billing_day: 10,
-    payment_method: 'Transferencia Alias',
-    status: 'al_dia',
-    next_due_date: '2026-11-10',
-    last_payment_date: '2026-10-10',
-    notes: 'Ahorro del 30% en comisiones comparado con apps de delivery tradicionales.'
-  },
-  {
-    id: 'crm-003',
-    business_name: 'AURA Studio Indumentaria',
-    contact_name: 'Camila Benítez',
-    whatsapp_phone: '5491154188294',
-    email: 'hola@aurastudio.com.ar',
-    plan_name: 'Tienda de Ropa + Talles',
-    monthly_fee: 45000,
-    currency: 'ARS',
-    billing_day: 8,
-    payment_method: 'Mercado Pago',
-    status: 'pendiente',
-    next_due_date: '2026-11-08',
-    last_payment_date: '2026-10-08',
-    notes: 'Aviso de cobro enviado por WhatsApp. Confirmará pago mañana.'
-  },
-  {
-    id: 'crm-004',
-    business_name: 'LUMIÈRE Studio Peluquería',
-    contact_name: 'Lucía Morales',
-    whatsapp_phone: '5491154188294',
-    email: 'administracion@lumiere.salon.ar',
-    plan_name: 'Control de Inventarios & Insumos',
-    monthly_fee: 35000,
-    currency: 'ARS',
-    billing_day: 15,
-    payment_method: 'Transferencia Alias',
-    status: 'al_dia',
-    next_due_date: '2026-11-15',
-    last_payment_date: '2026-10-15',
-    notes: 'Utilizan el registro rápido en 1 clic para consumo de tintes.'
-  },
-  {
-    id: 'crm-005',
-    business_name: 'MediConnect Consultorios',
-    contact_name: 'Dr. Alejandro Méndez',
-    whatsapp_phone: '5491154188294',
-    email: 'turnos@mediconnect.ar',
-    plan_name: 'Agenda Médica + Bot WhatsApp',
-    monthly_fee: 60000,
-    currency: 'ARS',
-    billing_day: 1,
-    payment_method: 'Transferencia Alias',
-    status: 'al_dia',
-    next_due_date: '2026-12-01',
-    last_payment_date: '2026-11-01',
-    notes: 'Cero ausentismo de pacientes gracias al recordatorio automatizado 24hs antes.'
+    last_payment_date: '',
+    notes: 'Cliente activo inicial. Configurado con catálogo digital y cobro por Alias MP.'
   }
 ];
 
