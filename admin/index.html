@@ -81,6 +81,13 @@
         color: #f87171;
         border: 1px solid rgba(239, 68, 68, 0.3);
       }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
       .chip-toggle {
         padding: 6px 14px;
         border-radius: 9999px;
@@ -203,17 +210,16 @@
     <div id="admin-dashboard" class="hidden flex-1 flex flex-col">
       <!-- Barra Superior -->
       <header class="border-b border-slate-800 bg-slate-950/85 sticky top-0 z-40 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <img src="../assets/banner_caribialabs.jpg" alt="CaribIA Labs" class="h-8 w-auto rounded object-contain" />
-            <div class="hidden sm:block">
-              <span class="font-display font-bold text-white text-sm leading-none block">CaribIA Labs Console</span>
-              <span class="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">CRM & Factory Suite v2.0</span>
-            </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-2.5 shrink-0">
+            <img src="../assets/banner_caribialabs.jpg" alt="CaribIA Labs" class="h-7 w-auto rounded object-contain" />
+            <span class="font-display font-bold text-cyan-400 text-xs sm:text-sm tracking-wider uppercase px-2 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 whitespace-nowrap">
+              CRM v2.0
+            </span>
           </div>
 
           <!-- Pestañas de Navegación del Panel (2 Homepages de CaribIA Labs) -->
-          <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto py-1">
+          <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto py-1 no-scrollbar">
             <button type="button" class="tab-btn active px-3 py-1.5 rounded-lg text-xs font-bold transition border border-transparent whitespace-nowrap flex items-center gap-1.5" data-tab="tab-discovery">
               <span>🎯 Levantamiento & Cotizaciones</span>
               <span class="text-[9px] px-1.5 py-0.5 bg-cyan-500/20 text-cyan-300 rounded font-mono">Home 1</span>
@@ -838,7 +844,18 @@
           <button id="btn-close-discovery-modal" type="button" class="text-slate-400 hover:text-white text-2xl px-2 py-1 cursor-pointer">✕</button>
         </div>
 
-        <form id="form-discovery" class="space-y-6 text-xs">
+        <!-- Banner de Borrador Auto-Guardado -->
+        <div id="disc-draft-bar" class="hidden mb-4 p-3 rounded-2xl bg-cyan-950/70 border border-cyan-500/40 flex items-center justify-between text-xs text-cyan-300 shadow-md">
+          <span class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span><strong>Borrador activo:</strong> Los datos se auto-guardan en tiempo real para que nunca pierdas información.</span>
+          </span>
+          <button type="button" id="btn-discard-draft" class="text-xs text-slate-400 hover:text-rose-400 underline font-semibold cursor-pointer">
+            Descartar borrador
+          </button>
+        </div>
+
+        <form id="form-discovery" novalidate class="space-y-6 text-xs">
           <input type="hidden" id="disc-id" value="" />
 
           <!-- BLOQUE 1: Identidad del Negocio & Contacto -->
@@ -851,10 +868,10 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div class="sm:col-span-2">
                 <label class="block font-bold text-slate-300 mb-1">Nombre Comercial de la Empresa *</label>
-                <input type="text" id="disc-business" required placeholder="Ej. Óptica Visión del Sol" class="glass-input w-full p-2.5 rounded-xl text-sm" />
+                <input type="text" id="disc-business" placeholder="Ej. Óptica Visión del Sol" class="glass-input w-full p-2.5 rounded-xl text-sm" />
               </div>
               <div>
-                <label class="block font-bold text-slate-300 mb-1">Rubro / Industria *</label>
+                <label class="block font-bold text-slate-300 mb-1">Rubro / Industria</label>
                 <select id="disc-rubro" class="glass-input w-full p-2.5 rounded-xl cursor-pointer">
                   <option value="retail">👗 Retail & Indumentaria</option>
                   <option value="gastronomia">🍔 Gastronomía & Delivery</option>
@@ -869,16 +886,16 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label class="block font-bold text-slate-300 mb-1">Contacto Principal *</label>
-                <input type="text" id="disc-contact" required placeholder="Ej. Martín Gómez" class="glass-input w-full p-2.5 rounded-xl" />
+                <label class="block font-bold text-slate-300 mb-1">Contacto Principal</label>
+                <input type="text" id="disc-contact" placeholder="Ej. Martín Gómez" class="glass-input w-full p-2.5 rounded-xl" />
               </div>
               <div>
                 <label class="block font-bold text-slate-300 mb-1">Cargo / Rol</label>
                 <input type="text" id="disc-role" placeholder="Ej. Dueño / Socio / Gerente Comercial" class="glass-input w-full p-2.5 rounded-xl" />
               </div>
               <div>
-                <label class="block font-bold text-slate-300 mb-1">WhatsApp de Contacto *</label>
-                <input type="text" id="disc-phone" required placeholder="5491154188294" class="glass-input w-full p-2.5 rounded-xl font-mono" />
+                <label class="block font-bold text-slate-300 mb-1">WhatsApp de Contacto</label>
+                <input type="text" id="disc-phone" placeholder="5491154188294" class="glass-input w-full p-2.5 rounded-xl font-mono" />
               </div>
             </div>
 
@@ -1095,8 +1112,8 @@
                 <input type="number" id="disc-setup-fee" placeholder="Ej. 180000" class="glass-input w-full p-2.5 rounded-xl font-mono text-sm" />
               </div>
               <div>
-                <label class="block font-bold text-slate-300 mb-1">Abono Mensual Recurrente ($) *</label>
-                <input type="number" id="disc-monthly-fee" required placeholder="Ej. 45000" class="glass-input w-full p-2.5 rounded-xl font-mono text-sm" />
+                <label class="block font-bold text-slate-300 mb-1">Abono Mensual Recurrente ($)</label>
+                <input type="number" id="disc-monthly-fee" placeholder="Ej. 45000" class="glass-input w-full p-2.5 rounded-xl font-mono text-sm" />
               </div>
               <div>
                 <label class="block font-bold text-slate-300 mb-1">Moneda</label>

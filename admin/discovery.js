@@ -3,215 +3,8 @@
 // Relevamiento en vivo, preguntas personalizadas, cotizaciones y conversión
 // ====================================================================
 
-const INITIAL_DISCOVERY_LEADS = [
-  {
-    id: 'disc-001',
-    business_name: 'Óptica Visión del Sol',
-    rubro: 'retail',
-    contact_name: 'Martín Gómez',
-    role_title: 'Socio / Gerente Comercial',
-    whatsapp_phone: '5491154188294',
-    email: 'ventas@visiondelsol.com.ar',
-    social_network: '@optica.visiondelsol',
-    location: 'Belgrano, CABA, Argentina',
-    physical_scope: ['1 Local a la calle', 'Showroom con cita previa'],
-    virtual_scope: ['Sin sitio web', 'Instagram Shop activo'],
-    contact_channels: ['WhatsApp manual', 'Anuncios Meta (IG / FB)', 'Boca a boca / Referidos'],
-    volume_level: 'medio',
-    peak_hours: '20:30 a 23:30 hs (al salir de trabajar)',
-    bottlenecks: [
-      'Pérdida de ventas de noche',
-      'Demoran horas en cotizar',
-      'Dueño atrapado respondiendo lo mismo'
-    ],
-    goals: 'Automatizar catálogo de marcos con graduación y señas con Mercado Pago 24/7 sin perder ventas de noche.',
-    tools_used: 'Cuaderno de ventas físico y WhatsApp Business en teléfono personal',
-    avg_ticket: 65000,
-    team_size: '2 personas (Dueño + 1 vendedora)',
-    custom_qa: [
-      {
-        question: '¿Cómo procesan las recetas médicas con aumentos que envían los clientes?',
-        answer: 'El cliente manda una foto borrosa por WhatsApp y el dueño la revisa manualmente cuando tiene un momento libre, tardando hasta 4 horas.'
-      },
-      {
-        question: '¿Qué porcentaje estimado de consultas entran fuera del horario de local?',
-        answer: 'Más del 45% de los mensajes entran entre las 20:30 y la medianoche, y la mayoría se enfría o compra en cadenas.'
-      }
-    ],
-    solution_name: 'Bot WhatsApp IA 24/7',
-    setup_fee: 180000,
-    monthly_fee: 45000,
-    currency: 'ARS',
-    delivery_time: '72 horas hábiles',
-    status: 'negotiation',
-    next_step: 'Llamar el jueves 11:30 hs para confirmar seña del 50%',
-    notes: 'Muy entusiasmado con el bot que atiende y cobra solo de noche. Pidió ver una demo de Óptica.',
-    created_at: '2026-11-14'
-  },
-  {
-    id: 'disc-002',
-    business_name: 'Parrilla Don Esteban',
-    rubro: 'gastronomia',
-    contact_name: 'Esteban Rodríguez',
-    role_title: 'Socio Fundador',
-    whatsapp_phone: '5491154188294',
-    email: 'pedidos@parrilladonesteban.com',
-    social_network: '@donesteban_parrilla',
-    location: 'Palermo Soho, CABA, Argentina',
-    physical_scope: ['1 Local a la calle', 'Depósito Logístico'],
-    virtual_scope: ['Instagram Shop activo', 'Solo atienden por WhatsApp'],
-    contact_channels: ['Tráfico peatonal a la calle', 'WhatsApp manual', 'Anuncios Meta (IG / FB)'],
-    volume_level: 'alto',
-    peak_hours: 'Jueves a Domingos de 19:30 a 23:30 hs',
-    bottlenecks: [
-      'Pérdida de ventas de noche',
-      'Caos al confirmar transferencias',
-      'Turnos superpuestos o cancelaciones'
-    ],
-    goals: 'Eliminar el 30% de comisión de PedidosYa y canalizar los pedidos de delivery directo a su WhatsApp oficial con comandas limpias.',
-    tools_used: 'Comandera térmica vieja y tablet de cajero',
-    avg_ticket: 28000,
-    team_size: '1 cajero + 3 repartidores propios',
-    custom_qa: [
-      {
-        question: '¿Cuánto pagan en comisiones mensuales a plataformas de terceros?',
-        answer: 'Más de $420.000 ARS por mes se les va en comisiones del 30% en pedidos de delivery.'
-      },
-      {
-        question: '¿Cuentan con repartidores propios para hacer los envíos directos?',
-        answer: 'Sí, tienen 3 repartidores fijos que podrían hacer todos los envíos si los pedidos entran organizados.'
-      }
-    ],
-    solution_name: 'Menú & Delivery 0% Comisión',
-    setup_fee: 150000,
-    monthly_fee: 55000,
-    currency: 'ARS',
-    delivery_time: '48 horas hábiles',
-    status: 'won',
-    next_step: 'Implementado con éxito. En producción en CaribIA Labs.',
-    notes: '¡Cliente Ganado! Pagó el setup y abono mensual. Muy conforme con la rapidez de entrega.',
-    created_at: '2026-11-10'
-  },
-  {
-    id: 'disc-003',
-    business_name: 'Clínica Dental San Lucas',
-    rubro: 'salud',
-    contact_name: 'Dra. Mariana San Lucas',
-    role_title: 'Directora Médica',
-    whatsapp_phone: '5491154188294',
-    email: 'contacto@dentalsanlucas.ar',
-    social_network: '@dentalsanlucas_oficial',
-    location: 'Vicente López, Buenos Aires, Argentina',
-    physical_scope: ['2 a 5 Sucursales'],
-    virtual_scope: ['Web informativa básica', 'Sin sitio web'],
-    contact_channels: ['Boca a boca / Referidos', 'Google Ads / Búsqueda', 'WhatsApp manual'],
-    volume_level: 'medio',
-    peak_hours: 'Lunes a Viernes de 09:00 a 18:00 hs',
-    bottlenecks: [
-      'Turnos superpuestos o cancelaciones',
-      'Dueño atrapado respondiendo lo mismo',
-      'Cero base de datos para recompras'
-    ],
-    goals: 'Cero ausentismo de pacientes en consultorio y recordatorio automático 24hs antes con confirmación en 1 clic.',
-    tools_used: 'Google Calendar y libreta de recepción',
-    avg_ticket: 48000,
-    team_size: '2 secretarias + 4 odontólogos',
-    custom_qa: [
-      {
-        question: '¿Qué porcentaje de pacientes agendados no se presentan a la consulta?',
-        answer: 'Entre el 20% y el 25% de ausentismo cuando la recepcionista no llega a llamarlos uno por uno.'
-      }
-    ],
-    solution_name: 'Agenda Médica & Turnos IA',
-    setup_fee: 220000,
-    monthly_fee: 60000,
-    currency: 'ARS',
-    delivery_time: '5 días hábiles',
-    status: 'quoted',
-    next_step: 'Reunión de demostración con los socios este viernes a las 15hs',
-    notes: 'Les interesó mucho que el bot confirme asistencia y libere el turno si el paciente cancela.',
-    created_at: '2026-11-16'
-  },
-  {
-    id: 'disc-004',
-    business_name: 'Distribuidora Mayorista Almagro',
-    rubro: 'servicios',
-    contact_name: 'Carlos Varela',
-    role_title: 'Gerente de Operaciones',
-    whatsapp_phone: '5491154188294',
-    email: 'carlos@mayoristaalmagro.ar',
-    social_network: '@mayorista_almagro',
-    location: 'Almagro, CABA, Argentina',
-    physical_scope: ['Distribuidor / Mayorista', 'Depósito Logístico'],
-    virtual_scope: ['Catálogo en PDF estático', 'Solo atienden por WhatsApp'],
-    contact_channels: ['Llamadas o prospección fría', 'WhatsApp manual'],
-    volume_level: 'masivo',
-    peak_hours: 'Madrugadas y mañanas de 06:00 a 13:00 hs',
-    bottlenecks: [
-      'Demoran horas en cotizar',
-      'Quiebres de stock sin avisar',
-      'Caos al confirmar transferencias'
-    ],
-    goals: 'Que los comercios clientes autogestionen sus pedidos con lista mayorista y reciban factura automática.',
-    tools_used: 'Planillas Excel con fórmulas desactualizadas',
-    avg_ticket: 320000,
-    team_size: '4 vendedores de mostrador y depósito',
-    custom_qa: [
-      {
-        question: '¿Con qué frecuencia cambian los precios de lista de los proveedores?',
-        answer: 'Semanalmente. Enviar un nuevo PDF cada 5 días genera confusiones y reclamos de precios viejos.'
-      }
-    ],
-    solution_name: 'Tienda Online + Mercado Pago',
-    setup_fee: 320000,
-    monthly_fee: 75000,
-    currency: 'ARS',
-    delivery_time: '7 días hábiles',
-    status: 'diagnostic',
-    next_step: 'Armar propuesta con listas de precios segmentadas por volumen',
-    notes: 'El volumen es alto, si cerramos es un contrato recurrente muy importante.',
-    created_at: '2026-11-17'
-  },
-  {
-    id: 'disc-005',
-    business_name: 'Inmobiliaria Casas & Lotes del Norte',
-    rubro: 'inmobiliaria',
-    contact_name: 'Santiago Rossi',
-    role_title: 'Director Comercial',
-    whatsapp_phone: '5491154188294',
-    email: 'contacto@casasylotesnorte.com',
-    social_network: '@casasylotes.pilar',
-    location: 'Pilar, Buenos Aires, Argentina',
-    physical_scope: ['1 Local a la calle'],
-    virtual_scope: ['Web informativa básica', 'Instagram Shop activo'],
-    contact_channels: ['Anuncios Meta (IG / FB)', 'Google Ads / Búsqueda'],
-    volume_level: 'medio',
-    peak_hours: 'Sábados y Domingos de 10:00 a 19:00 hs',
-    bottlenecks: [
-      'Demoran horas en cotizar',
-      'Cero base de datos para recompras'
-    ],
-    goals: 'Filtrar consultas curiosas y agendar visitas presenciales a barrios cerrados solo con compradores calificados.',
-    tools_used: 'CRM inmobiliario viejo en desuso',
-    avg_ticket: 1500000,
-    team_size: '3 agentes de venta',
-    custom_qa: [
-      {
-        question: '¿Por qué abandonaron su software anterior?',
-        answer: 'Pedía demasiados datos para cargar un lead y los agentes terminaban usando WhatsApp Web suelto.'
-      }
-    ],
-    solution_name: 'Bot WhatsApp IA 24/7',
-    setup_fee: 200000,
-    monthly_fee: 50000,
-    currency: 'ARS',
-    delivery_time: '5 días hábiles',
-    status: 'lost',
-    next_step: 'Recontactar en 60 días para evaluar resultados del personal eventual',
-    notes: 'Prefirieron contratar un pasante temporal para responder WhatsApp los fines de semana. Seguimiento abierto.',
-    created_at: '2026-11-08'
-  }
-];
+// Base inicial limpia para prospectos reales (las 5 tarjetas demo fueron retiradas para no ensuciar la base real)
+const INITIAL_DISCOVERY_LEADS = [];
 
 // Preguntas inteligentes sugeridas para llamadas de prospección
 const SMART_DISCOVERY_QUESTIONS = [
@@ -233,8 +26,26 @@ const SMART_DISCOVERY_QUESTIONS = [
   }
 ];
 
+// Carga y purga de datos demo previos en localStorage
+function loadSavedDiscoveryLeads() {
+  try {
+    const raw = localStorage.getItem('caribia_discovery_leads');
+    if (!raw) return [];
+    let list = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+    // Purgar los 5 IDs demo antiguos de prueba para dejar la base limpia
+    const demoIds = ['disc-001', 'disc-002', 'disc-003', 'disc-004', 'disc-005'];
+    list = list.filter(item => !demoIds.includes(item.id));
+    localStorage.setItem('caribia_discovery_leads', JSON.stringify(list));
+    return list;
+  } catch (e) {
+    console.warn('Error leyendo caribia_discovery_leads:', e);
+    return [];
+  }
+}
+
 // Estado global de Discovery CRM
-let discoveryLeads = JSON.parse(localStorage.getItem('caribia_discovery_leads')) || INITIAL_DISCOVERY_LEADS;
+let discoveryLeads = loadSavedDiscoveryLeads();
 let currentDiscFilter = 'todos';
 let currentDiscRubro = 'todos';
 let discSearchQuery = '';
@@ -346,13 +157,27 @@ function setupDiscoveryCrmModule() {
     });
   }
 
-  // Cerrar modal
-  const closeModal = () => modal.classList.add('hidden');
-  if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
-  if (btnCancel) btnCancel.addEventListener('click', closeModal);
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
+  // Cerrar modal con confirmación si hay datos sin guardar (NUNCA por clic fuera accidental)
+  const handleCloseModal = () => {
+    if (isDiscoveryFormDirty()) {
+      if (!confirm('¿Deseas cerrar la ficha? Tu avance quedará guardado en el borrador automático.')) {
+        return;
+      }
+    }
+    modal.classList.add('hidden');
+  };
+
+  if (btnCloseModal) btnCloseModal.addEventListener('click', handleCloseModal);
+  if (btnCancel) btnCancel.addEventListener('click', handleCloseModal);
+
+  // Botón para descartar borrador y empezar limpio
+  const btnDiscardDraft = document.getElementById('btn-discard-draft');
+  if (btnDiscardDraft) {
+    btnDiscardDraft.addEventListener('click', () => {
+      if (confirm('¿Deseas descartar el borrador y comenzar con el formulario limpio?')) {
+        clearDiscoveryDraft();
+        openDiscoveryFormForCreate(true);
+      }
     });
   }
 
@@ -373,6 +198,7 @@ function setupDiscoveryCrmModule() {
         }
       });
       renderDynamicQaList();
+      saveDiscoveryDraft();
     });
   }
 
@@ -381,8 +207,21 @@ function setupDiscoveryCrmModule() {
     btnExportJson.addEventListener('click', exportDiscoveryJson);
   }
 
-  // Submit del formulario de levantamiento
+  // Submit del formulario de levantamiento con protección contra Enter accidental
   if (form) {
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    });
+
+    form.addEventListener('input', () => {
+      saveDiscoveryDraft();
+    });
+    form.addEventListener('change', () => {
+      saveDiscoveryDraft();
+    });
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       saveDiscoveryLeadFromForm();
@@ -465,11 +304,12 @@ function wireAddCustomChip(btnId, inputId, containerId, isDanger = false) {
       const span = document.createElement('span');
       span.className = 'chip-toggle ' + (isDanger ? 'active-danger' : 'active');
       span.setAttribute('data-val', text);
-      span.innerHTML = `<span>✏️ ${escapeHtml(text)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove();">✕</span>`;
+      span.innerHTML = `<span>✏️ ${escapeHtml(text)}</span> <span class="ml-1 text-[10px] text-slate-400 hover:text-white" onclick="event.stopPropagation(); this.parentElement.remove(); if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();">✕</span>`;
       container.appendChild(span);
     }
 
     input.value = '';
+    if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();
   }
 
   btn.addEventListener('click', doAdd);
@@ -494,6 +334,7 @@ function setupChipToggles(containerId, isDanger = false) {
     } else {
       chip.classList.toggle('active');
     }
+    if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();
   });
 }
 
@@ -600,12 +441,14 @@ function renderDynamicQaList() {
 window.updateCustomQaItem = function(index, field, value) {
   if (currentCustomQas[index]) {
     currentCustomQas[index][field] = value;
+    if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();
   }
 };
 
 function addCustomQaItem(q = '', a = '') {
   currentCustomQas.push({ question: q, answer: a });
   renderDynamicQaList();
+  if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();
   setTimeout(() => {
     const inputs = document.querySelectorAll('#dynamic-qa-list input');
     if (inputs.length > 0) {
@@ -617,29 +460,140 @@ function addCustomQaItem(q = '', a = '') {
 window.removeCustomQaItem = function(index) {
   currentCustomQas.splice(index, 1);
   renderDynamicQaList();
+  if (typeof saveDiscoveryDraft === 'function') saveDiscoveryDraft();
 };
+
+// --------------------------------------------------------------------
+// MOTOR DE BORRADOR AUTOMÁTICO & PROTECCIÓN DE DATOS
+// --------------------------------------------------------------------
+function isDiscoveryFormDirty() {
+  const biz = document.getElementById('disc-business')?.value.trim() || '';
+  const contact = document.getElementById('disc-contact')?.value.trim() || '';
+  const phone = document.getElementById('disc-phone')?.value.trim() || '';
+  const notes = document.getElementById('disc-notes')?.value.trim() || '';
+  const customQasWithAnswers = currentCustomQas.some(q => q.answer && q.answer.trim().length > 0);
+  return Boolean(biz || contact || phone || notes || customQasWithAnswers);
+}
+
+function saveDiscoveryDraft() {
+  const form = document.getElementById('form-discovery');
+  if (!form) return;
+  const existingId = document.getElementById('disc-id')?.value;
+  // Solo auto-guardar si estamos registrando un nuevo lead, no editando uno existente
+  if (existingId) return;
+
+  const draft = {
+    business_name: document.getElementById('disc-business')?.value || '',
+    rubro: document.getElementById('disc-rubro')?.value || 'retail',
+    contact_name: document.getElementById('disc-contact')?.value || '',
+    role_title: document.getElementById('disc-role')?.value || '',
+    whatsapp_phone: document.getElementById('disc-phone')?.value || '',
+    email: document.getElementById('disc-email')?.value || '',
+    social_network: document.getElementById('disc-social')?.value || '',
+    location: document.getElementById('disc-location')?.value || '',
+    physical_scope: getSelectedChips('chips-physical-scope'),
+    virtual_scope: getSelectedChips('chips-virtual-scope'),
+    contact_channels: getSelectedChips('chips-contact-channels'),
+    volume_level: document.getElementById('disc-volume')?.value || 'medio',
+    peak_hours: document.getElementById('disc-peak-hours')?.value || '',
+    bottlenecks: getSelectedChips('chips-bottlenecks'),
+    goals: document.getElementById('disc-goals')?.value || '',
+    tools_used: document.getElementById('disc-tools')?.value || '',
+    avg_ticket: document.getElementById('disc-ticket')?.value || '',
+    team_size: document.getElementById('disc-team-size')?.value || '',
+    custom_qa: currentCustomQas,
+    solution_name: document.getElementById('disc-solution')?.value || 'Bot WhatsApp IA 24/7',
+    delivery_time: document.getElementById('disc-delivery-time')?.value || '72 horas hábiles',
+    setup_fee: document.getElementById('disc-setup-fee')?.value || '',
+    monthly_fee: document.getElementById('disc-monthly-fee')?.value || '',
+    currency: document.getElementById('disc-currency')?.value || 'ARS',
+    status: document.getElementById('disc-status')?.value || 'diagnostic',
+    next_step: document.getElementById('disc-next-step')?.value || '',
+    notes: document.getElementById('disc-notes')?.value || '',
+    updated_at: Date.now()
+  };
+
+  const hasAnyData = Boolean(
+    draft.business_name || draft.contact_name || draft.whatsapp_phone ||
+    draft.notes || draft.physical_scope.length > 1 || draft.custom_qa.some(q => q.answer)
+  );
+
+  if (hasAnyData) {
+    localStorage.setItem('caribia_discovery_draft', JSON.stringify(draft));
+    const draftBar = document.getElementById('disc-draft-bar');
+    if (draftBar) draftBar.classList.remove('hidden');
+  }
+}
+
+function clearDiscoveryDraft() {
+  localStorage.removeItem('caribia_discovery_draft');
+  const draftBar = document.getElementById('disc-draft-bar');
+  if (draftBar) draftBar.classList.add('hidden');
+}
 
 // --------------------------------------------------------------------
 // ABRIR FORMULARIO PARA CREAR / EDITAR
 // --------------------------------------------------------------------
-function openDiscoveryFormForCreate() {
+function openDiscoveryFormForCreate(forceClean = false) {
   const modal = document.getElementById('modal-discovery');
   const title = document.getElementById('discovery-modal-title');
   const form = document.getElementById('form-discovery');
+  const draftBar = document.getElementById('disc-draft-bar');
 
   title.textContent = 'Ficha de Levantamiento de Información & Cotización';
   document.getElementById('disc-id').value = '';
   form.reset();
 
-  // Reset chips con defaults útiles
-  setSelectedChips('chips-physical-scope', ['1 Local a la calle']);
-  setSelectedChips('chips-virtual-scope', ['Sin sitio web', 'Solo atienden por WhatsApp'], true);
-  setSelectedChips('chips-contact-channels', ['WhatsApp manual', 'Boca a boca / Referidos']);
-  setSelectedChips('chips-bottlenecks', ['Pérdida de ventas de noche', 'Demoran horas en cotizar'], true);
+  const savedDraft = !forceClean ? JSON.parse(localStorage.getItem('caribia_discovery_draft') || 'null') : null;
 
-  // Cargar preguntas sugeridas iniciales
-  currentCustomQas = SMART_DISCOVERY_QUESTIONS.map(q => ({ question: q.question, answer: '' }));
-  renderDynamicQaList();
+  if (savedDraft) {
+    // Restaurar borrador previo intacto
+    if (document.getElementById('disc-business')) document.getElementById('disc-business').value = savedDraft.business_name || '';
+    if (document.getElementById('disc-rubro')) document.getElementById('disc-rubro').value = savedDraft.rubro || 'retail';
+    if (document.getElementById('disc-contact')) document.getElementById('disc-contact').value = savedDraft.contact_name || '';
+    if (document.getElementById('disc-role')) document.getElementById('disc-role').value = savedDraft.role_title || '';
+    if (document.getElementById('disc-phone')) document.getElementById('disc-phone').value = savedDraft.whatsapp_phone || '';
+    if (document.getElementById('disc-email')) document.getElementById('disc-email').value = savedDraft.email || '';
+    if (document.getElementById('disc-social')) document.getElementById('disc-social').value = savedDraft.social_network || '';
+    if (document.getElementById('disc-location')) document.getElementById('disc-location').value = savedDraft.location || '';
+    if (document.getElementById('disc-volume')) document.getElementById('disc-volume').value = savedDraft.volume_level || 'medio';
+    if (document.getElementById('disc-peak-hours')) document.getElementById('disc-peak-hours').value = savedDraft.peak_hours || '';
+    if (document.getElementById('disc-goals')) document.getElementById('disc-goals').value = savedDraft.goals || '';
+    if (document.getElementById('disc-tools')) document.getElementById('disc-tools').value = savedDraft.tools_used || '';
+    if (document.getElementById('disc-ticket')) document.getElementById('disc-ticket').value = savedDraft.avg_ticket || '';
+    if (document.getElementById('disc-team-size')) document.getElementById('disc-team-size').value = savedDraft.team_size || '';
+    if (document.getElementById('disc-solution')) document.getElementById('disc-solution').value = savedDraft.solution_name || 'Bot WhatsApp IA 24/7';
+    if (document.getElementById('disc-delivery-time')) document.getElementById('disc-delivery-time').value = savedDraft.delivery_time || '72 horas hábiles';
+    if (document.getElementById('disc-setup-fee')) document.getElementById('disc-setup-fee').value = savedDraft.setup_fee || '';
+    if (document.getElementById('disc-monthly-fee')) document.getElementById('disc-monthly-fee').value = savedDraft.monthly_fee || '';
+    if (document.getElementById('disc-currency')) document.getElementById('disc-currency').value = savedDraft.currency || 'ARS';
+    if (document.getElementById('disc-status')) document.getElementById('disc-status').value = savedDraft.status || 'diagnostic';
+    if (document.getElementById('disc-next-step')) document.getElementById('disc-next-step').value = savedDraft.next_step || '';
+    if (document.getElementById('disc-notes')) document.getElementById('disc-notes').value = savedDraft.notes || '';
+
+    setSelectedChips('chips-physical-scope', savedDraft.physical_scope || ['1 Local a la calle']);
+    setSelectedChips('chips-virtual-scope', savedDraft.virtual_scope || ['Sin sitio web', 'Solo atienden por WhatsApp'], true);
+    setSelectedChips('chips-contact-channels', savedDraft.contact_channels || ['WhatsApp manual', 'Boca a boca / Referidos']);
+    setSelectedChips('chips-bottlenecks', savedDraft.bottlenecks || ['Pérdida de ventas de noche', 'Demoran horas en cotizar'], true);
+
+    currentCustomQas = Array.isArray(savedDraft.custom_qa) && savedDraft.custom_qa.length > 0
+      ? savedDraft.custom_qa
+      : SMART_DISCOVERY_QUESTIONS.map(q => ({ question: q.question, answer: '' }));
+    renderDynamicQaList();
+
+    if (draftBar) draftBar.classList.remove('hidden');
+  } else {
+    // Defaults limpios
+    setSelectedChips('chips-physical-scope', ['1 Local a la calle']);
+    setSelectedChips('chips-virtual-scope', ['Sin sitio web', 'Solo atienden por WhatsApp'], true);
+    setSelectedChips('chips-contact-channels', ['WhatsApp manual', 'Boca a boca / Referidos']);
+    setSelectedChips('chips-bottlenecks', ['Pérdida de ventas de noche', 'Demoran horas en cotizar'], true);
+
+    currentCustomQas = SMART_DISCOVERY_QUESTIONS.map(q => ({ question: q.question, answer: '' }));
+    renderDynamicQaList();
+
+    if (draftBar) draftBar.classList.add('hidden');
+  }
 
   modal.classList.remove('hidden');
 }
@@ -650,6 +604,8 @@ function openEditDiscoveryModal(leadId) {
 
   const modal = document.getElementById('modal-discovery');
   const title = document.getElementById('discovery-modal-title');
+  const draftBar = document.getElementById('disc-draft-bar');
+  if (draftBar) draftBar.classList.add('hidden');
 
   title.textContent = 'Editar Levantamiento: ' + lead.business_name;
   document.getElementById('disc-id').value = lead.id;
@@ -681,7 +637,7 @@ function openEditDiscoveryModal(leadId) {
   document.getElementById('disc-solution').value = lead.solution_name || 'Bot WhatsApp IA 24/7';
   document.getElementById('disc-delivery-time').value = lead.delivery_time || '72 horas hábiles';
   document.getElementById('disc-setup-fee').value = lead.setup_fee || '';
-  document.getElementById('disc-monthly-fee').value = lead.monthly_fee || 45000;
+  document.getElementById('disc-monthly-fee').value = lead.monthly_fee || 0;
   document.getElementById('disc-currency').value = lead.currency || 'ARS';
   document.getElementById('disc-status').value = lead.status || 'quoted';
   document.getElementById('disc-next-step').value = lead.next_step || '';
@@ -697,15 +653,29 @@ function saveDiscoveryLeadFromForm() {
   const modal = document.getElementById('modal-discovery');
   const existingId = document.getElementById('disc-id').value;
 
-  const validQas = currentCustomQas.filter(q => q.question.trim().length > 0 || q.answer.trim().length > 0);
+  const bizNameInput = document.getElementById('disc-business');
+  const bizName = bizNameInput ? bizNameInput.value.trim() : '';
+
+  if (!bizName) {
+    showToastNotification('⚠️ Ingresa al menos el Nombre Comercial de la empresa para guardar la ficha', 'error');
+    if (bizNameInput) {
+      bizNameInput.focus();
+      bizNameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return;
+  }
+
+  const validQas = currentCustomQas.filter(q => (q.question && q.question.trim().length > 0) || (q.answer && q.answer.trim().length > 0));
+  const contactName = document.getElementById('disc-contact')?.value.trim() || 'Contacto comercial';
+  const whatsappPhone = document.getElementById('disc-phone')?.value.trim() || '';
 
   const leadData = {
     id: existingId || ('disc-' + Date.now().toString(36)),
-    business_name: document.getElementById('disc-business').value.trim(),
+    business_name: bizName,
     rubro: document.getElementById('disc-rubro').value,
-    contact_name: document.getElementById('disc-contact').value.trim(),
+    contact_name: contactName,
     role_title: document.getElementById('disc-role').value.trim(),
-    whatsapp_phone: document.getElementById('disc-phone').value.trim(),
+    whatsapp_phone: whatsappPhone,
     email: document.getElementById('disc-email').value.trim(),
     social_network: document.getElementById('disc-social').value.trim(),
     location: document.getElementById('disc-location').value.trim(),
@@ -745,13 +715,18 @@ function saveDiscoveryLeadFromForm() {
   // Persistir en localStorage
   localStorage.setItem('caribia_discovery_leads', JSON.stringify(discoveryLeads));
 
-  // Feedback y re-render
+  // Limpiar el borrador temporal tras guardado exitoso
+  clearDiscoveryDraft();
+
+  // Cerrar modal
   modal.classList.add('hidden');
+
+  // Feedback y re-render
   renderDiscoveryLeads();
   renderDiscoveryKpis();
   renderDiscoveryInsights();
 
-  showToastNotification('✓ Ficha de levantamiento guardada con éxito.');
+  showToastNotification(`✓ Ficha de "${bizName}" guardada en la base de datos.`);
 }
 
 // --------------------------------------------------------------------
@@ -786,6 +761,25 @@ function renderDiscoveryLeads() {
 
   updateDiscoveryCounts();
 
+  if (discoveryLeads.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full glass-card p-12 text-center rounded-3xl border border-dashed border-slate-800 text-slate-400 bg-slate-900/30">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-3xl">
+          🎯
+        </div>
+        <h4 class="font-display font-bold text-white text-base">Tu CRM de Levantamiento está listo y limpio</h4>
+        <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto">
+          No hay negocios de prueba. Todas las cotizaciones y llamadas reales que registres aparecerán aquí organizadas para darles seguimiento.
+        </p>
+        <button type="button" class="btn-glow px-5 py-2.5 rounded-xl text-xs font-bold text-white mt-5 cursor-pointer inline-flex items-center gap-2" onclick="openDiscoveryFormForCreate()">
+          <span>+</span>
+          <span>Registrar Primer Levantamiento Real</span>
+        </button>
+      </div>
+    `;
+    return;
+  }
+
   if (filtered.length === 0) {
     container.innerHTML = `
       <div class="col-span-full glass-card p-12 text-center rounded-3xl border border-slate-800 text-slate-400">
@@ -794,7 +788,7 @@ function renderDiscoveryLeads() {
         <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">
           Prueba cambiando el estado, seleccionando otro rubro o creando un nuevo levantamiento comercial.
         </p>
-        <button type="button" class="btn-glow px-4 py-2 rounded-xl text-xs font-bold text-white mt-4 cursor-pointer" onclick="document.getElementById('btn-open-discovery-modal').click()">
+        <button type="button" class="btn-glow px-4 py-2 rounded-xl text-xs font-bold text-white mt-4 cursor-pointer" onclick="openDiscoveryFormForCreate()">
           + Nuevo Levantamiento
         </button>
       </div>
