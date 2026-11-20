@@ -85,30 +85,50 @@ const INITIAL_TENANTS = [
   }
 ];
 
-// Estado global de la aplicación (Limpieza automática de demos para no enbasurar el CRM)
+// Estado global de la aplicación (Limpieza y sanitización automática de demos para no enbasurar el CRM)
+const DEMO_CRM_IDS = ['crm-002', 'crm-003', 'crm-004', 'crm-005'];
+const DEMO_CRM_NAMES = [
+  'Forno & Co. Palermo',
+  'Forno Palermo',
+  'AURA Studio Indumentaria',
+  'AURA Studio',
+  'LUMIÈRE Studio Peluquería',
+  'LUMIÈRE Studio',
+  'MediConnect Consultorios',
+  'MediConnect Salud'
+];
+
+function sanitizeClients(clients) {
+  if (!Array.isArray(clients)) return [...INITIAL_CRM_CLIENTS];
+  const cleaned = clients.filter(c => {
+    if (!c) return false;
+    if (DEMO_CRM_IDS.includes(c.id)) return false;
+    if (c.business_name && DEMO_CRM_NAMES.includes(c.business_name)) return false;
+    if (c.name && DEMO_CRM_NAMES.includes(c.name)) return false;
+    return true;
+  });
+
+  // Asegurar que Garage Pimpollos figure en estado pendiente si aún no abonó en la vida real
+  const pimpollos = cleaned.find(c => c.id === 'crm-001' || (c.business_name && c.business_name.toLowerCase().includes('garage pimpollos')));
+  if (pimpollos && (!pimpollos.last_payment_date || (pimpollos.notes && pimpollos.notes.includes('Abonó')))) {
+    pimpollos.status = 'pendiente';
+    pimpollos.last_payment_date = '';
+    pimpollos.notes = 'Cliente activo inicial. Configurado con catálogo digital y cobro por Alias MP.';
+  }
+
+  return cleaned.length > 0 ? cleaned : [...INITIAL_CRM_CLIENTS];
+}
+
 let storedCrmClients = null;
 try {
   storedCrmClients = JSON.parse(localStorage.getItem('caribia_crm_clients'));
 } catch (e) {
   storedCrmClients = null;
 }
-const DEMO_CRM_IDS = ['crm-002', 'crm-003', 'crm-004', 'crm-005'];
-if (Array.isArray(storedCrmClients)) {
-  storedCrmClients = storedCrmClients.filter(c => !DEMO_CRM_IDS.includes(c.id));
-  // Asegurar que Garage Pimpollos figure en estado pendiente si aún no abonó en la vida real
-  const pimpollos = storedCrmClients.find(c => c.id === 'crm-001');
-  if (pimpollos && (!pimpollos.last_payment_date || pimpollos.notes.includes('Abonó'))) {
-    pimpollos.status = 'pendiente';
-    pimpollos.last_payment_date = '';
-    pimpollos.notes = 'Cliente activo inicial. Configurado con catálogo digital y cobro por Alias MP.';
-  }
-  if (storedCrmClients.length === 0) {
-    storedCrmClients = [...INITIAL_CRM_CLIENTS];
-  }
-  localStorage.setItem('caribia_crm_clients', JSON.stringify(storedCrmClients));
-}
 
-let crmClients = storedCrmClients || [...INITIAL_CRM_CLIENTS];
+let crmClients = sanitizeClients(storedCrmClients || INITIAL_CRM_CLIENTS);
+localStorage.setItem('caribia_crm_clients', JSON.stringify(crmClients));
+
 let tenants = JSON.parse(localStorage.getItem('caribia_admin_tenants')) || INITIAL_TENANTS;
 let currentCrmFilter = 'todos';
 let crmSearchQuery = '';
@@ -170,6 +190,8 @@ function setupAuth() {
       dashboard.classList.remove('hidden');
       loginError.classList.add('hidden');
       loginForm.reset();
+      crmClients = sanitizeClients(crmClients);
+      renderCrmClients();
     } else {
       loginError.classList.remove('hidden');
       passInput.value = '';
@@ -411,6 +433,7 @@ function calculateNextDueDate(day) {
 
 // Renderizado de clientes y métricas del CRM
 function renderCrmClients() {
+  crmClients = sanitizeClients(crmClients);
   const tbody = document.getElementById('crm-table-body');
   if (!tbody) return;
 
@@ -585,21 +608,7 @@ async function syncCrmWithCloudApi() {
     if (res.ok) {
       const data = await res.json();
       if (data && data.clients && data.clients.length > 0) {
-        // Filtrar clientes de demostración obsoletos para mantener limpio el CRM
-        const cleanRemote = data.clients
-          .filter(c => !DEMO_CRM_IDS.includes(c.id))
-          .map(c => {
-            if (c.id === 'crm-001' && (!c.last_payment_date || (c.notes && c.notes.includes('Abonó')))) {
-              return { ...c, status: 'pendiente', last_payment_date: '', notes: 'Cliente activo inicial. Configurado con catálogo digital y cobro por Alias MP.' };
-            }
-            const localMatch = crmClients.find(local => local.id === c.id);
-            return localMatch ? { ...c, status: localMatch.status } : c;
-          });
-        if (cleanRemote.length > 0) {
-          crmClients = cleanRemote;
-        } else {
-          crmClients = [...INITIAL_CRM_CLIENTS];
-        }
+        crmClients = sanitizeClients(data.clients);
         localStorage.setItem('caribia_crm_clients', JSON.stringify(crmClients));
         renderCrmClients();
       }
