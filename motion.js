@@ -110,18 +110,58 @@
     });
   }
 
-  // Initialize all motion modules when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      initSpotlightCards();
-      initCard3DTilt();
-      initScrollReveals();
-      initAmbientAurora();
+  // 5. MotionSites: Horizontal Drag to Scroll for Desktop
+  function initHorizontalDragScroll() {
+    const reels = document.querySelectorAll('.horizontal-reel-container');
+    reels.forEach((slider) => {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.style.cursor = 'grabbing';
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      });
+
+      slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+      });
+
+      slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+      });
+
+      slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1.6; // Scroll multiplier
+        slider.scrollLeft = scrollLeft - walk;
+      });
+      slider.style.cursor = 'grab';
     });
-  } else {
+  }
+
+  // Initialize all motion modules when DOM is ready
+  function initAll() {
     initSpotlightCards();
     initCard3DTilt();
     initScrollReveals();
     initAmbientAurora();
+    initHorizontalDragScroll();
+  }
+
+  // Expose global refresh function for dynamic AJAX/DOM rerenders
+  window.refreshMotion = initAll;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
   }
 })();
+

@@ -37,6 +37,23 @@
   display: inline-block;
 }
 
+.shimmer-text-dark {
+  background: linear-gradient(
+    90deg,
+    #0284c7 0%,
+    #0369a1 25%,
+    #0f172a 50%,
+    #0369a1 75%,
+    #0284c7 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: reactBitsShimmer 4.5s linear infinite;
+  display: inline-block;
+}
+
 @keyframes reactBitsShimmer {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
@@ -234,6 +251,144 @@
   transform: translateY(-2.5px) scale(1.02);
   box-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.45);
 }
-.btn-spring-glow:active {
-  transform: translateY(0) scale(0.98);
+/* Amber / Violet Spotlight variants */
+.spotlight-card-amber::before {
+  background: radial-gradient(
+    700px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    rgba(245, 158, 11, 0.22),
+    rgba(239, 68, 68, 0.08) 35%,
+    transparent 65%
+  ) !important;
 }
+
+.spotlight-card-purple::before {
+  background: radial-gradient(
+    700px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    rgba(168, 85, 247, 0.22),
+    rgba(59, 130, 246, 0.08) 35%,
+    transparent 65%
+  ) !important;
+}
+
+/* --------------------------------------------------------------------
+   5. MOTIONSITES: HORIZONTAL MOTION & CONTINUOUS MARQUEE
+   -------------------------------------------------------------------- */
+.motion-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  display: flex;
+  user-select: none;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.motion-marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  animation: marqueeScroll 28s linear infinite;
+  gap: 2.5rem;
+  padding: 0.75rem 0;
+}
+
+.motion-marquee-track-reverse {
+  animation: marqueeScrollReverse 32s linear infinite;
+}
+
+.motion-marquee:hover .motion-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes marqueeScrollReverse {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* Horizontal Side-Scrolling Card Reel */
+.horizontal-reel-container {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(6, 182, 212, 0.3) transparent;
+  padding: 0.75rem 0.25rem 1.5rem 0.25rem;
+}
+
+.horizontal-reel-container::-webkit-scrollbar {
+  height: 6px;
+}
+.horizontal-reel-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+}
+.horizontal-reel-container::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.4);
+  border-radius: 999px;
+}
+
+.horizontal-reel-item {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .horizontal-reel-item {
+    flex: 0 0 320px;
+  }
+}
+
+/* --------------------------------------------------------------------
+   6. EYECANNNDY: CINEMATIC VIDEO HERO STAGE & AMBIENT DEPTH
+   -------------------------------------------------------------------- */
+.video-hero-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #050811;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+}
+
+.video-hero-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.65;
+  filter: contrast(110%) brightness(85%);
+  transition: transform 1.2s var(--spring-ease), opacity 0.8s ease;
+}
+
+.video-hero-stage:hover .video-hero-bg {
+  transform: translate(-50%, -50%) scale(1.04);
+  opacity: 0.75;
+}
+
+.video-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(10, 15, 29, 0.35) 0%, rgba(10, 15, 29, 0.85) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.video-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+

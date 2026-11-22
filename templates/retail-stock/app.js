@@ -187,7 +187,7 @@ function renderProducts() {
     `).join("");
 
     return `
-      <article class="shopify-card">
+      <article class="shopify-card spotlight-card card-3d motion-reveal">
         <div class="card-image-box" onclick="openDetailModal('${p.id}')">
           <img src="${p.image}" alt="${p.name}" class="card-product-img" loading="lazy" />
           
@@ -233,6 +233,10 @@ function renderProducts() {
       </article>
     `;
   }).join("");
+
+  if (window.refreshMotion) {
+    setTimeout(window.refreshMotion, 50);
+  }
 }
 
 // ================= 2. MODAL FICHA DE PRENDA ESTILO SHOPIFY =================

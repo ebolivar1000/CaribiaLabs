@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderDoctors() {
   const container = document.getElementById("doctors-container");
   container.innerHTML = DOCTORS.map(doc => `
-    <div class="doctor-card ${selectedDoctor.id === doc.id ? 'selected' : ''}" onclick="selectDoctor('${doc.id}')">
+    <div class="doctor-card spotlight-card card-3d motion-reveal ${selectedDoctor.id === doc.id ? 'selected' : ''}" onclick="selectDoctor('${doc.id}')">
       <img src="${doc.image}" alt="${doc.name}" class="doctor-img" />
       <h5 class="doctor-name">${doc.name}</h5>
       <span class="doctor-spec">${doc.specialty}</span>
@@ -73,6 +73,10 @@ function renderDoctors() {
       <span style="font-size: 0.72rem; color: #16a34a; font-weight: 700;">Atención: ${doc.days.join(", ")}</span>
     </div>
   `).join("");
+
+  if (window.refreshMotion) {
+    setTimeout(window.refreshMotion, 50);
+  }
 }
 
 window.selectDoctor = function(docId) {

@@ -16,6 +16,7 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../../motion.css" />
   </head>
   <body class="bg-dark text-slate-100">
     <!-- Barra del Administrador de Restaurante -->
@@ -78,18 +79,91 @@
     </header>
 
     <main>
-      <!-- Hero Banner Gastronómico -->
+      <!-- Hero Banner Gastronómico (Cinematic Video Loop) -->
       <section class="food-hero">
         <div class="food-hero-img-wrap">
-          <img src="assets/food_hero.jpg" alt="Pizzas & Burgers Forno" class="food-hero-img" />
+          <video
+            class="food-hero-img"
+            autoplay
+            loop
+            muted
+            playsinline
+            poster="assets/food_hero.jpg"
+            preload="auto"
+          >
+            <source src="assets/food_hero_motion.mp4" type="video/mp4" />
+          </video>
           <div class="food-hero-overlay"></div>
         </div>
         <div class="food-hero-content">
-          <span class="food-hero-badge">HORNO DE LEÑA & CARNE DE PASTOREO</span>
-          <h2 class="food-hero-title">Comida real. Sin intermediarios ni comisiones.</h2>
+          <span class="food-hero-badge shimmer-badge">🔥 HORNO DE LEÑA & CARNE DE PASTOREO</span>
+          <h2 class="food-hero-title">Comida real. <span class="shimmer-text">Sin intermediarios</span> ni comisiones.</h2>
           <p class="food-hero-desc">
             Pide tu pizza fermentada 48hs o tu smash burger doble con cheddar. Tu pedido entra directo a nuestra cocina por WhatsApp.
           </p>
+        </div>
+      </section>
+
+      <!-- Infinite Food Ticker (MotionSites & React Bits) -->
+      <div class="motion-marquee bg-amber-950/40 text-amber-300 border-y border-amber-900/50 text-xs font-bold tracking-widest py-3">
+        <div class="motion-marquee-track">
+          <span>🍕 PIZZAS A LA LEÑA 450°C</span>
+          <span>🍔 SMASH BURGERS DOBLE MEDALLÓN</span>
+          <span>⚡ PEDIDOS DIRECTOS A NUESTRO WHATSAPP</span>
+          <span>💸 10% OFF CON ALIAS / CBU</span>
+          <span>⏱️ ENTREGA RÁPIDA 35-45 MIN</span>
+          <span>✨ FORNO & CO. CALIDAD DE AUTOR</span>
+        </div>
+        <div class="motion-marquee-track" aria-hidden="true">
+          <span>🍕 PIZZAS A LA LEÑA 450°C</span>
+          <span>🍔 SMASH BURGERS DOBLE MEDALLÓN</span>
+          <span>⚡ PEDIDOS DIRECTOS A NUESTRO WHATSAPP</span>
+          <span>💸 10% OFF CON ALIAS / CBU</span>
+          <span>⏱️ ENTREGA RÁPIDA 35-45 MIN</span>
+          <span>✨ FORNO & CO. CALIDAD DE AUTOR</span>
+        </div>
+      </div>
+
+      <!-- Desplazamiento Lateral: Destacados al Fuego (Figma for Motion) -->
+      <section class="py-8 bg-slate-950 border-b border-slate-900">
+        <div class="container-food">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-amber-500">Swipe Lateral</span>
+              <h3 class="text-lg font-extrabold text-white">🔥 Los Más Pedidos de Nuestra Cocina</h3>
+            </div>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">Desliza horizontalmente &rarr;</span>
+          </div>
+
+          <div class="horizontal-reel-container">
+            <div class="horizontal-reel-item dish-card spotlight-card spotlight-card-amber card-3d p-4 bg-slate-900/90 rounded-2xl border border-slate-800">
+              <img src="assets/pizza_margherita.jpg" alt="Margherita D.O.P." class="w-full h-44 object-cover rounded-xl mb-3" />
+              <div class="text-xs font-bold text-amber-400 mb-1">Clásica Italiana</div>
+              <h4 class="font-bold text-white text-base mb-1">Pizza Margherita D.O.P.</h4>
+              <p class="font-extrabold text-amber-400 text-sm">$14.500 ARS <span class="text-xs text-slate-400 font-normal">· Muzzarella fior di latte</span></p>
+            </div>
+
+            <div class="horizontal-reel-item dish-card spotlight-card spotlight-card-amber card-3d p-4 bg-slate-900/90 rounded-2xl border border-slate-800">
+              <img src="assets/burger_smash.jpg" alt="Double Oklahoma Smash" class="w-full h-44 object-cover rounded-xl mb-3" />
+              <div class="text-xs font-bold text-rose-400 mb-1">Top Ventas</div>
+              <h4 class="font-bold text-white text-base mb-1">Double Oklahoma Smash</h4>
+              <p class="font-extrabold text-amber-400 text-sm">$16.200 ARS <span class="text-xs text-slate-400 font-normal">· Doble carne 120g</span></p>
+            </div>
+
+            <div class="horizontal-reel-item dish-card spotlight-card spotlight-card-amber card-3d p-4 bg-slate-900/90 rounded-2xl border border-slate-800">
+              <img src="assets/papas_rusticas.jpg" alt="Papas Rústicas Trufadas" class="w-full h-44 object-cover rounded-xl mb-3" />
+              <div class="text-xs font-bold text-emerald-400 mb-1">Para Compartir</div>
+              <h4 class="font-bold text-white text-base mb-1">Papas Rústicas Trufadas</h4>
+              <p class="font-extrabold text-amber-400 text-sm">$8.900 ARS <span class="text-xs text-slate-400 font-normal">· Dip de alioli</span></p>
+            </div>
+
+            <div class="horizontal-reel-item dish-card spotlight-card spotlight-card-amber card-3d p-4 bg-slate-900/90 rounded-2xl border border-slate-800">
+              <img src="assets/postre_volcan.jpg" alt="Volcán de Chocolate Belga" class="w-full h-44 object-cover rounded-xl mb-3" />
+              <div class="text-xs font-bold text-purple-400 mb-1">Postre Estrella</div>
+              <h4 class="font-bold text-white text-base mb-1">Volcán de Chocolate Belga</h4>
+              <p class="font-extrabold text-amber-400 text-sm">$7.800 ARS <span class="text-xs text-slate-400 font-normal">· Corazón fundido</span></p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -222,6 +296,7 @@
       </div>
     </div>
 
+    <script src="../../motion.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

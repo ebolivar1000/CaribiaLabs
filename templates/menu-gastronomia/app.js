@@ -74,7 +74,7 @@ function renderDishes() {
     const aliasPrice = Math.round(d.price * (1 - REST_CONFIG.discount_percent / 100));
 
     return `
-      <article class="dish-card">
+      <article class="dish-card spotlight-card spotlight-card-amber card-3d motion-reveal">
         <div class="dish-img-wrap">
           <img src="${d.image}" alt="${d.name}" class="dish-img" loading="lazy" />
           <span class="dish-badge">${d.badge || d.category}</span>
@@ -105,6 +105,10 @@ function renderDishes() {
       </article>
     `;
   }).join("");
+
+  if (window.refreshMotion) {
+    setTimeout(window.refreshMotion, 50);
+  }
 }
 
 function addDishToCart(dishId) {

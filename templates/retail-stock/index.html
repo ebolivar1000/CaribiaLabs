@@ -15,6 +15,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../../motion.css" />
   </head>
   <body>
     <!-- ============================================================ -->
@@ -97,22 +98,99 @@
 
     <main>
       <!-- ============================================================ -->
-      <!-- HERO BANNER EDITORIAL DE MODA (SHOPIFY LOOK)                 -->
+      <!-- HERO BANNER EDITORIAL DE MODA (CINEMATIC MOTION VIDEO)       -->
       <!-- ============================================================ -->
       <section class="shopify-hero">
         <div class="hero-image-backdrop">
-          <img src="assets/hero_fashion.jpg" alt="Nueva Colección AURA Studio" class="hero-cover-img" />
+          <video
+            class="hero-cover-img"
+            autoplay
+            loop
+            muted
+            playsinline
+            poster="assets/hero_fashion.jpg"
+            preload="auto"
+          >
+            <source src="assets/fashion_hero_motion.mp4" type="video/mp4" />
+          </video>
           <div class="hero-gradient-overlay"></div>
         </div>
         <div class="hero-content-box">
-          <span class="hero-collection-tag">NUEVA COLECCIÓN OTOÑO / INVIERNO</span>
-          <h2 class="hero-headline">Prendas con propósito, calce perfecto y stock real.</h2>
+          <span class="hero-collection-tag shimmer-badge">NUEVA COLECCIÓN OTOÑO / INVIERNO</span>
+          <h2 class="hero-headline">Prendas con propósito, <span class="shimmer-text">calce perfecto</span> y stock real.</h2>
           <p class="hero-subhead">
             Diseños atemporales confeccionados con materiales nobles. Compra online en 3 cuotas o ahorra 15% pagando con transferencia inmediata.
           </p>
           <div class="flex items-center justify-center gap-3">
-            <a href="#catalogo" class="btn-hero-primary">Explorar Catálogo</a>
-            <a href="#beneficios" class="btn-hero-secondary">Medios de Pago & Envíos</a>
+            <a href="#catalogo" class="btn-hero-primary btn-spring-glow">Explorar Catálogo</a>
+            <a href="#beneficios" class="btn-hero-secondary btn-spring-glow">Medios de Pago & Envíos</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- CONTINUOUS INFINITE TICKER (MOTIONSITES & REACT BITS)        -->
+      <!-- ============================================================ -->
+      <div class="motion-marquee bg-slate-900 text-white border-y border-slate-800 text-xs font-bold tracking-widest py-3">
+        <div class="motion-marquee-track">
+          <span>✦ NUEVA TEMPORADA 2026</span>
+          <span>⚡ 3 CUOTAS SIN INTERÉS CON MERCADO PAGO</span>
+          <span>💸 15% OFF PAGANDO CON ALIAS / CBU</span>
+          <span>📦 ENVÍOS A TODO EL PAÍS EN 24-48HS</span>
+          <span>🔒 STOCK REAL EN TIEMPO REAL</span>
+          <span>✦ AURA STUDIO BUENOS AIRES</span>
+        </div>
+        <div class="motion-marquee-track" aria-hidden="true">
+          <span>✦ NUEVA TEMPORADA 2026</span>
+          <span>⚡ 3 CUOTAS SIN INTERÉS CON MERCADO PAGO</span>
+          <span>💸 15% OFF PAGANDO CON ALIAS / CBU</span>
+          <span>📦 ENVÍOS A TODO EL PAÍS EN 24-48HS</span>
+          <span>🔒 STOCK REAL EN TIEMPO REAL</span>
+          <span>✦ AURA STUDIO BUENOS AIRES</span>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- DESPLAZAMIENTO LATERAL: DROPS DESTACADOS (FIGMA FOR MOTION)  -->
+      <!-- ============================================================ -->
+      <section class="py-8 bg-slate-50 border-b border-slate-200">
+        <div class="container-general">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-cyan-600">Swipe Lateral</span>
+              <h3 class="text-lg font-extrabold text-slate-900">🔥 Drops Exclusivos de la Semana</h3>
+            </div>
+            <span class="text-xs text-slate-500 font-semibold hidden sm:inline">Desliza horizontalmente &rarr;</span>
+          </div>
+
+          <div class="horizontal-reel-container">
+            <div class="horizontal-reel-item shopify-card spotlight-card card-3d p-4 bg-white rounded-xl shadow-sm border border-slate-200">
+              <img src="assets/blazer_oversize.jpg" alt="Blazer Oversize" class="w-full h-48 object-cover rounded-lg mb-3" />
+              <div class="text-xs font-bold text-amber-600 mb-1">Tendencia</div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1">Blazer Sastrero Oversize</h4>
+              <p class="font-extrabold text-cyan-700 text-sm">$84.000 ARS <span class="text-xs font-normal text-slate-500">· 3 cuotas s/int</span></p>
+            </div>
+
+            <div class="horizontal-reel-item shopify-card spotlight-card card-3d p-4 bg-white rounded-xl shadow-sm border border-slate-200">
+              <img src="assets/vestido_lino.jpg" alt="Vestido Lino" class="w-full h-48 object-cover rounded-lg mb-3" />
+              <div class="text-xs font-bold text-emerald-600 mb-1">15% OFF Transferencia</div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1">Vestido Midi de Lino Puro</h4>
+              <p class="font-extrabold text-cyan-700 text-sm">$62.000 ARS <span class="text-xs font-normal text-slate-500">· Stock en vivo</span></p>
+            </div>
+
+            <div class="horizontal-reel-item shopify-card spotlight-card card-3d p-4 bg-white rounded-xl shadow-sm border border-slate-200">
+              <img src="assets/hoodie_beige.jpg" alt="Hoodie Heavyweight" class="w-full h-48 object-cover rounded-lg mb-3" />
+              <div class="text-xs font-bold text-cyan-600 mb-1">Favorito Streetwear</div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1">Hoodie Boxy Heavyweight</h4>
+              <p class="font-extrabold text-cyan-700 text-sm">$54.000 ARS <span class="text-xs font-normal text-slate-500">· Frisa pesada</span></p>
+            </div>
+
+            <div class="horizontal-reel-item shopify-card spotlight-card card-3d p-4 bg-white rounded-xl shadow-sm border border-slate-200">
+              <img src="assets/campera_puffer.jpg" alt="Campera Puffer" class="w-full h-48 object-cover rounded-lg mb-3" />
+              <div class="text-xs font-bold text-purple-600 mb-1">Últimas 2 unidades</div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1">Campera Puffer Térmica</h4>
+              <p class="font-extrabold text-cyan-700 text-sm">$115.000 ARS <span class="text-xs font-normal text-slate-500">· Relleno plumón</span></p>
+            </div>
           </div>
         </div>
       </section>
@@ -493,6 +571,7 @@
       </div>
     </footer>
 
+    <script src="../../motion.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

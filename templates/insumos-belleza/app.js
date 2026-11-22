@@ -93,6 +93,10 @@ function renderInventory() {
   select.innerHTML = supplies.map(s => `
     <option value="${s.id}">${s.name} (Quedan: ${s.stock})</option>
   `).join("");
+
+  if (window.refreshMotion) {
+    setTimeout(window.refreshMotion, 50);
+  }
 }
 
 window.quickConsume = function(idx) {

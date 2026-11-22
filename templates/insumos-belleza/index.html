@@ -16,6 +16,7 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../../motion.css" />
   </head>
   <body class="bg-slate-950 text-slate-100">
     <!-- Top Announcement -->
@@ -52,29 +53,113 @@
 
     <main class="py-10">
       <div class="container-beauty">
+        <!-- Cinematic Video Hero Stage -->
+        <div class="relative rounded-2xl overflow-hidden mb-8 border border-purple-500/20 shadow-2xl">
+          <video
+            class="w-full h-56 sm:h-72 object-cover"
+            autoplay
+            loop
+            muted
+            playsinline
+            poster="assets/salon_hero.jpg"
+            preload="auto"
+          >
+            <source src="assets/beauty_hero_motion.mp4" type="video/mp4" />
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+          <div class="absolute bottom-4 left-6 right-6 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span class="text-xs uppercase font-extrabold tracking-wider text-purple-400">Atelier & Estilismo Profesional</span>
+              <h2 class="text-xl sm:text-2xl font-black text-white">Control de Stock, Mermas y Comisiones <span class="shimmer-text">en Tiempo Real</span></h2>
+            </div>
+            <span class="shimmer-badge px-3 py-1 bg-purple-600/40 text-purple-200 border border-purple-500/40 rounded-full text-xs font-bold">
+              ⚡ SALÓN CONECTADO 24/7
+            </span>
+          </div>
+        </div>
+
+        <!-- Infinite Salon Ticker (MotionSites & React Bits) -->
+        <div class="motion-marquee bg-purple-950/40 text-purple-200 border-y border-purple-900/50 text-xs font-bold tracking-widest py-3 mb-8">
+          <div class="motion-marquee-track">
+            <span>✨ AUDITORÍA EN TIEMPO REAL DE TINTES Y QUÍMICOS</span>
+            <span>📦 REPOSICIÓN AUTOMÁTICA A PROVEEDOR POR WHATSAPP</span>
+            <span>✂️ CÁLCULO DE COMISIÓN DIARIA POR ESTILISTA</span>
+            <span>⚠️ ALERTA TEMPRANA DE QUIEBRE DE STOCK</span>
+            <span>⚡ LUMIÈRE STUDIO BUENOS AIRES</span>
+          </div>
+          <div class="motion-marquee-track" aria-hidden="true">
+            <span>✨ AUDITORÍA EN TIEMPO REAL DE TINTES Y QUÍMICOS</span>
+            <span>📦 REPOSICIÓN AUTOMÁTICA A PROVEEDOR POR WHATSAPP</span>
+            <span>✂️ CÁLCULO DE COMISIÓN DIARIA POR ESTILISTA</span>
+            <span>⚠️ ALERTA TEMPRANA DE QUIEBRE DE STOCK</span>
+            <span>⚡ LUMIÈRE STUDIO BUENOS AIRES</span>
+          </div>
+        </div>
+
+        <!-- Desplazamiento Lateral: Categorías de Insumos (Figma for Motion) -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-purple-400">Swipe Lateral</span>
+              <h3 class="text-lg font-extrabold text-white">📦 Insumos Clave por Estación</h3>
+            </div>
+            <span class="text-xs text-slate-400 font-semibold hidden sm:inline">Desliza horizontalmente &rarr;</span>
+          </div>
+
+          <div class="horizontal-reel-container">
+            <div class="horizontal-reel-item p-4 bg-slate-900/90 rounded-2xl border border-slate-800 spotlight-card spotlight-card-purple card-3d">
+              <span class="text-2xl mb-2 block">🧪</span>
+              <span class="text-xs font-bold text-purple-400 mb-1 block">Coloración & Decoloración</span>
+              <h4 class="font-bold text-white text-sm mb-1">Tintes Majirel & Oxigenadas</h4>
+              <p class="text-xs text-slate-400">L'Oréal Pro 60g · Stock crítico controlado al mililitro.</p>
+            </div>
+
+            <div class="horizontal-reel-item p-4 bg-slate-900/90 rounded-2xl border border-slate-800 spotlight-card spotlight-card-purple card-3d">
+              <span class="text-2xl mb-2 block">🧴</span>
+              <span class="text-xs font-bold text-cyan-400 mb-1 block">Cuidado & Lavado</span>
+              <h4 class="font-bold text-white text-sm mb-1">Shampoos Neutros & Mascarillas</h4>
+              <p class="text-xs text-slate-400">Bidón técnico 5L con dispensador volumétrico.</p>
+            </div>
+
+            <div class="horizontal-reel-item p-4 bg-slate-900/90 rounded-2xl border border-slate-800 spotlight-card spotlight-card-purple card-3d">
+              <span class="text-2xl mb-2 block">✂️</span>
+              <span class="text-xs font-bold text-amber-400 mb-1 block">Herramientas & Filos</span>
+              <h4 class="font-bold text-white text-sm mb-1">Hojas de Afeitar & Tijeras</h4>
+              <p class="text-xs text-slate-400">Reposición higiénica semanal por estilista asignado.</p>
+            </div>
+
+            <div class="horizontal-reel-item p-4 bg-slate-900/90 rounded-2xl border border-slate-800 spotlight-card spotlight-card-purple card-3d">
+              <span class="text-2xl mb-2 block">💅</span>
+              <span class="text-xs font-bold text-rose-400 mb-1 block">Manicuría & Spa</span>
+              <h4 class="font-bold text-white text-sm mb-1">Esmaltes Semipermanentes</h4>
+              <p class="text-xs text-slate-400">Geles UV/LED y limas esterilizadas de un solo uso.</p>
+            </div>
+          </div>
+        </div>
+
         <!-- Hero Salón -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div class="stat-card">
+          <div class="stat-card spotlight-card spotlight-card-purple card-3d motion-reveal">
             <span class="stat-label">Insumos Registrados</span>
-            <div class="stat-value text-white" id="stat-total-items">4 productos</div>
+            <div class="stat-value text-white shimmer-text" id="stat-total-items">4 productos</div>
             <span class="stat-sub">Control en tiempo real</span>
           </div>
 
-          <div class="stat-card border-amber-500/30">
+          <div class="stat-card border-amber-500/30 spotlight-card card-3d motion-reveal glowing-border-beam">
             <span class="stat-label text-amber-400">⚠️ Alerta de Stock Crítico</span>
             <div class="stat-value text-amber-400" id="stat-low-stock">1 insumo</div>
             <span class="stat-sub">Menos de 2 unidades en boliche</span>
           </div>
 
-          <div class="stat-card">
+          <div class="stat-card spotlight-card spotlight-card-purple card-3d motion-reveal">
             <span class="stat-label">Comisiones del Día</span>
-            <div class="stat-value text-emerald-400">$42.500 ARS</div>
+            <div class="stat-value text-emerald-400" id="stat-commissions">$42.500 ARS</div>
             <span class="stat-sub">3 estilistas activos</span>
           </div>
         </div>
 
         <!-- Tabla de Insumos -->
-        <div class="beauty-card mb-10">
+        <div class="beauty-card mb-10 spotlight-card spotlight-card-purple motion-reveal">
           <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             <div>
               <h3 class="text-lg font-bold text-white">Inventario de Tintes & Químicos</h3>
@@ -151,6 +236,7 @@
       </div>
     </footer>
 
+    <script src="../../motion.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
