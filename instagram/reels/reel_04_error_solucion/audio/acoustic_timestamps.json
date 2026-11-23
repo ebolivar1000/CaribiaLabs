@@ -1,0 +1,32 @@
+[
+  {
+    "segment_id": "act1_error",
+    "text": "Cada minuto que tardas en contestar, el cliente se va a la competencia.",
+    "local_offset_ms": 100.0,
+    "duration_ms": 3956.15,
+    "master_start_ms": 300.0,
+    "master_end_ms": 4256.15,
+    "master_start_sec": 0.3,
+    "master_end_sec": 4.26
+  },
+  {
+    "segment_id": "act2_solucion",
+    "text": "Con CaribIA Labs, tu chatbot IA cotiza y cierra ventas en automático.",
+    "local_offset_ms": 100.0,
+    "duration_ms": 4377.97,
+    "master_start_ms": 4650.0,
+    "master_end_ms": 9027.97,
+    "master_start_sec": 4.65,
+    "master_end_sec": 9.03
+  },
+  {
+    "segment_id": "act3_cta",
+    "text": "Comenta ERROR o entra al link de la bio.",
+    "local_offset_ms": 100.0,
+    "duration_ms": 2548.68,
+    "master_start_ms": 9200.0,
+    "master_end_ms": 11748.68,
+    "master_start_sec": 9.2,
+    "master_end_sec": 11.75
+  }
+]

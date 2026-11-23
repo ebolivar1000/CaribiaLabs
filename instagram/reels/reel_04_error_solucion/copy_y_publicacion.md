@@ -1,5 +1,5 @@
-# REEL #03 — ERROR VS SOLUCIÓN: ¿RESPONDER A LOS PRESUPUESTOS TARDE?
-*Campaña: Error/ Solución #04 — CaribIA Labs*
+# REEL #04 — ERROR VS SOLUCIÓN: ¿RESPONDER A LOS PRESUPUESTOS TARDE?
+*Campaña: Error / Solución #04 — CaribIA Labs*
 
 ---
 
@@ -8,14 +8,19 @@
 
 ---
 
-### 2. Guion para la Voz de Diego (ElevenLabs)
-*Copia y pega este texto en ElevenLabs (voz Diego, modelo Multilingual v2) y guarda el audio como `video3.mp3` en `instagram/reels/reel_03_error_solucion/audio/`*:
+### 2. Guion & Telemetría Acústica de Voz Neuronal
+*Generado automáticamente mediante `generate_audio.py` con `es-MX-JorgeNeural` (Multilingual v2) y normalizado con FFmpeg Gain Staging SOP v2 (-1.0 dBFS Peak)*:
 
 ```text
-Cada minuto que tardas en contestar un presupuesto, el cliente lo lleva a la competencia.
-Con CaribIA Labs, tu chatbot IA responde al instante, genera la cotización y cierra la venta en menos de 5 segundos.
-La entrega personalizada más rápida del mercado. Escribe BOT o entra al link en la bio.
+Acto 1 (0.30s - 4.26s): Cada minuto que tardas en contestar, el cliente se va a la competencia.
+Acto 2 (4.65s - 9.03s): Con CaribIA Labs, tu chatbot IA cotiza y cierra ventas en automático.
+Acto 3 (9.20s - 11.75s): Comenta ERROR o entra al link de la bio.
 ```
+
+* **Duración total master:** `12.00 segundos`
+* **Transición Glitch SFX:** `4.52s` (-6 dBFS)
+* **Highlight Cash SFX:** `7.20s` (-6 dBFS)
+* **Cama Musical Tech:** `-19 dB` con fade out en `11.0s`
 
 ---
 

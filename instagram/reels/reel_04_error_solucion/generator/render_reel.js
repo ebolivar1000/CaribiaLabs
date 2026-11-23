@@ -5,9 +5,9 @@ const fs = require('fs');
 
 const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const HTML_PATH = path.resolve(__dirname, 'reel_scene.html');
-const OUTPUT_VIDEO = path.resolve(__dirname, '../renders/reel_03_error_solucion.mp4');
-const POSTER_IMAGE = path.resolve(__dirname, '../renders/reel_03_poster.jpg');
-const AUDIO_BED = path.resolve(__dirname, '../audio/music_bed.wav');
+const OUTPUT_VIDEO = path.resolve(__dirname, '../renders/reel_04_error_solucion.mp4');
+const POSTER_IMAGE = path.resolve(__dirname, '../renders/reel_04_poster.jpg');
+const AUDIO_BED = path.resolve(__dirname, '../audio/master_audio.wav');
 
 const WIDTH = 1080;
 const HEIGHT = 1920;
@@ -16,6 +16,10 @@ const DURATION = 12; // seconds
 const TOTAL_FRAMES = FPS * DURATION; // 300
 
 async function generateAudio() {
+  if (fs.existsSync(AUDIO_BED)) {
+    console.log('Using existing Master Audio mix:', AUDIO_BED);
+    return true;
+  }
   console.log('Generating background music bed (dark tech pulse, 12s)...');
   // Create a dark pulsing synth bed with FFmpeg lavfi
   const cmd = [
@@ -42,7 +46,7 @@ async function generateAudio() {
 }
 
 async function main() {
-  console.log(`\n=== REEL #03: ERROR VS SOLUCIÓN ===`);
+  console.log(`\n=== REEL #04: ERROR VS SOLUCIÓN ===`);
   console.log(`Resolution: ${WIDTH}x${HEIGHT} @ ${FPS}fps`);
   console.log(`Duration: ${DURATION}s (${TOTAL_FRAMES} frames)\n`);
 
