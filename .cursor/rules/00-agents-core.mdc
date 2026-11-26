@@ -1,0 +1,13 @@
+---
+description: Protocolo multiagente compartido para Cursor y Antigravity
+globs: *
+alwaysApply: true
+---
+
+# Protocolo Multiagente de Inicio de Sesión en Cursor
+
+Antes de sugerir o modificar archivos en este proyecto:
+1. **Lee `docs/ai/HANDOFF.md`:** Verifica qué entorno realizó el último trabajo y qué tareas dejó abiertas.
+2. **Lee `AGENTS.md` y `docs/ai/PROJECT_CONTEXT.md`:** Comprende la propuesta de valor PyME.
+3. **No toques `.env`:** Los secretos de Neon DB son locales y privados.
+4. **Al terminar:** Actualiza `docs/ai/HANDOFF.md` y `docs/ai/TODO.md`.

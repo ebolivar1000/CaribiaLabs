@@ -1,0 +1,11 @@
+---
+description: Arquitectura y Vanilla UX de CaribIA Labs
+globs: *
+alwaysApply: true
+---
+
+# Reglas de Arquitectura — CaribIA Labs
+
+1. **Vanilla Frontend:** Mantener `index.html` y `styles.css` con CSS variables obsidian/cyan/emerald y cero librerías pesadas.
+2. **Neon DB Serverless:** Las modificaciones de base de datos se reflejan en `database/schema.sql`.
+3. **Showroom Dinámico:** Toda nueva plantilla de demostración se añade en `app.js` y `assets/`.

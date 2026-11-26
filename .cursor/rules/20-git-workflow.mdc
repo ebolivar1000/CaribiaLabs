@@ -1,0 +1,11 @@
+---
+description: Reglas de Git y manejo de secretos
+globs: *
+alwaysApply: true
+---
+
+# Reglas de Git y Seguridad
+
+1. Verifica siempre `git status` antes de modificar código.
+2. Respeta los cambios de Antigravity.
+3. Jamás commitees `.env`, credenciales de bases de datos o tokens de Cloudflare.
